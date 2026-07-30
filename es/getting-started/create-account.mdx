@@ -1,23 +1,158 @@
+
 ---
 title: "Crear tu cuenta"
-description: "Regístrate, inicia sesión y crea el workspace inicial."
+description: "Regístrate con Google, GitHub o correo electrónico y luego crea o únete a un workspace de Launcher Forge."
 icon: "user-plus"
 ---
 
-
 # Crear tu cuenta
 
-<Steps>
-  <Step title="Regístrate">Crea la cuenta de desarrollador con el método disponible.</Step>
-  <Step title="Verifica la cuenta">Completa la verificación de correo cuando corresponda.</Step>
-  <Step title="Inicia sesión">Abre el dashboard de Launcher Forge.</Step>
-  <Step title="Crea el workspace">Ingresa el nombre y confirma el propietario inicial.</Step>
-</Steps>
+Una cuenta de desarrollador de Launcher Forge te permite acceder al dashboard, donde podrás crear launchers, registrar juegos, publicar builds, administrar miembros del equipo y revisar el uso de tus workspaces.
 
-{/* PHOTO AREA: replace /images/screenshots/create-account.png with your real screenshot. */}
-<Frame caption="Registro y creación del workspace">
+Puedes crear tu cuenta mediante un proveedor externo o completando el formulario de registro manual.
+
+## Registrarse con Google o GitHub
+
+Launcher Forge permite registrarse mediante los siguientes proveedores externos:
+
+<CardGroup cols={2}>
+  <Card title="Continuar con Google" icon="google">
+    Crea tu cuenta de Launcher Forge utilizando tu cuenta de Google.
+  </Card>
+
+  <Card title="Continuar con GitHub" icon="github">
+    Crea tu cuenta de Launcher Forge utilizando tu cuenta de GitHub.
+  </Card>
+</CardGroup>
+
+Cuando seleccionas una de estas opciones, Launcher Forge te redirige al proveedor correspondiente para autorizar el registro.
+
+Después de completar la autorización, regresarás a Launcher Forge con tu cuenta de desarrollador creada.
+
+{/* ÁREA DE IMAGEN 1:
+    Agrega una captura donde se muestren los botones
+    de registro con Google y GitHub.
+*/}
+<Frame caption="Regístrate utilizando Google o GitHub">
   <img
-    src="/images/screenshots/create-account.png"
-    alt="Registro de cuenta"
+    src="/images/screenshots/create-account-oauth.png"
+    alt="Opciones de registro de Launcher Forge con Google y GitHub"
   />
 </Frame>
+
+<Note>
+  Las cuentas creadas mediante Google o GitHub podrían necesitar establecer una contraseña de Launcher Forge más adelante para utilizar herramientas que requieran autenticación mediante correo electrónico y contraseña, como la CLI interactiva.
+</Note>
+
+## Registrarse manualmente
+
+También puedes crear una cuenta utilizando el formulario de registro estándar.
+
+Ingresa la información solicitada por Launcher Forge, incluyendo tu dirección de correo electrónico y una contraseña.
+
+<Steps>
+  <Step title="Abre el formulario de registro">
+    Selecciona la opción para crear una nueva cuenta de Launcher Forge.
+  </Step>
+
+  <Step title="Ingresa tu información">
+    Completa los campos obligatorios del formulario de registro.
+  </Step>
+
+  <Step title="Crea la cuenta">
+    Revisa la información ingresada y envía el formulario.
+  </Step>
+
+  <Step title="Verifica tu correo electrónico">
+    Completa la verificación de correo cuando sea requerida antes de acceder a funciones protegidas.
+  </Step>
+</Steps>
+
+{/* ÁREA DE IMAGEN 2:
+    Agrega una captura donde se muestre el formulario
+    completo de registro manual.
+*/}
+<Frame caption="Crea una cuenta mediante el formulario de registro manual">
+  <img
+    src="/images/screenshots/create-account-manual.png"
+    alt="Formulario de registro manual de Launcher Forge"
+  />
+</Frame>
+
+## Iniciar sesión
+
+Después de crear tu cuenta, inicia sesión para acceder al dashboard de Launcher Forge.
+
+Utiliza el mismo método de autenticación que seleccionaste durante el registro:
+
+- Google.
+- GitHub.
+- Correo electrónico y contraseña.
+
+## Crear o unirse a un workspace
+
+Después de registrarte, tu cuenta de desarrollador debe estar asociada a un workspace.
+
+Un workspace es el contenedor principal de:
+
+- Launchers.
+- Juegos.
+- Miembros del equipo.
+- Roles y permisos.
+- Suscripción y facturación.
+- Almacenamiento.
+- Ancho de banda.
+- Uso del workspace.
+
+Puedes acceder a un workspace de dos formas.
+
+<Tabs>
+  <Tab title="Crear un workspace">
+    Crea un nuevo workspace cuando estés comenzando tu propio proyecto, estudio u organización.
+
+    Cuando creas un workspace, te conviertes en su propietario inicial.
+
+    El propietario del workspace puede administrar:
+
+    - Configuración del workspace.
+    - Launchers y juegos.
+    - Invitaciones de miembros.
+    - Roles y permisos.
+    - Suscripción y facturación.
+    - Uso de almacenamiento y ancho de banda.
+  </Tab>
+
+  <Tab title="Unirse a un workspace">
+    Puedes unirte a un workspace existente cuando su propietario o un miembro autorizado te envía una invitación.
+
+    Después de aceptar la invitación, las acciones disponibles dependerán del rol y los permisos asignados a tu cuenta.
+
+    Dependiendo de tus permisos, podrás:
+
+    - Administrar launchers.
+    - Registrar juegos.
+    - Publicar builds.
+    - Revisar versiones.
+    - Gestionar soporte o configuraciones del workspace.
+  </Tab>
+</Tabs>
+
+{/* ÁREA DE IMAGEN 3:
+    Agrega una captura donde se muestre la creación
+    de un workspace, su selección o una invitación para unirse.
+*/}
+<Frame caption="Crea un nuevo workspace o únete a uno existente">
+  <img
+    src="/images/screenshots/create-or-join-workspace.png"
+    alt="Pantalla de creación de workspace e invitaciones de Launcher Forge"
+  />
+</Frame>
+
+<Info>
+  Una cuenta de desarrollador puede crear su propio workspace o unirse a otro mediante una invitación. El acceso a cada workspace depende del rol asignado, los permisos y el plan activo.
+</Info>
+
+## Siguiente paso
+
+Después de crear o unirte a un workspace, continúa con [Crear tu primer launcher](/es/getting-started/create-launcher).
+
