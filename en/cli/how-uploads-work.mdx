@@ -1,0 +1,26 @@
+---
+title: "How uploads work"
+description: "Understand scanning, hashing, manifests, and file transfer."
+icon: "microchip"
+---
+
+
+# How uploads work
+
+1. Scan files.
+2. Calculate SHA-256.
+3. Create the manifest.
+4. Detect new or modified files.
+5. Upload required files.
+6. Create the version.
+
+- `STABLE` establishes a full release baseline.
+- `PATCH` and `HOTFIX` use manifest comparison to transfer required changes.
+
+{/* PHOTO AREA: replace /images/screenshots/cli-how-uploads-work.png with your real screenshot. */}
+<Frame caption="Scanning, hashing, manifest creation, and transfer">
+  <img
+    src="/images/screenshots/cli-how-uploads-work.png"
+    alt="CLI upload processing"
+  />
+</Frame>

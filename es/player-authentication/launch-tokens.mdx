@@ -1,0 +1,42 @@
+---
+title: "Launch tokens"
+description: "Comprende el flujo autenticado de ejecución."
+icon: "shield-halved"
+---
+
+
+# Launch tokens
+
+```text
+El jugador selecciona Play
+        ↓
+El launcher solicita un token
+        ↓
+El launcher inicia el juego
+        ↓
+El juego valida el token
+```
+
+Datos iniciales:
+
+- User ID.
+- Email.
+- Estado de autenticación.
+
+```json
+{
+  "id": "player-id",
+  "email": "player@example.com",
+  "valid": true
+}
+```
+
+Nunca expongas tokens en errores o logs de producción.
+
+{/* PHOTO AREA: replace /images/screenshots/launch-tokens.png with your real screenshot. */}
+<Frame caption="Solicitud, inicio y validación del token">
+  <img
+    src="/images/screenshots/launch-tokens.png"
+    alt="Flujo de launch token"
+  />
+</Frame>

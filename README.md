@@ -1,27 +1,35 @@
-# Launcher Forge Mintlify Documentation
+# Launcher Forge - Mintlify documentation
 
-Starter bilingüe basado en el esquema de documentación proporcionado.
+Repositorio completo bilingüe basado en el esquema de documentación proporcionado.
 
-## Incluye
+## Importante
 
-- Inglés en `/en`.
-- Español en `/es`.
-- Tabs: Help Center, Changelog y API Reference.
-- API Reference marcada como Coming Soon.
-- CLI documentada como interactiva.
-- Páginas de prioridad inicial.
-- Bloques de capturas reemplazables con `<Frame>`.
-- Logos y favicon de reemplazo.
+El ZIP fue creado para que `docs.json` quede directamente en la raíz al descomprimirlo.
 
-## Agregar fotos
-
-Reemplaza los PNG dentro de:
+Estructura:
 
 ```text
-images/screenshots/
+docs.json
+README.md
+en/
+es/
+images/
 ```
 
-Mantén el mismo nombre de archivo y no tendrás que modificar las páginas MDX.
+No subas una carpeta contenedora adicional a GitHub.
+
+## Contenido
+
+- 41 páginas en inglés.
+- 41 páginas en español.
+- Help Center / Centro de ayuda.
+- Changelog / Novedades.
+- API Reference / Referencia API.
+- Todas las carpetas del esquema.
+- CLI documentada como interactiva.
+- Unity marcada como Beta.
+- Godot, Service Status y API marcados como Coming Soon.
+- Áreas reemplazables para capturas.
 
 ## Vista local
 
@@ -37,11 +45,14 @@ mint validate
 mint broken-links --check-anchors
 ```
 
-## Antes de publicar
+## GitHub
 
-- Reemplaza logos y capturas.
-- Confirma URLs definitivas.
-- Confirma versiones compatibles de Unreal Engine.
-- Confirma planes y límites.
-- Actualiza el changelog con cambios reales.
-- Mantén API Reference como Coming Soon hasta estabilizar la API externa.
+Sube directamente el contenido de esta carpeta a la raíz del repositorio:
+
+```text
+repository/
+├── docs.json
+├── en/
+├── es/
+└── images/
+```

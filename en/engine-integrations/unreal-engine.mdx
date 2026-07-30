@@ -1,0 +1,40 @@
+---
+title: "Unreal Engine"
+description: "Install and configure Launcher Forge authentication in Unreal Engine."
+icon: "gamepad"
+---
+
+
+# Unreal Engine
+
+Document:
+
+- Plugin installation.
+- Supported versions.
+- Game Instance configuration.
+- Launch-token reading.
+- Available player data.
+- Blueprint usage.
+- C++ usage.
+- Shipping builds.
+- Frequent errors.
+
+Launcher Forge starts the game with:
+
+```text
+MyGame.exe --launchToken=TOKEN
+```
+
+Keep the recommended `0.5` second startup delay before validation.
+
+<Warning>
+  Shipping builds must not expose Token Override or raw tokens.
+</Warning>
+
+{/* PHOTO AREA: replace /images/screenshots/unreal-engine.png with your real screenshot. */}
+<Frame caption="Plugin setup and Game Instance authentication flow">
+  <img
+    src="/images/screenshots/unreal-engine.png"
+    alt="Unreal Engine Launcher Forge integration"
+  />
+</Frame>

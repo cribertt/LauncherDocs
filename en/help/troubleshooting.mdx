@@ -1,41 +1,29 @@
 ---
 title: "Troubleshooting"
-description: "Resolve common launcher, game, CLI, update, and authentication issues."
-icon: "triangle-exclamation"
+description: "Resolve common launcher, login, game, update, CLI, and token issues."
+icon: "screwdriver-wrench"
 ---
 
 
 # Troubleshooting
 
-## The launcher does not start
+Cover these common problems:
 
-Confirm compatibility, installation, logs, and security software behavior.
+- Launcher does not start.
+- Sign-in fails.
+- Game does not appear.
+- Download fails.
+- Game does not update.
+- Game does not start.
+- CLI cannot publish.
+- Launch token is invalid.
 
-## The game does not appear
+Start by collecting the exact error, affected account, game, branch, version, operating system, and relevant logs.
 
-Verify the workspace, launcher, saved game, visibility, branch access, and account.
-
-## Download or update fails
-
-Check the network, workspace limits, disk space, and active downloads.
-
-## The game installs but does not start
-
-Verify the executable path, dependencies, startup arguments, and logs.
-
-## The CLI cannot publish
-
-Reauthenticate, check permissions, select a packaged folder, use a new version, and review storage limits.
-
-## The launch token is invalid
-
-Start from Launcher Forge, confirm `--launchToken`, review environment and expiration, and keep the Unreal Engine startup delay.
-
-{/* IMAGE SLOT: Replace /images/screenshots/troubleshooting-logs.png with a real screenshot using the same filename. */}
-<Frame caption="Example area for launcher, CLI, and engine logs">
-  <img src="/images/screenshots/troubleshooting-logs.png" alt="Launcher Forge logs placeholder" />
+{/* PHOTO AREA: replace /images/screenshots/troubleshooting.png with your real screenshot. */}
+<Frame caption="Common error information and diagnostic steps">
+  <img
+    src="/images/screenshots/troubleshooting.png"
+    alt="Launcher Forge troubleshooting"
+  />
 </Frame>
-
-<Info>
-  Remove tokens, credentials, personal information, and private URLs before sharing logs.
-</Info>

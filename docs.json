@@ -2,19 +2,16 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Launcher Forge",
-  "description": "Official documentation for Launcher Forge.",
+  "description": "Official Launcher Forge documentation.",
   "colors": {
     "primary": "#3B5C76",
     "light": "#507DA0",
     "dark": "#253A4B"
   },
-  "favicon": {
-    "light": "/images/Logotipo2.png",
-    "dark": "/favicon.svg"
-  },
+  "favicon": "/images/favicon.svg",
   "logo": {
-    "light": "/images/LogotipoHorizontal_2_800x180.png",
-    "dark": "/images/launcherforge-logo.png",
+    "light": "/images/logo-light.svg",
+    "dark": "/images/logo-dark.svg",
     "href": "https://launcherforge.io"
   },
   "navigation": {
@@ -30,54 +27,90 @@
               {
                 "group": "Introduction",
                 "pages": [
-                  "en/index",
-                  "en/core-concepts"
+                  "en/introduction/what-is-launcher-forge",
+                  "en/introduction/core-concepts"
                 ]
               },
               {
                 "group": "Getting Started",
                 "pages": [
-                  "en/quickstart",
+                  "en/getting-started/create-account",
                   "en/getting-started/create-launcher",
-                  "en/getting-started/add-game"
+                  "en/getting-started/add-game",
+                  "en/getting-started/publish-first-build",
+                  "en/getting-started/test-launcher"
+                ]
+              },
+              {
+                "group": "Launcher Configuration",
+                "pages": [
+                  "en/launcher-configuration/general-settings",
+                  "en/launcher-configuration/templates",
+                  "en/launcher-configuration/branding",
+                  "en/launcher-configuration/content",
+                  "en/launcher-configuration/preview-and-build"
+                ]
+              },
+              {
+                "group": "Games and Releases",
+                "pages": [
+                  "en/games-and-releases/game-settings",
+                  "en/games-and-releases/branches",
+                  "en/games-and-releases/builds",
+                  "en/games-and-releases/updates"
                 ]
               },
               {
                 "group": "Launcher Forge CLI",
                 "pages": [
                   "en/cli/installation",
-                  "en/cli/publish-build"
+                  "en/cli/authentication",
+                  "en/cli/publish-build",
+                  "en/cli/how-uploads-work",
+                  "en/cli/troubleshooting"
                 ]
               },
               {
-                "group": "Launcher Configuration",
+                "group": "Player Authentication",
                 "pages": [
-                  "en/launcher/configure-launcher"
-                ]
-              },
-              {
-                "group": "Games and Releases",
-                "pages": [
-                  "en/games/builds-and-branches"
+                  "en/player-authentication/player-accounts",
+                  "en/player-authentication/password-recovery",
+                  "en/player-authentication/game-library",
+                  "en/player-authentication/game-keys",
+                  "en/player-authentication/launch-tokens"
                 ]
               },
               {
                 "group": "Engine Integrations",
                 "pages": [
-                  "en/integrations/unreal-engine"
+                  "en/engine-integrations/unreal-engine",
+                  "en/engine-integrations/unity",
+                  "en/engine-integrations/godot"
                 ]
               },
               {
                 "group": "Workspace and Account",
                 "pages": [
-                  "en/workspace/plans-and-limits"
+                  "en/workspace/team",
+                  "en/workspace/plans-and-limits",
+                  "en/workspace/subscription",
+                  "en/workspace/usage"
                 ]
               },
               {
                 "group": "Help and Support",
                 "pages": [
                   "en/help/troubleshooting",
-                  "en/help/faq"
+                  "en/help/logs",
+                  "en/help/support-tickets",
+                  "en/help/service-status"
+                ]
+              },
+              {
+                "group": "Resources",
+                "pages": [
+                  "en/resources/roadmap",
+                  "en/resources/faq"
                 ]
               }
             ]
@@ -86,7 +119,7 @@
             "tab": "Changelog",
             "icon": "clock-rotate-left",
             "pages": [
-              "en/changelog/index"
+              "en/resources/changelog"
             ]
           },
           {
@@ -108,54 +141,90 @@
               {
                 "group": "Introducción",
                 "pages": [
-                  "es/index",
-                  "es/core-concepts"
+                  "es/introduction/what-is-launcher-forge",
+                  "es/introduction/core-concepts"
                 ]
               },
               {
                 "group": "Primeros pasos",
                 "pages": [
-                  "es/quickstart",
+                  "es/getting-started/create-account",
                   "es/getting-started/create-launcher",
-                  "es/getting-started/add-game"
+                  "es/getting-started/add-game",
+                  "es/getting-started/publish-first-build",
+                  "es/getting-started/test-launcher"
+                ]
+              },
+              {
+                "group": "Configuración del launcher",
+                "pages": [
+                  "es/launcher-configuration/general-settings",
+                  "es/launcher-configuration/templates",
+                  "es/launcher-configuration/branding",
+                  "es/launcher-configuration/content",
+                  "es/launcher-configuration/preview-and-build"
+                ]
+              },
+              {
+                "group": "Juegos y versiones",
+                "pages": [
+                  "es/games-and-releases/game-settings",
+                  "es/games-and-releases/branches",
+                  "es/games-and-releases/builds",
+                  "es/games-and-releases/updates"
                 ]
               },
               {
                 "group": "CLI de Launcher Forge",
                 "pages": [
                   "es/cli/installation",
-                  "es/cli/publish-build"
+                  "es/cli/authentication",
+                  "es/cli/publish-build",
+                  "es/cli/how-uploads-work",
+                  "es/cli/troubleshooting"
                 ]
               },
               {
-                "group": "Configuración del launcher",
+                "group": "Autenticación de jugadores",
                 "pages": [
-                  "es/launcher/configure-launcher"
-                ]
-              },
-              {
-                "group": "Juegos y versiones",
-                "pages": [
-                  "es/games/builds-and-branches"
+                  "es/player-authentication/player-accounts",
+                  "es/player-authentication/password-recovery",
+                  "es/player-authentication/game-library",
+                  "es/player-authentication/game-keys",
+                  "es/player-authentication/launch-tokens"
                 ]
               },
               {
                 "group": "Integraciones con motores",
                 "pages": [
-                  "es/integrations/unreal-engine"
+                  "es/engine-integrations/unreal-engine",
+                  "es/engine-integrations/unity",
+                  "es/engine-integrations/godot"
                 ]
               },
               {
                 "group": "Workspace y cuenta",
                 "pages": [
-                  "es/workspace/plans-and-limits"
+                  "es/workspace/team",
+                  "es/workspace/plans-and-limits",
+                  "es/workspace/subscription",
+                  "es/workspace/usage"
                 ]
               },
               {
                 "group": "Ayuda y soporte",
                 "pages": [
                   "es/help/troubleshooting",
-                  "es/help/faq"
+                  "es/help/logs",
+                  "es/help/support-tickets",
+                  "es/help/service-status"
+                ]
+              },
+              {
+                "group": "Recursos",
+                "pages": [
+                  "es/resources/roadmap",
+                  "es/resources/faq"
                 ]
               }
             ]
@@ -164,7 +233,7 @@
             "tab": "Novedades",
             "icon": "clock-rotate-left",
             "pages": [
-              "es/changelog/index"
+              "es/resources/changelog"
             ]
           },
           {
@@ -181,8 +250,8 @@
   "navbar": {
     "links": [
       {
-        "href": "https://launcherforge.io",
-        "label": "Website"
+        "label": "Website",
+        "href": "https://launcherforge.io"
       }
     ],
     "primary": {
@@ -191,22 +260,7 @@
       "href": "https://launcherforge.io"
     }
   },
-  "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
-    ]
-  },
   "appearance": {
     "default": "dark"
-  },
-  "interaction": {
-    "drilldown": true
   }
 }

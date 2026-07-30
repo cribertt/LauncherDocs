@@ -1,0 +1,42 @@
+---
+title: "Launch tokens"
+description: "Understand the authenticated game launch flow."
+icon: "shield-halved"
+---
+
+
+# Launch tokens
+
+```text
+Player selects Play
+        ↓
+Launcher requests a token
+        ↓
+Launcher starts the game
+        ↓
+Game validates the token
+```
+
+Initial validated data:
+
+- User ID.
+- Email.
+- Valid authentication status.
+
+```json
+{
+  "id": "player-id",
+  "email": "player@example.com",
+  "valid": true
+}
+```
+
+Treat launch tokens as temporary credentials. Never expose them in player-facing errors or production logs.
+
+{/* PHOTO AREA: replace /images/screenshots/launch-tokens.png with your real screenshot. */}
+<Frame caption="Launcher token request, game startup, and validation">
+  <img
+    src="/images/screenshots/launch-tokens.png"
+    alt="Authenticated launch token flow"
+  />
+</Frame>
