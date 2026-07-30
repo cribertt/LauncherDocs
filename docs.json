@@ -1,4 +1,5 @@
 {
+  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Launcher Forge",
   "description": "Official Launcher Forge documentation.",
@@ -59,8 +60,8 @@
         "default": true,
         "tabs": [
           {
-            "tab": "Help Center",
-            "icon": "book-open",
+            "tab": "Documentation",
+            "icon": "book",
             "groups": [
               {
                 "group": "Introduction",
@@ -136,18 +137,34 @@
                 ]
               },
               {
-                "group": "Help and Support",
+                "group": "Resources",
+                "pages": [
+                  "en/resources/roadmap"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Help Center",
+            "icon": "circle-question",
+            "groups": [
+              {
+                "group": "Troubleshooting",
                 "pages": [
                   "en/help/troubleshooting",
-                  "en/help/logs",
+                  "en/help/logs"
+                ]
+              },
+              {
+                "group": "Support",
+                "pages": [
                   "en/help/support-tickets",
                   "en/help/service-status"
                 ]
               },
               {
-                "group": "Resources",
+                "group": "Common Questions",
                 "pages": [
-                  "en/resources/roadmap",
                   "en/resources/faq"
                 ]
               }
@@ -173,8 +190,8 @@
         "language": "es",
         "tabs": [
           {
-            "tab": "Centro de ayuda",
-            "icon": "book-open",
+            "tab": "Documentación",
+            "icon": "book",
             "groups": [
               {
                 "group": "Introducción",
@@ -250,18 +267,34 @@
                 ]
               },
               {
-                "group": "Ayuda y soporte",
+                "group": "Recursos",
+                "pages": [
+                  "es/resources/roadmap"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Centro de ayuda",
+            "icon": "circle-question",
+            "groups": [
+              {
+                "group": "Solución de problemas",
                 "pages": [
                   "es/help/troubleshooting",
-                  "es/help/logs",
+                  "es/help/logs"
+                ]
+              },
+              {
+                "group": "Soporte",
+                "pages": [
                   "es/help/support-tickets",
                   "es/help/service-status"
                 ]
               },
               {
-                "group": "Recursos",
+                "group": "Preguntas comunes",
                 "pages": [
-                  "es/resources/roadmap",
                   "es/resources/faq"
                 ]
               }
