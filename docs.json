@@ -23,8 +23,7 @@
           {
             "tab": "Help Center",
             "icon": "book-open",
-            "pages": [
-              "en/help/index",
+            "groups": [
               {
                 "group": "Introduction",
                 "pages": [
