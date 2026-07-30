@@ -4,7 +4,6 @@ description: "Conoce las entidades utilizadas en Launcher Forge."
 icon: "cubes"
 ---
 
-
 # Conceptos principales
 
 | Concepto | Descripción |
@@ -18,10 +17,15 @@ icon: "cubes"
 | **Storage** | Espacio utilizado por juegos y builds. |
 | **Bandwidth** | Datos transferidos durante descargas y actualizaciones. |
 
-{/* PHOTO AREA: replace /images/screenshots/core-concepts.png with your real screenshot. */}
 <Frame caption="Relación entre workspace, launcher, juego, rama, versión y build">
-  <img
-    src="/images/screenshots/core-concepts.png"
-    alt="Diagrama de conceptos"
-  />
+```mermaid
+graph TD
+    W[Workspace] --> L[Launcher]
+    W --> G[Game]
+    G --> B[Branch]
+    B --> V[Version]
+    V --> BU[Build]
+    W --> S[Storage]
+    W --> BW[Bandwidth]
+```
 </Frame>
