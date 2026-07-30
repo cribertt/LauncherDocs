@@ -3,9 +3,8 @@
   "name": "Launcher Forge",
   "description": "Official Launcher Forge documentation.",
   "colors": {
-    "primary": "#3B5C76",
-    "light": "#507DA0",
-    "dark": "#253A4B"
+    "primary": "#9a4b32",
+    "light": "#6f3423"
   },
   "logo": {
     "light": "/images/logo-light.svg",
@@ -278,5 +277,11 @@
         ]
       }
     ]
+  },
+  "background": {
+    "color": {
+      "light": "#302d28",
+      "dark": "#302d28"
+    }
   }
 }
