@@ -1,0 +1,37 @@
+---
+title: "Publish your first build"
+description: "Publish a packaged game using the interactive CLI."
+icon: "cloud-arrow-up"
+---
+
+
+# Publish your first build
+
+<Steps>
+  <Step title="Select Upload a build">Start from the interactive main menu.</Step>
+  <Step title="Select the game">Choose a game available to your account.</Step>
+  <Step title="Select the branch">Choose stable, beta, alpha, development, or another allowed branch.</Step>
+  <Step title="Enter the version">Use a consistent value such as `1.0.0`.</Step>
+  <Step title="Select the release type">Choose `STABLE`, `PATCH`, or `HOTFIX`.</Step>
+  <Step title="Select the build directory">Choose the packaged game root.</Step>
+  <Step title="Write the changelog">Describe player-visible changes.</Step>
+  <Step title="Review and confirm">Verify the summary before upload.</Step>
+</Steps>
+
+{/* IMAGE SLOT: Replace /images/screenshots/cli-upload-workflow.png with a real screenshot using the same filename. */}
+<Frame caption="Build publishing summary before confirmation">
+  <img src="/images/screenshots/cli-upload-workflow.png" alt="Interactive upload workflow placeholder" />
+</Frame>
+
+## How uploads work
+
+1. Scan the selected directory.
+2. Calculate SHA-256 hashes.
+3. Create the file manifest.
+4. Detect new or changed files.
+5. Upload the required files.
+6. Create the version.
+
+<Warning>
+  Do not move, rename, or modify the selected build directory during scanning or upload.
+</Warning>

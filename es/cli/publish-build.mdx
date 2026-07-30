@@ -1,0 +1,33 @@
+---
+title: "Publicar tu primera build"
+description: "Publica un juego empaquetado mediante la CLI interactiva."
+icon: "cloud-arrow-up"
+---
+
+
+# Publicar tu primera build
+
+<Steps>
+  <Step title="Selecciona Subir una build">Comienza desde el menú principal.</Step>
+  <Step title="Selecciona el juego">Elige un juego disponible.</Step>
+  <Step title="Selecciona la rama">Elige stable, beta, alpha, development u otra rama.</Step>
+  <Step title="Ingresa la versión">Usa un valor como `1.0.0`.</Step>
+  <Step title="Selecciona el tipo">Elige `STABLE`, `PATCH` o `HOTFIX`.</Step>
+  <Step title="Selecciona la carpeta">Elige la raíz de la build empaquetada.</Step>
+  <Step title="Escribe el changelog">Describe cambios visibles.</Step>
+  <Step title="Revisa y confirma">Verifica el resumen antes de subir.</Step>
+</Steps>
+
+{/* IMAGE SLOT: Replace /images/screenshots/cli-upload-workflow.png with a real screenshot using the same filename. */}
+<Frame caption="Resumen de la build antes de confirmar">
+  <img src="/images/screenshots/cli-upload-workflow.png" alt="Flujo interactivo de publicación" />
+</Frame>
+
+## Cómo funciona la carga
+
+1. Escaneo del directorio.
+2. Cálculo de SHA-256.
+3. Creación del manifiesto.
+4. Detección de archivos nuevos o modificados.
+5. Subida de los archivos requeridos.
+6. Creación de la versión.

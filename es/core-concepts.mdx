@@ -1,0 +1,34 @@
+---
+title: "Conceptos principales"
+description: "Comprende las entidades y límites principales de Launcher Forge."
+icon: "cubes"
+---
+
+
+# Conceptos principales
+
+| Concepto | Descripción |
+| --- | --- |
+| **Workspace** | Contenedor de launchers, juegos, miembros, facturación, uso y permisos. |
+| **Launcher** | Aplicación utilizada para instalar, actualizar e iniciar juegos. |
+| **Game** | Producto con información, configuración, ramas, builds y versiones. |
+| **Branch** | Canal como stable, beta, alpha, development o privado. |
+| **Build** | Archivos empaquetados que analiza y sube la CLI. |
+| **Version** | Estado publicado con número de versión y changelog. |
+| **Storage** | Espacio utilizado por juegos y builds. |
+| **Bandwidth** | Datos transferidos durante descargas y actualizaciones. |
+
+{/* IMAGE SLOT: Replace /images/screenshots/core-concepts.png with a real screenshot using the same filename. */}
+<Frame caption="Relación entre workspace, launcher, juego, rama, versión y build">
+  <img src="/images/screenshots/core-concepts.png" alt="Diagrama de conceptos de Launcher Forge" />
+</Frame>
+
+```text
+Workspace
+└── Launcher
+    └── Game
+        ├── Branch
+        │   └── Version
+        │       └── Build manifest
+        └── Launch configuration
+```

@@ -1,0 +1,212 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Launcher Forge",
+  "description": "Official documentation for Launcher Forge.",
+  "colors": {
+    "primary": "#3B5C76",
+    "light": "#507DA0",
+    "dark": "#253A4B"
+  },
+  "favicon": {
+    "light": "/images/Logotipo2.png",
+    "dark": "/favicon.svg"
+  },
+  "logo": {
+    "light": "/images/LogotipoHorizontal_2_800x180.png",
+    "dark": "/images/launcherforge-logo.png",
+    "href": "https://launcherforge.io"
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "default": true,
+        "tabs": [
+          {
+            "tab": "Help Center",
+            "icon": "book-open",
+            "groups": [
+              {
+                "group": "Introduction",
+                "pages": [
+                  "en/index",
+                  "en/core-concepts"
+                ]
+              },
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "en/quickstart",
+                  "en/getting-started/create-launcher",
+                  "en/getting-started/add-game"
+                ]
+              },
+              {
+                "group": "Launcher Forge CLI",
+                "pages": [
+                  "en/cli/installation",
+                  "en/cli/publish-build"
+                ]
+              },
+              {
+                "group": "Launcher Configuration",
+                "pages": [
+                  "en/launcher/configure-launcher"
+                ]
+              },
+              {
+                "group": "Games and Releases",
+                "pages": [
+                  "en/games/builds-and-branches"
+                ]
+              },
+              {
+                "group": "Engine Integrations",
+                "pages": [
+                  "en/integrations/unreal-engine"
+                ]
+              },
+              {
+                "group": "Workspace and Account",
+                "pages": [
+                  "en/workspace/plans-and-limits"
+                ]
+              },
+              {
+                "group": "Help and Support",
+                "pages": [
+                  "en/help/troubleshooting",
+                  "en/help/faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Changelog",
+            "icon": "clock-rotate-left",
+            "pages": [
+              "en/changelog/index"
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "icon": "square-terminal",
+            "pages": [
+              "en/api-reference/index"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "es",
+        "tabs": [
+          {
+            "tab": "Centro de ayuda",
+            "icon": "book-open",
+            "groups": [
+              {
+                "group": "Introducción",
+                "pages": [
+                  "es/index",
+                  "es/core-concepts"
+                ]
+              },
+              {
+                "group": "Primeros pasos",
+                "pages": [
+                  "es/quickstart",
+                  "es/getting-started/create-launcher",
+                  "es/getting-started/add-game"
+                ]
+              },
+              {
+                "group": "CLI de Launcher Forge",
+                "pages": [
+                  "es/cli/installation",
+                  "es/cli/publish-build"
+                ]
+              },
+              {
+                "group": "Configuración del launcher",
+                "pages": [
+                  "es/launcher/configure-launcher"
+                ]
+              },
+              {
+                "group": "Juegos y versiones",
+                "pages": [
+                  "es/games/builds-and-branches"
+                ]
+              },
+              {
+                "group": "Integraciones con motores",
+                "pages": [
+                  "es/integrations/unreal-engine"
+                ]
+              },
+              {
+                "group": "Workspace y cuenta",
+                "pages": [
+                  "es/workspace/plans-and-limits"
+                ]
+              },
+              {
+                "group": "Ayuda y soporte",
+                "pages": [
+                  "es/help/troubleshooting",
+                  "es/help/faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Novedades",
+            "icon": "clock-rotate-left",
+            "pages": [
+              "es/changelog/index"
+            ]
+          },
+          {
+            "tab": "Referencia API",
+            "icon": "square-terminal",
+            "pages": [
+              "es/api-reference/index"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "href": "https://launcherforge.io",
+        "label": "Website"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Open Launcher Forge",
+      "href": "https://launcherforge.io"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "appearance": {
+    "default": "dark"
+  },
+  "interaction": {
+    "drilldown": true
+  }
+}
