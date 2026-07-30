@@ -1,28 +1,282 @@
 ---
 title: "Add your first game"
-description: "Register a game, images, and its executable."
+description: "Create a game from the Catalog, configure its information, and prepare it for builds and launcher distribution."
 icon: "gamepad"
 ---
 
-
 # Add your first game
 
-<Steps>
-  <Step title="Open the launcher">Select the launcher that will distribute the game.</Step>
-  <Step title="Create the game">Enter title, slug, description, and genre.</Step>
-  <Step title="Add visual assets">Upload the cover and banner.</Step>
-  <Step title="Configure the executable">Set the executable path relative to the installed build.</Step>
-  <Step title="Save and verify">Confirm the game appears in the dashboard and CLI.</Step>
-</Steps>
+A game represents the product that your players will install, update, and launch through Launcher Forge.
 
-{/* PHOTO AREA: replace /images/screenshots/add-game.png with your real screenshot. */}
-<Frame caption="Game metadata, images, and executable configuration">
+Games are created from the **Catalog** section of the developer dashboard.
+
+<Info>
+  Your account currently uses a single workspace and a single launcher. Every game you create belongs to that workspace and can later be linked to the existing launcher.
+</Info>
+
+## Before you begin
+
+Before creating the game, prepare:
+
+- The final game name.
+- A short description.
+- The game genre.
+- A cover image.
+- A banner or background image, when required.
+- The expected executable name.
+- A packaged build that runs correctly on your computer.
+
+You do not need to upload the game build during this step. Builds are published later through the Launcher Forge interactive CLI.
+
+## 1. Open the Catalog
+
+Sign in to the Launcher Forge dashboard.
+
+In the left sidebar, find the **MY GAMES** section and select **Catalog**.
+
+The Catalog contains every game registered in your workspace.
+
+{/* PHOTO AREA 1:
+    Add a screenshot showing the Catalog option
+    in the left sidebar.
+*/}
+<Frame caption="Open the Catalog from the developer dashboard">
   <img
-    src="/images/screenshots/add-game.png"
-    alt="Game creation form"
+    src="/images/screenshots/catalog-sidebar.png"
+    alt="Launcher Forge sidebar with the Catalog option highlighted"
+  />
+</Frame>
+
+## 2. Create a new game
+
+From the Catalog page, select the option to create a new game.
+
+Depending on the dashboard language, the button may appear as:
+
+- **New game**
+- **Add game**
+- **Create game**
+
+Launcher Forge will open the game creation form.
+
+{/* PHOTO AREA 2:
+    Add a screenshot showing the Catalog page
+    and the button used to create a new game.
+*/}
+<Frame caption="Create a new game from the Catalog">
+  <img
+    src="/images/screenshots/catalog-create-game.png"
+    alt="Launcher Forge Catalog page with the create game option"
+  />
+</Frame>
+
+## 3. Complete the game information
+
+Enter the information requested by the form.
+
+### Game title
+
+Enter the public name of the game.
+
+Use the final name that should appear in:
+
+- The launcher library.
+- Game cards.
+- Release pages.
+- Player-facing screens.
+
+### Slug
+
+The slug is the stable identifier used by Launcher Forge in URLs and internal references.
+
+Use lowercase letters, numbers, and hyphens.
+
+For example:
+
+```text
+my-first-game
+```
+
+<Warning>
+  Avoid changing the slug after publishing builds or sharing links related to the game.
+</Warning>
+
+### Description
+
+Write a clear summary explaining what the game is about.
+
+Keep it understandable for players and avoid internal development notes.
+
+### Genre
+
+Select the genre that best represents the game.
+
+This information can be used to organize and display games inside the launcher.
+
+{/* PHOTO AREA 3:
+    Add a screenshot showing the main game
+    creation form and its required fields.
+*/}
+<Frame caption="Complete the basic game information">
+  <img
+    src="/images/screenshots/create-game-form.png"
+    alt="Launcher Forge game creation form with title, slug, description, and genre"
+  />
+</Frame>
+
+## 4. Add visual assets
+
+Add the images that will represent the game inside the launcher.
+
+<CardGroup cols={2}>
+  <Card title="Cover image" icon="image">
+    Used in the game catalog, cards, library entries, and compact game views.
+  </Card>
+
+  <Card title="Banner image" icon="panorama">
+    Used in wider sections such as headers, hero areas, or expanded game views.
+  </Card>
+</CardGroup>
+
+Use clear, high-quality images without important text too close to the edges.
+
+<Note>
+  The exact image requirements can depend on the launcher template.
+</Note>
+
+{/* PHOTO AREA 4:
+    Add a screenshot showing the cover and
+    banner upload fields.
+*/}
+<Frame caption="Upload the cover and banner images">
+  <img
+    src="/images/screenshots/game-visual-assets.png"
+    alt="Launcher Forge cover and banner upload fields"
+  />
+</Frame>
+
+## 5. Create the game
+
+Review the entered information and submit the form.
+
+After the game is created, Launcher Forge opens its management page or adds it to the Catalog.
+
+The game should now appear as a registered product in your workspace.
+
+<Check>
+  The game has been created, but it does not contain a published build yet.
+</Check>
+
+## 6. Configure the executable
+
+The executable setting tells Launcher Forge which file must be started after the game has been installed.
+
+Use a path relative to the root of the packaged build.
+
+For example:
+
+```text
+MyGame.exe
+```
+
+Or, when the executable is inside a folder:
+
+```text
+Binaries/Win64/MyGame.exe
+```
+
+Do not use a path from your own computer:
+
+```text
+C:\Users\Developer\Desktop\MyGame\MyGame.exe
+```
+
+That path only exists on your development computer and will not work for players.
+
+{/* PHOTO AREA 5:
+    Add a screenshot showing the executable
+    and launch configuration.
+*/}
+<Frame caption="Configure the game executable">
+  <img
+    src="/images/screenshots/game-executable-settings.png"
+    alt="Launcher Forge executable and launch configuration"
   />
 </Frame>
 
 <Warning>
-  An incorrect executable path can allow installation to finish while preventing the game from starting.
+  An incorrect executable path can allow the game to install successfully while preventing it from launching.
 </Warning>
+
+## 7. Review the game page
+
+After creation, review the main game information:
+
+- Title.
+- Slug.
+- Description.
+- Genre.
+- Cover and banner.
+- Executable path.
+- Installation configuration.
+- Existing branches.
+- Published versions.
+
+At this point, the game exists in the Catalog but still needs a branch and a published build.
+
+## 8. Link the game to the launcher
+
+Open your launcher from the sidebar and enter the **Linked games** section.
+
+Select the game you created and associate it with the launcher.
+
+After linking it, the launcher management page should no longer show `0` linked games.
+
+{/* PHOTO AREA 6:
+    Add a screenshot showing the game being linked
+    to the existing launcher.
+*/}
+<Frame caption="Link the game to your launcher">
+  <img
+    src="/images/screenshots/link-game-to-launcher.png"
+    alt="Launcher Forge linked games configuration"
+  />
+</Frame>
+
+<Info>
+  Creating a game in the Catalog does not automatically publish it or upload its files. It must also be linked to the launcher and receive at least one published build.
+</Info>
+
+## What happens next?
+
+After creating and linking the game, you must:
+
+<Steps>
+  <Step title="Review the executable">
+    Confirm that the executable path matches the packaged game structure.
+  </Step>
+
+  <Step title="Create or select a branch">
+    Use the appropriate release channel, such as stable, beta, or development.
+  </Step>
+
+  <Step title="Prepare the packaged build">
+    Package the game and test it locally.
+  </Step>
+
+  <Step title="Publish the build">
+    Use the Launcher Forge interactive CLI to scan and upload the game files.
+  </Step>
+
+  <Step title="Test the launcher">
+    Install and launch the game from the generated launcher.
+  </Step>
+</Steps>
+
+<Warning>
+  Do not generate and distribute the final launcher before confirming that the game is linked and has a valid published build.
+</Warning>
+
+## Next step
+
+Continue with [Publish your first build](/en/getting-started/publish-first-build).
