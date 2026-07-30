@@ -1,24 +1,176 @@
 ---
 title: "Crear tu primer launcher"
-description: "Crea y configura el launcher inicial."
+description: "Crea el único launcher disponible en tu workspace de Launcher Forge y conoce qué debes configurar después."
 icon: "rocket"
 ---
 
-
 # Crear tu primer launcher
 
-<Steps>
-  <Step title="Abre Launchers">Ingresa al área de Launchers.</Step>
-  <Step title="Crea el launcher">Ingresa un nombre y slug estable.</Step>
-  <Step title="Selecciona un template">Elige uno disponible para el plan.</Step>
-  <Step title="Selecciona el idioma">Define el idioma predeterminado.</Step>
-  <Step title="Guarda">Crea el launcher antes de añadir contenido detallado.</Step>
-</Steps>
+Un launcher es la aplicación de escritorio que tus jugadores utilizarán para instalar, actualizar y ejecutar tus juegos.
 
-{/* PHOTO AREA: replace /images/screenshots/create-launcher.png with your real screenshot. */}
-<Frame caption="Creación inicial del launcher">
+<Warning>
+  Actualmente, cada cuenta de Launcher Forge utiliza un único workspace y cada workspace puede tener solamente un launcher.
+</Warning>
+
+Esto significa que:
+
+- No necesitas elegir entre varios workspaces.
+- No puedes crear varios launchers dentro del mismo workspace.
+- Después de crear el launcher, continuarás configurando ese mismo launcher.
+- Si ya existe un launcher, debes abrirlo desde el menú lateral en lugar de intentar crear otro.
+
+## 1. Abre la opción para crear el launcher
+
+Inicia sesión en el dashboard de Launcher Forge.
+
+En el menú lateral izquierdo, busca la sección **LAUNCHERS** y selecciona **New launcher** o **Nuevo launcher**, según el idioma configurado en el dashboard.
+
+<Frame caption="Selecciona New launcher desde el menú lateral">
   <img
-    src="/images/screenshots/create-launcher.png"
-    alt="Formulario para crear launcher"
+    src="/images/screenshots/create-launcher-sidebar.png"
+    alt="Menú lateral de Launcher Forge con la opción New launcher destacada"
   />
 </Frame>
+
+<Note>
+  La opción **New launcher** se utiliza solamente para crear el launcher inicial. Después de crearlo, su nombre aparecerá debajo de esta opción en el menú lateral.
+</Note>
+
+## 2. Confirma la creación
+
+Launcher Forge mostrará una ventana de confirmación antes de crear el launcher.
+
+Selecciona **Yes, create launcher** para continuar.
+
+<Frame caption="Confirma la creación del launcher">
+  <img
+    src="/images/screenshots/create-launcher-confirmation.png"
+    alt="Ventana de confirmación para crear un nuevo launcher"
+  />
+</Frame>
+
+El sistema creará automáticamente un launcher vacío.
+
+En esta etapa no necesitas completar un formulario extenso. Primero se crea el launcher y luego podrás configurar su diseño, imágenes, juegos, comportamiento y ejecutable desde su página de administración.
+
+## 3. Abre el nuevo launcher
+
+Después de confirmar, Launcher Forge creará el launcher y abrirá su página de administración.
+
+El launcher también aparecerá en el menú lateral izquierdo. Puedes seleccionar su nombre cada vez que necesites volver a su configuración.
+
+<Frame caption="Página de administración del launcher recién creado">
+  <img
+    src="/images/screenshots/launcher-overview.png"
+    alt="Página de administración de un launcher recién creado en Launcher Forge"
+  />
+</Frame>
+
+## ¿Qué aparece en esta página?
+
+La página de administración contiene las principales áreas de configuración del launcher.
+
+<CardGroup cols={2}>
+  <Card title="Design" icon="palette">
+    Permite configurar colores, tipografías, layouts, templates y la apariencia general del launcher.
+  </Card>
+
+  <Card title="Visual assets" icon="image">
+    Permite administrar logos, fondos, banners, imágenes e iconos utilizados por el launcher.
+  </Card>
+
+  <Card title="Configuration" icon="gear">
+    Permite configurar el idioma, comportamiento, actualizaciones y preferencias generales.
+  </Card>
+
+  <Card title="Linked games" icon="gamepad">
+    Permite vincular el juego que será mostrado y distribuido mediante este launcher.
+  </Card>
+</CardGroup>
+
+## Nombre del launcher
+
+El launcher se crea inicialmente con un nombre predeterminado.
+
+Para cambiarlo, selecciona el icono de edición ubicado junto al nombre del launcher e ingresa el nombre definitivo.
+
+Utiliza un nombre claro relacionado con tu juego, estudio o producto.
+
+## Icono del ejecutable
+
+Launcher Forge también muestra la configuración del icono del ejecutable de Windows.
+
+En los planes que no incluyen un icono personalizado, el launcher generado utilizará el icono oficial de Launcher Forge.
+
+<Info>
+  Las opciones de personalización disponibles dependen del plan activo del workspace.
+</Info>
+
+## Juegos vinculados
+
+Un launcher recién creado no tiene juegos asociados.
+
+Por esta razón, el indicador **Linked games** mostrará inicialmente el valor `0`.
+
+Antes de distribuir el launcher, debes crear un juego y vincularlo con este launcher.
+
+<Warning>
+  No generes el ejecutable final del launcher sin haber configurado y vinculado previamente el juego correcto.
+</Warning>
+
+## Generar el ejecutable
+
+El botón **Generate executable** inicia la generación del launcher que posteriormente podrás distribuir a tus usuarios.
+
+Antes de generar el ejecutable, verifica lo siguiente:
+
+- El launcher tiene el nombre correcto.
+- El diseño está configurado.
+- Los recursos visuales fueron agregados.
+- El idioma y comportamiento son correctos.
+- El juego está vinculado.
+- El ejecutable del juego está configurado.
+- Existen releases publicadas para el juego.
+- Revisaste la vista previa del launcher.
+
+<Warning>
+  Generar el launcher no crea ni publica automáticamente la build de tu juego. Las builds se publican por separado mediante la CLI interactiva de Launcher Forge.
+</Warning>
+
+## ¿Qué debes configurar después?
+
+Sigue este orden para evitar omitir configuraciones importantes:
+
+<Steps>
+  <Step title="Cambia el nombre del launcher">
+    Reemplaza el nombre predeterminado por el nombre definitivo.
+  </Step>
+
+  <Step title="Configura el diseño">
+    Selecciona el template y ajusta la apariencia visual.
+  </Step>
+
+  <Step title="Añade los recursos visuales">
+    Sube el logo, fondos, banners y otras imágenes compatibles.
+  </Step>
+
+  <Step title="Configura el comportamiento">
+    Revisa el idioma, las actualizaciones y las preferencias generales.
+  </Step>
+
+  <Step title="Crea y vincula tu juego">
+    Registra el juego que será distribuido mediante el launcher.
+  </Step>
+
+  <Step title="Revisa y genera">
+    Comprueba toda la configuración antes de generar el ejecutable.
+  </Step>
+</Steps>
+
+<Check>
+  Tu launcher fue creado correctamente. Ahora puedes configurarlo y vincular tu primer juego.
+</Check>
+
+## Siguiente paso
+
+Continúa con [Añadir tu primer juego](/es/getting-started/add-game).
