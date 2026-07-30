@@ -4,7 +4,6 @@ description: "Learn the entities used throughout Launcher Forge."
 icon: "cubes"
 ---
 
-
 # Core concepts
 
 | Concept | Description |
@@ -18,10 +17,15 @@ icon: "cubes"
 | **Storage** | Space consumed by retained game files and builds. |
 | **Bandwidth** | Data transferred when players download or update games. |
 
-{/* PHOTO AREA: replace /images/screenshots/core-concepts.png with your real screenshot. */}
 <Frame caption="Workspace, launcher, game, branch, version, and build relationship">
-  <img
-    src="/images/screenshots/core-concepts.png"
-    alt="Launcher Forge concepts diagram"
-  />
+```mermaid
+graph TD
+    W[Workspace] --> L[Launcher]
+    W --> G[Game]
+    G --> B[Branch]
+    B --> V[Version]
+    V --> BU[Build]
+    W --> S[Storage]
+    W --> BW[Bandwidth]
+```
 </Frame>
