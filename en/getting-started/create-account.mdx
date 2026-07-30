@@ -1,27 +1,158 @@
+```mdx
 ---
 title: "Create your account"
-description: "Register, sign in, and create the initial workspace."
+description: "Register with Google, GitHub, or email, then create or join a Launcher Forge workspace."
 icon: "user-plus"
 ---
 
-
 # Create your account
 
+A Launcher Forge developer account gives you access to the dashboard, where you can create launchers, register games, publish builds, manage team members, and review workspace usage.
+
+You can create your account using an external provider or by completing the manual registration form.
+
+## Register with Google or GitHub
+
+Launcher Forge supports registration through the following external providers:
+
+<CardGroup cols={2}>
+  <Card title="Continue with Google" icon="google">
+    Create your Launcher Forge account using your Google account.
+  </Card>
+
+  <Card title="Continue with GitHub" icon="github">
+    Create your Launcher Forge account using your GitHub account.
+  </Card>
+</CardGroup>
+
+When you select one of these options, Launcher Forge redirects you to the selected provider to authorize the registration.
+
+After authorization, you are returned to Launcher Forge with your developer account created.
+
+{/* PHOTO AREA 1:
+    Add a screenshot showing the Google and GitHub
+    registration buttons.
+*/}
+<Frame caption="Register using Google or GitHub">
+  <img
+    src="/images/screenshots/create-account-oauth.png"
+    alt="Launcher Forge registration options with Google and GitHub"
+  />
+</Frame>
+
+<Note>
+  Accounts created through Google or GitHub may need to create a Launcher Forge password later when using tools that require email and password authentication, such as the interactive CLI.
+</Note>
+
+## Register manually
+
+You can also create an account using the standard registration form.
+
+Enter the information requested by Launcher Forge, including your email address and password.
+
 <Steps>
-  <Step title="Register">Create the developer account using the available registration method.</Step>
-  <Step title="Verify the account">Complete any required email verification.</Step>
-  <Step title="Sign in">Open the Launcher Forge dashboard.</Step>
-  <Step title="Create the workspace">Enter the workspace name and confirm the initial owner.</Step>
+  <Step title="Open the registration form">
+    Select the option to create a new Launcher Forge account.
+  </Step>
+
+  <Step title="Enter your information">
+    Complete the required fields in the registration form.
+  </Step>
+
+  <Step title="Create the account">
+    Review the information and submit the form.
+  </Step>
+
+  <Step title="Verify your email">
+    Complete email verification when required before accessing protected features.
+  </Step>
 </Steps>
 
-{/* PHOTO AREA: replace /images/screenshots/create-account.png with your real screenshot. */}
-<Frame caption="Account registration and workspace creation">
+{/* PHOTO AREA 2:
+    Add a screenshot showing the complete manual
+    registration form.
+*/}
+<Frame caption="Create an account using the manual registration form">
   <img
-    src="/images/screenshots/create-account.png"
-    alt="Account registration screen"
+    src="/images/screenshots/create-account-manual.png"
+    alt="Launcher Forge manual account registration form"
+  />
+</Frame>
+
+## Sign in
+
+After creating your account, sign in to access the Launcher Forge dashboard.
+
+Use the same authentication method you selected during registration:
+
+- Google.
+- GitHub.
+- Email and password.
+
+## Create or join a workspace
+
+After registration, your developer account must be associated with a workspace.
+
+A workspace is the main container for:
+
+- Launchers.
+- Games.
+- Team members.
+- Roles and permissions.
+- Subscription and billing.
+- Storage.
+- Bandwidth.
+- Workspace usage.
+
+You can access a workspace in two ways.
+
+<Tabs>
+  <Tab title="Create a workspace">
+    Create a new workspace when you are starting your own project, studio, or organization.
+
+    When you create the workspace, you become its initial owner.
+
+    The workspace owner can manage:
+
+    - Workspace settings.
+    - Launchers and games.
+    - Team invitations.
+    - Roles and permissions.
+    - Subscription and billing.
+    - Storage and bandwidth usage.
+  </Tab>
+
+  <Tab title="Join a workspace">
+    You can join an existing workspace when its owner or an authorized member sends you an invitation.
+
+    After accepting the invitation, your available actions depend on the role and permissions assigned to your account.
+
+    You may be allowed to:
+
+    - Manage launchers.
+    - Register games.
+    - Publish builds.
+    - Review releases.
+    - Manage support or workspace settings.
+  </Tab>
+</Tabs>
+
+{/* PHOTO AREA 3:
+    Add a screenshot showing workspace creation,
+    workspace selection, or an invitation to join.
+*/}
+<Frame caption="Create a new workspace or join an existing workspace">
+  <img
+    src="/images/screenshots/create-or-join-workspace.png"
+    alt="Launcher Forge workspace creation and invitation screen"
   />
 </Frame>
 
 <Info>
-  The workspace owner controls billing, plan limits, launchers, games, and team access.
+  A developer account can create its own workspace or join another workspace through an invitation. Access to each workspace depends on the assigned role, permissions, and active plan.
 </Info>
+
+## Next step
+
+After creating or joining a workspace, continue with [Create your first launcher](/en/getting-started/create-launcher).
+```
