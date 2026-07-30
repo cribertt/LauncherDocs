@@ -1,26 +1,395 @@
 ---
 title: "Publicar tu primera build"
-description: "Instala la CLI interactiva y publica la versión inicial."
+description: "Descarga la CLI interactiva, inicia sesión y publica la primera versión empaquetada de tu juego."
 icon: "cloud-arrow-up"
 ---
 
-
 # Publicar tu primera build
 
-Launcher Forge utiliza una **CLI interactiva**. No necesitas construir un comando de despliegue con flags.
+Launcher Forge publica las builds mediante una **CLI interactiva**.
 
-<Steps>
-  <Step title="Abre la CLI">Ejecuta la aplicación oficial.</Step>
-  <Step title="Autentícate">Completa el login guiado.</Step>
-  <Step title="Selecciona Subir una build">Elige la opción desde el menú.</Step>
-  <Step title="Completa los pasos">Selecciona juego, rama, versión, tipo, carpeta y changelog.</Step>
-  <Step title="Confirma">Revisa el resumen antes de comenzar.</Step>
-</Steps>
+No necesitas crear un comando largo de despliegue ni memorizar parámetros. La CLI te guía durante todo el proceso mediante menús y preguntas.
 
-{/* PHOTO AREA: replace /images/screenshots/publish-first-build.png with your real screenshot. */}
-<Frame caption="Publicación de la primera build mediante la CLI">
+<Warning>
+  Publicar el juego dentro del Catálogo solamente hace visible su ficha dentro del launcher. No sube los archivos del juego. Debes publicar al menos una build mediante la CLI para que los jugadores puedan instalarlo y ejecutarlo.
+</Warning>
+
+## Antes de comenzar
+
+Confirma lo siguiente:
+
+- El juego existe dentro del Catálogo.
+- Su estado es **Published**.
+- Tiene al menos una rama.
+- El acceso mediante CLI está habilitado.
+- Tienes una build empaquetada que funciona correctamente.
+- Conoces el ejecutable utilizado para iniciar el juego.
+- El workspace tiene almacenamiento disponible.
+- Tu cuenta tiene permisos para publicar builds.
+
+<Note>
+  Las cuentas creadas mediante Google o GitHub pueden necesitar establecer una contraseña de Launcher Forge antes de iniciar sesión en la CLI mediante correo y contraseña.
+</Note>
+
+## 1. Abre la sección CLI
+
+Inicia sesión en el dashboard de Launcher Forge.
+
+En el menú lateral izquierdo, selecciona **CLI**.
+
+Launcher Forge mostrará los juegos disponibles para publicar mediante la CLI.
+
+Selecciona el juego que quieres publicar. Puedes presionar su tarjeta o utilizar **Open CLI**.
+
+<Frame caption="Abre la sección CLI y selecciona el juego">
   <img
-    src="/images/screenshots/publish-first-build.png"
-    alt="Publicación interactiva"
+    src="/images/screenshots/cli-dashboard-select-game.png"
+    alt="Página CLI de Launcher Forge con una tarjeta de juego y Open CLI destacados"
   />
 </Frame>
+
+<Info>
+  La CLI solamente obtiene los juegos y permisos disponibles para la cuenta autenticada.
+</Info>
+
+## 2. Revisa la página CLI del juego
+
+La página específica del juego muestra la información utilizada por el flujo de publicación.
+
+Revisa:
+
+- **Application ID**.
+- Cantidad de ramas.
+- Rama predeterminada.
+- Estado del acceso mediante CLI.
+- Versión del instalador.
+- Tamaño del archivo.
+
+El Application ID identifica internamente al juego. Después de iniciar sesión, la CLI obtiene los juegos disponibles, por lo que normalmente seleccionas el juego desde el menú y no necesitas escribir este ID manualmente.
+
+<Frame caption="Revisa la información del juego y descarga la CLI">
+  <img
+    src="/images/screenshots/cli-game-download.png"
+    alt="Página CLI del juego con el botón Download CLI destacado"
+  />
+</Frame>
+
+## 3. Descarga la CLI
+
+Selecciona **Download CLI**.
+
+La descarga utiliza tu sesión activa del dashboard y valida el estado de la contraseña de la cuenta.
+
+Guarda el instalador de Windows en tu equipo.
+
+<Warning>
+  Descarga la CLI solamente desde el dashboard oficial de Launcher Forge. No ejecutes copias recibidas desde fuentes desconocidas.
+</Warning>
+
+## 4. Instala la CLI
+
+Ejecuta el instalador descargado y completa la instalación en Windows.
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura del instalador o de la pantalla
+    que confirma que la instalación terminó.
+*/}
+<Frame caption="Instala la CLI de Launcher Forge en Windows">
+  <img
+    src="/images/screenshots/cli-installer.png"
+    alt="Instalador de Windows de Launcher Forge CLI"
+  />
+</Frame>
+
+Después de instalarla, abre Launcher Forge CLI.
+
+## 5. Inicia sesión
+
+Cuando no exista una sesión válida, la CLI solicitará autenticación.
+
+Utiliza el correo electrónico y la contraseña de Launcher Forge asociados a tu cuenta de desarrollador.
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura de la pantalla de inicio de sesión.
+    Oculta el correo real antes de publicar la imagen.
+*/}
+<Frame caption="Inicia sesión en Launcher Forge CLI">
+  <img
+    src="/images/screenshots/cli-login.png"
+    alt="Pantalla de inicio de sesión con correo y contraseña de Launcher Forge CLI"
+  />
+</Frame>
+
+<Note>
+  Iniciar sesión en el dashboard no inicia automáticamente una sesión dentro de la CLI instalada. La CLI mantiene su propia sesión local.
+</Note>
+
+## 6. Selecciona Publish a new version
+
+Después de autenticarte, aparecerá el menú principal interactivo.
+
+Selecciona **Publish a new version**.
+
+El menú también puede ofrecer opciones para revisar cargas, listar versiones, administrar permisos, cerrar sesión y consultar la versión instalada.
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura del menú principal completo.
+*/}
+<Frame caption="Selecciona Publish a new version en el menú interactivo">
+  <img
+    src="/images/screenshots/cli-main-menu.png"
+    alt="Menú principal interactivo de Launcher Forge CLI"
+  />
+</Frame>
+
+## 7. Selecciona el juego y la rama
+
+La CLI obtiene los juegos y permisos asociados a tu cuenta.
+
+Selecciona:
+
+1. El juego que quieres publicar.
+2. La rama de destino.
+
+Algunas ramas habituales son:
+
+- `main`
+- `stable`
+- `beta`
+- `development`
+- Una rama privada permitida
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura de la selección del juego y la rama.
+*/}
+<Frame caption="Selecciona el juego y la rama de destino">
+  <img
+    src="/images/screenshots/cli-select-game-and-branch.png"
+    alt="Preguntas de selección de juego y rama en Launcher Forge CLI"
+  />
+</Frame>
+
+<Warning>
+  Revisa cuidadosamente la rama seleccionada. Publicar una build de prueba en una rama de producción puede exponerla a jugadores.
+</Warning>
+
+## 8. Define la release
+
+La CLI solicitará la información de la release.
+
+### Versión
+
+Ingresa un número de versión nuevo.
+
+Se recomienda un formato semántico:
+
+```text
+MAJOR.MINOR.PATCH
+```
+
+Ejemplos:
+
+```text
+1.0.0
+1.1.0
+1.1.1
+```
+
+No reutilices una versión que ya exista para el juego y la rama seleccionados.
+
+### Tipo de publicación
+
+Selecciona uno de los tipos disponibles.
+
+<Tabs>
+  <Tab title="STABLE">
+    Utiliza `STABLE` para establecer una base completa de publicación.
+
+    Launcher Forge procesa la build empaquetada completa.
+  </Tab>
+
+  <Tab title="PATCH">
+    Utiliza `PATCH` para una actualización planificada.
+
+    Launcher Forge compara el nuevo manifiesto con los hashes existentes y sube los archivos requeridos por la nueva versión.
+  </Tab>
+
+  <Tab title="HOTFIX">
+    Utiliza `HOTFIX` para una corrección urgente y específica.
+
+    Utiliza la comparación de manifiestos, pero deja claramente indicada la intención urgente de la publicación.
+  </Tab>
+</Tabs>
+
+### Changelog
+
+Escribe un resumen breve y comprensible para los jugadores.
+
+Ejemplo:
+
+```text
+Se añadió reasignación de controles, se mejoraron los tiempos de carga y se corrigió un cierre inesperado al cambiar de región.
+```
+
+No incluyas contraseñas, tokens, URLs privadas ni información interna de infraestructura.
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura de las preguntas de versión,
+    tipo de publicación y changelog.
+*/}
+<Frame caption="Ingresa la versión, el tipo de publicación y el changelog">
+  <img
+    src="/images/screenshots/cli-release-details.png"
+    alt="Preguntas de versión, tipo y changelog en Launcher Forge CLI"
+  />
+</Frame>
+
+## 9. Selecciona la build empaquetada
+
+Selecciona la carpeta local que contiene los archivos compilados y empaquetados.
+
+Por ejemplo:
+
+```text
+MiJuegoBuild/
+├── MiJuego.exe
+├── Content/
+├── Engine/
+└── Config/
+```
+
+Selecciona la raíz de la build empaquetada, no la carpeta del proyecto de Unreal Engine o Unity.
+
+No selecciones carpetas con:
+
+- Código fuente.
+- Caché del editor.
+- Archivos intermedios.
+- Contenido temporal.
+- Credenciales.
+- Configuración privada.
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura de la selección de carpeta.
+    Evita mostrar tu usuario de Windows o carpetas privadas.
+*/}
+<Frame caption="Selecciona la carpeta de la build empaquetada">
+  <img
+    src="/images/screenshots/cli-select-build-folder.png"
+    alt="Selección de carpeta de la build en Launcher Forge CLI"
+  />
+</Frame>
+
+<Warning>
+  No muevas, renombres ni modifiques la carpeta seleccionada mientras la CLI la analiza o la sube.
+</Warning>
+
+## 10. Analiza y publica
+
+Antes de comenzar, la CLI mostrará un resumen de los valores seleccionados.
+
+Revisa:
+
+- Juego.
+- Rama.
+- Versión.
+- Tipo.
+- Changelog.
+- Directorio de la build.
+
+Confirma solamente cuando todo sea correcto.
+
+Luego Launcher Forge:
+
+1. Escanea los archivos.
+2. Calcula hashes SHA-256.
+3. Genera el manifiesto.
+4. Detecta los archivos que deben subirse.
+5. Sube los artefactos requeridos.
+6. Crea la nueva versión.
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura del escaneo, hashes,
+    manifiesto o progreso de la subida.
+*/}
+<Frame caption="Espera mientras la CLI analiza y sube la build">
+  <img
+    src="/images/screenshots/cli-upload-progress.png"
+    alt="Progreso de análisis y subida en Launcher Forge CLI"
+  />
+</Frame>
+
+Mantén abierta la terminal y una conexión estable hasta que termine el proceso.
+
+## 11. Confirma la versión publicada
+
+Cuando la operación termine correctamente, la CLI mostrará una confirmación o resumen de la versión.
+
+{/* CAPTURA PENDIENTE:
+    Toma una captura del resultado exitoso.
+*/}
+<Frame caption="Confirma que la versión fue publicada correctamente">
+  <img
+    src="/images/screenshots/cli-upload-success.png"
+    alt="Publicación exitosa de una build en Launcher Forge CLI"
+  />
+</Frame>
+
+Después de publicar:
+
+- Revisa la versión en el dashboard.
+- Confirma la rama y el tipo.
+- Revisa el changelog.
+- Comprueba el estado de procesamiento.
+- Instala o actualiza el juego desde el launcher.
+- Ejecuta el juego instalado y verifica su funcionamiento.
+
+<Check>
+  Tu primera build fue publicada correctamente.
+</Check>
+
+## Si la carga falla
+
+La CLI debería mostrar la causa y devolverte a un menú utilizable en lugar de cerrarse inesperadamente.
+
+Algunas causas frecuentes son:
+
+- Sesión inválida o vencida.
+- Permisos insuficientes.
+- Versión duplicada.
+- Carpeta empaquetada inválida.
+- Límite de almacenamiento.
+- Interrupción de red.
+- Ejecutable inexistente.
+- Archivos modificados durante la subida.
+
+Corrige la causa indicada antes de volver a intentarlo.
+
+## Capturas que todavía debes tomar
+
+Reemplaza los siguientes marcadores con capturas reales:
+
+```text
+images/screenshots/cli-installer.png
+images/screenshots/cli-login.png
+images/screenshots/cli-main-menu.png
+images/screenshots/cli-select-game-and-branch.png
+images/screenshots/cli-release-details.png
+images/screenshots/cli-select-build-folder.png
+images/screenshots/cli-upload-progress.png
+images/screenshots/cli-upload-success.png
+```
+
+Antes de publicar las imágenes, oculta:
+
+- Correos electrónicos.
+- Contraseñas.
+- Tokens.
+- Usuario local de Windows.
+- Rutas privadas.
+- URLs privadas.
+- Información de la aplicación que no quieras exponer.
+
+## Siguiente paso
+
+Continúa con [Probar tu launcher](/es/getting-started/test-launcher).

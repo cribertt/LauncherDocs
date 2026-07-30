@@ -1,26 +1,391 @@
 ---
 title: "Publish your first build"
-description: "Install the interactive CLI and publish the initial version."
+description: "Download the interactive CLI, sign in, and publish the first packaged version of your game."
 icon: "cloud-arrow-up"
 ---
 
-
 # Publish your first build
 
-Launcher Forge uses an **interactive CLI**. You do not need to construct a deployment command with flags.
+Launcher Forge publishes game builds through an **interactive CLI**.
 
-<Steps>
-  <Step title="Open the CLI">Start the official Launcher Forge CLI executable.</Step>
-  <Step title="Authenticate">Complete the guided login when required.</Step>
-  <Step title="Select Upload a build">Choose the publishing option from the menu.</Step>
-  <Step title="Complete the prompts">Select game, branch, version, release type, build directory, and changelog.</Step>
-  <Step title="Confirm">Review the summary before the upload starts.</Step>
-</Steps>
+You do not need to create a long deployment command or remember command-line flags. The CLI guides you through the complete process using menus and prompts.
 
-{/* PHOTO AREA: replace /images/screenshots/publish-first-build.png with your real screenshot. */}
-<Frame caption="Publishing the first build with the interactive CLI">
+<Warning>
+  Publishing the game in the Catalog only makes its entry visible in the launcher. It does not upload the game files. You must publish at least one build through the CLI before players can install and run the game.
+</Warning>
+
+## Before you begin
+
+Confirm that:
+
+- The game exists in the Catalog.
+- The game status is **Published**.
+- The game has at least one branch.
+- CLI access is enabled for the game.
+- You have a packaged build that runs correctly.
+- You know which executable is used to start the game.
+- Your workspace has enough storage available.
+- Your account has permission to publish builds.
+
+<Note>
+  Accounts created through Google or GitHub may need to create a Launcher Forge password before signing in to the CLI with email and password.
+</Note>
+
+## 1. Open the CLI section
+
+Sign in to the Launcher Forge dashboard.
+
+In the left sidebar, select **CLI**.
+
+Launcher Forge displays the games available for CLI publishing.
+
+Select the game that you want to publish. You can select the game card or use **Open CLI**.
+
+<Frame caption="Open the CLI section and select the game">
   <img
-    src="/images/screenshots/publish-first-build.png"
-    alt="Interactive CLI publishing workflow"
+    src="/images/screenshots/cli-dashboard-select-game.png"
+    alt="Launcher Forge CLI page with a game card and Open CLI option highlighted"
   />
 </Frame>
+
+<Info>
+  The CLI only retrieves games and permissions available to the authenticated account.
+</Info>
+
+## 2. Review the game CLI page
+
+The game-specific CLI page shows the information used by the publishing workflow.
+
+Review:
+
+- **Application ID**.
+- Number of branches.
+- Default branch.
+- CLI access status.
+- CLI installer version.
+- Installer file size.
+
+The Application ID identifies the game internally. The interactive CLI retrieves the available games after login, so you normally select the game from the menu instead of typing this ID manually.
+
+<Frame caption="Review the game information and download the Launcher Forge CLI">
+  <img
+    src="/images/screenshots/cli-game-download.png"
+    alt="Launcher Forge game CLI page with the Download CLI button highlighted"
+  />
+</Frame>
+
+## 3. Download the CLI
+
+Select **Download CLI**.
+
+The download uses your active dashboard session and verifies the password state of your account.
+
+Save the Windows installer to your computer.
+
+<Warning>
+  Download the CLI only from the official Launcher Forge dashboard. Do not use executables received from unknown sources.
+</Warning>
+
+## 4. Install the CLI
+
+Run the downloaded installer and complete the Windows installation.
+
+{/* SCREENSHOT TO TAKE:
+    Capture the installer or the installation completed screen.
+*/}
+<Frame caption="Install the Launcher Forge CLI on Windows">
+  <img
+    src="/images/screenshots/cli-installer.png"
+    alt="Launcher Forge CLI Windows installer"
+  />
+</Frame>
+
+After installation, open the Launcher Forge CLI.
+
+## 5. Sign in
+
+When no valid session exists, the CLI asks you to authenticate.
+
+Use the email address and Launcher Forge password associated with your developer account.
+
+{/* SCREENSHOT TO TAKE:
+    Capture the CLI sign-in screen.
+    Hide the real email address before publishing the screenshot.
+*/}
+<Frame caption="Sign in to the Launcher Forge CLI">
+  <img
+    src="/images/screenshots/cli-login.png"
+    alt="Launcher Forge CLI email and password sign-in screen"
+  />
+</Frame>
+
+<Note>
+  Signing in to the dashboard does not automatically sign in to the installed CLI. The CLI maintains its own local session.
+</Note>
+
+## 6. Select Publish a new version
+
+After authentication, the interactive main menu appears.
+
+Select **Publish a new version**.
+
+The menu can also provide options for upload status, version history, permissions, session management, and the installed CLI version.
+
+{/* SCREENSHOT TO TAKE:
+    Capture the complete interactive main menu.
+*/}
+<Frame caption="Select Publish a new version from the interactive menu">
+  <img
+    src="/images/screenshots/cli-main-menu.png"
+    alt="Launcher Forge CLI interactive main menu"
+  />
+</Frame>
+
+## 7. Select the game and branch
+
+The CLI retrieves the games and permissions associated with your account.
+
+Select:
+
+1. The game you want to publish.
+2. The destination branch.
+
+Typical branches include:
+
+- `main`
+- `stable`
+- `beta`
+- `development`
+- A permitted private branch
+
+{/* SCREENSHOT TO TAKE:
+    Capture the game and branch selection prompts.
+*/}
+<Frame caption="Select the game and destination branch">
+  <img
+    src="/images/screenshots/cli-select-game-and-branch.png"
+    alt="Launcher Forge CLI game and branch selection prompts"
+  />
+</Frame>
+
+<Warning>
+  Verify the selected branch carefully. Publishing a test build to a production branch can expose it to players.
+</Warning>
+
+## 8. Define the release
+
+The CLI requests the release metadata.
+
+### Version
+
+Enter a new version number.
+
+A semantic version format is recommended:
+
+```text
+MAJOR.MINOR.PATCH
+```
+
+Examples:
+
+```text
+1.0.0
+1.1.0
+1.1.1
+```
+
+Do not reuse a version that already exists for the selected game and branch.
+
+### Release type
+
+Select one of the available release types.
+
+<Tabs>
+  <Tab title="STABLE">
+    Use `STABLE` for a complete release baseline.
+
+    Launcher Forge processes the complete packaged build for the release.
+  </Tab>
+
+  <Tab title="PATCH">
+    Use `PATCH` for a planned update.
+
+    Launcher Forge compares the new manifest with existing file hashes and uploads the files required by the new version.
+  </Tab>
+
+  <Tab title="HOTFIX">
+    Use `HOTFIX` for an urgent and focused correction.
+
+    It uses the manifest comparison flow while clearly identifying the release as an urgent fix.
+  </Tab>
+</Tabs>
+
+### Changelog
+
+Write a short player-facing summary of the changes.
+
+Example:
+
+```text
+Added controller remapping, improved loading times, and fixed a crash when changing regions.
+```
+
+Do not include passwords, tokens, private URLs, or internal infrastructure information.
+
+{/* SCREENSHOT TO TAKE:
+    Capture the version, release type, and changelog prompts.
+*/}
+<Frame caption="Enter the version, release type, and changelog">
+  <img
+    src="/images/screenshots/cli-release-details.png"
+    alt="Launcher Forge CLI version, release type, and changelog prompts"
+  />
+</Frame>
+
+## 9. Select the packaged build
+
+Select the local folder containing the compiled and packaged game files.
+
+For example:
+
+```text
+MyGameBuild/
+├── MyGame.exe
+├── Content/
+├── Engine/
+└── Config/
+```
+
+Select the packaged build root, not the Unreal Engine or Unity project directory.
+
+Do not select folders containing:
+
+- Source code.
+- Editor caches.
+- Intermediate files.
+- Temporary build content.
+- Credentials or private configuration.
+
+{/* SCREENSHOT TO TAKE:
+    Capture the build folder selection.
+    Avoid exposing your Windows username or private folders.
+*/}
+<Frame caption="Select the packaged game directory">
+  <img
+    src="/images/screenshots/cli-select-build-folder.png"
+    alt="Launcher Forge CLI packaged build folder selection"
+  />
+</Frame>
+
+<Warning>
+  Do not move, rename, or modify the selected folder while the CLI is scanning or uploading it.
+</Warning>
+
+## 10. Analyze and publish
+
+Before uploading, the CLI shows a summary of the selected values.
+
+Review:
+
+- Game.
+- Branch.
+- Version.
+- Release type.
+- Changelog.
+- Build directory.
+
+Confirm the operation only when all values are correct.
+
+Launcher Forge then:
+
+1. Scans the files.
+2. Calculates SHA-256 hashes.
+3. Generates the build manifest.
+4. Detects the files that must be uploaded.
+5. Uploads the required artifacts.
+6. Creates the new version.
+
+{/* SCREENSHOT TO TAKE:
+    Capture the scan, hash, manifest, or upload progress.
+*/}
+<Frame caption="Wait while the CLI analyzes and uploads the build">
+  <img
+    src="/images/screenshots/cli-upload-progress.png"
+    alt="Launcher Forge CLI scanning and upload progress"
+  />
+</Frame>
+
+Keep the terminal open and maintain a stable internet connection until the process finishes.
+
+## 11. Confirm the published version
+
+When the operation succeeds, the CLI displays a completion message or version summary.
+
+{/* SCREENSHOT TO TAKE:
+    Capture the final successful publication result.
+*/}
+<Frame caption="Confirm that the version was published successfully">
+  <img
+    src="/images/screenshots/cli-upload-success.png"
+    alt="Launcher Forge CLI successful build publication"
+  />
+</Frame>
+
+After publishing:
+
+- Review the version in the dashboard.
+- Confirm the correct branch and release type.
+- Review the changelog.
+- Verify the processing status.
+- Install or update the game through the launcher.
+- Start the installed game and confirm that it works.
+
+<Check>
+  Your first game build has been published successfully.
+</Check>
+
+## If the upload fails
+
+The CLI should display the cause and return you to a usable menu instead of closing unexpectedly.
+
+Common causes include:
+
+- Invalid or expired session.
+- Missing game or branch permission.
+- Duplicate version.
+- Invalid packaged folder.
+- Storage limit reached.
+- Network interruption.
+- Missing executable.
+- The selected files changed during the upload.
+
+Correct the reported cause before retrying.
+
+## Screenshots you still need to take
+
+Replace the following placeholder files with real captures:
+
+```text
+images/screenshots/cli-installer.png
+images/screenshots/cli-login.png
+images/screenshots/cli-main-menu.png
+images/screenshots/cli-select-game-and-branch.png
+images/screenshots/cli-release-details.png
+images/screenshots/cli-select-build-folder.png
+images/screenshots/cli-upload-progress.png
+images/screenshots/cli-upload-success.png
+```
+
+Before publishing the images, hide:
+
+- Email addresses.
+- Passwords.
+- Access tokens.
+- Local usernames.
+- Private folder paths.
+- Private URLs.
+- Application information you do not want to expose.
+
+## Next step
+
+Continue with [Test your launcher](/en/getting-started/test-launcher).
