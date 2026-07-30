@@ -8,11 +8,14 @@
     "light": "#6f3423"
   },
   "logo": {
-    "light": "/images/logo-light.svg",
-    "dark": "/images/logo-dark.svg",
+    "light": "/images/LogotipoHorizontal_2_800x180.png",
+    "dark": "/images/LogotipoHorizontal_2_800x180.png",
     "href": "https://launcherforge.io"
   },
-  "favicon": "/images/favicon.svg",
+  "favicon": {
+    "light": "/images/Logotipo3icon.ico",
+    "dark": "/images/Logotipo3icon.ico"
+  },
   "appearance": {
     "default": "dark",
     "strict": true
