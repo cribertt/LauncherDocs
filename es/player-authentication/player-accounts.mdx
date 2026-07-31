@@ -1,26 +1,388 @@
 ---
 title: "Cuentas de jugadores"
-description: "Explica registro e inicio de sesión de usuarios finales."
+description: "Comprende el registro, autenticación y verificación del launcher, además de la administración de jugadores desde el panel."
 icon: "users"
 ---
 
-
 # Cuentas de jugadores
 
-Las cuentas de jugadores son distintas a las cuentas de desarrollador.
+Las cuentas de jugadores son las cuentas de usuario final creadas dentro de un launcher generado con Launcher Forge.
 
-Documenta:
+Son distintas de las cuentas utilizadas para acceder al dashboard de desarrollador.
 
-- Registro.
+El launcher se encarga de:
+
+- Registro del jugador.
+- Inicio de sesión.
 - Verificación de correo.
-- Login.
-- Sesiones.
-- Restricciones o bloqueos.
+- Recuperación de contraseña.
+- Sesiones del usuario final.
+- Acceso a la biblioteca de juegos.
 
-{/* PHOTO AREA: replace /images/screenshots/player-accounts.png with your real screenshot. */}
-<Frame caption="Registro e inicio de sesión">
+El dashboard permite al desarrollador revisar y administrar las cuentas registradas dentro de su launcher.
+
+<Info>
+  La cuenta de desarrollador administra el workspace, los juegos, las builds, las keys, el launcher y los accesos.
+
+  La cuenta de jugador inicia sesión dentro del launcher generado y utiliza los juegos que ese launcher tenga disponibles.
+</Info>
+
+## Responsabilidades de cada componente
+
+<CardGroup cols={2}>
+  <Card title="Launcher" icon="desktop">
+    Administra el flujo visible para el jugador:
+
+    - Registro.
+    - Inicio de sesión.
+    - Verificación de correo.
+    - Recuperación de contraseña.
+    - Creación de sesiones.
+    - Adquisición y acceso a juegos.
+  </Card>
+
+  <Card title="Dashboard del desarrollador" icon="user-shield">
+    Proporciona herramientas de administración:
+
+    - Ver cuentas registradas.
+    - Revisar verificación y actividad.
+    - Revisar acceso a juegos.
+    - Revisar acceso a ramas privadas.
+    - Eliminar cuentas no verificadas.
+    - Bloquear jugadores verificados o activos.
+  </Card>
+</CardGroup>
+
+<Warning>
+  Las cuentas del dashboard y las cuentas de jugadores del launcher son tipos de cuenta diferentes.
+
+  Registrarse como desarrollador no crea automáticamente una cuenta de jugador dentro del launcher.
+</Warning>
+
+## Ciclo de una cuenta de jugador
+
+```text
+El jugador abre el launcher
+        ↓
+Registra una cuenta de usuario final
+        ↓
+El launcher envía la verificación de correo
+        ↓
+El jugador verifica su correo
+        ↓
+El jugador inicia sesión
+        ↓
+El launcher crea la sesión
+        ↓
+El jugador adquiere, canjea, descarga e inicia juegos
+        ↓
+El desarrollador revisa o restringe el acceso desde el panel
+```
+
+## 1. Abre Players
+
+Inicia sesión en el dashboard de Launcher Forge.
+
+En el menú lateral izquierdo, selecciona **Players**.
+
+La página muestra las cuentas registradas mediante tu launcher.
+
+<Frame caption="Abre Players y revisa las cuentas registradas">
   <img
-    src="/images/screenshots/player-accounts.png"
-    alt="Registro de jugadores"
+    src="/images/screenshots/players-overview.png"
+    alt="Página Players de Launcher Forge con cuentas registradas y acciones View"
   />
 </Frame>
+
+## Resumen del panel
+
+Las tarjetas superiores muestran un resumen de las cuentas del launcher.
+
+| Métrica | Descripción |
+| --- | --- |
+| **Total players** | Cantidad total de cuentas registradas. |
+| **Active** | Cuentas consideradas activas actualmente. |
+| **New this month** | Cuentas registradas durante el mes actual. |
+| **Banned** | Cuentas restringidas por el desarrollador. |
+
+Utiliza **Refresh** para obtener la información más reciente.
+
+## Tabla de cuentas registradas
+
+La tabla puede mostrar:
+
+| Columna | Descripción |
+| --- | --- |
+| **Player** | Correo, iniciales e identificador del jugador. |
+| **Games** | Cantidad de juegos asociados con la cuenta. |
+| **Private branches** | Cantidad de ramas privadas asignadas. |
+| **Last login** | Último inicio de sesión correcto en el launcher. |
+| **Registered** | Fecha de registro. |
+| **Actions** | Abre los detalles del jugador. |
+
+También puedes:
+
+- Buscar por correo.
+- Filtrar por estado.
+- Navegar entre páginas.
+- Abrir una cuenta mediante **View**.
+
+<Note>
+  La sección Players pertenece al launcher. No muestra las cuentas de desarrolladores del dashboard.
+</Note>
+
+## 2. Abre los detalles del jugador
+
+Selecciona **View** en la fila de la cuenta.
+
+Launcher Forge abrirá el panel **Player details**.
+
+El panel puede mostrar:
+
+- Correo.
+- UUID del jugador.
+- Estado de la cuenta.
+- Fecha de registro.
+- Último inicio de sesión.
+- Estado de verificación del correo.
+- Launcher asociado.
+- Acceso a juegos.
+- Acceso a ramas privadas.
+- Acción administrativa disponible.
+
+## Cuentas no verificadas
+
+Una cuenta recién registrada puede aparecer como **Unverified** cuando todavía no completó la verificación de correo.
+
+<Frame caption="Revisa una cuenta de jugador no verificada">
+  <img
+    src="/images/screenshots/player-unverified-details.png"
+    alt="Detalles de una cuenta no verificada sin acceso a juegos ni ramas privadas"
+  />
+</Frame>
+
+El panel muestra:
+
+- Estado **Unverified**.
+- Fecha de registro.
+- Último login, que puede indicar `Never`.
+- Estado de verificación del correo.
+- Launcher asociado.
+- Ausencia de acceso a juegos, cuando no se ha concedido ninguno.
+- Ausencia de ramas privadas, cuando no existe una asignación.
+
+## Eliminar una cuenta no verificada
+
+Cuando el correo sigue sin verificarse, el desarrollador puede utilizar **Delete unverified**.
+
+Esta acción puede utilizarse en casos como:
+
+- Registro con un correo incorrecto.
+- Cuenta duplicada no verificada.
+- Registro abandonado.
+- Cuenta de prueba que nunca fue verificada.
+- Cuenta no verificada que no debe permanecer en el launcher.
+
+<Warning>
+  Eliminar una cuenta no verificada borra permanentemente ese registro.
+
+  Confirma el correo y el identificador antes de eliminarla.
+</Warning>
+
+Esta acción está destinada a cuentas que no completaron la verificación de correo.
+
+## Cuentas verificadas y activas
+
+Después de verificar el correo e iniciar sesión correctamente, la cuenta puede aparecer como **Active**.
+
+<Frame caption="Revisa un jugador activo y su acceso a juegos">
+  <img
+    src="/images/screenshots/player-active-details.png"
+    alt="Detalles de un jugador activo y verificado con acceso a un juego y acción Ban player"
+  />
+</Frame>
+
+El panel puede mostrar:
+
+- Estado **Active**.
+- Correo verificado.
+- Fecha de registro.
+- Último inicio de sesión.
+- Launcher asociado.
+- Juegos concedidos.
+- Estado de acceso de cada juego.
+- Tipo de acceso, por ejemplo gratuito.
+- Fecha de concesión del acceso.
+- Ramas privadas asignadas.
+- Acción **Ban player**.
+
+## Acceso a juegos
+
+La sección **Game access** muestra los juegos asociados con la cuenta.
+
+Un registro de acceso puede incluir:
+
+| Campo | Descripción |
+| --- | --- |
+| **Nombre del juego** | Título público. |
+| **Slug** | Identificador interno o utilizado en URLs. |
+| **Estado** | Estado actual del acceso. |
+| **Tipo de acceso** | Por ejemplo, gratuito o mediante key. |
+| **Fecha de concesión** | Fecha en que el jugador obtuvo acceso. |
+
+El acceso puede originarse mediante:
+
+- Adquisición de un juego gratuito.
+- Canje de una CD key válida.
+- Otro flujo compatible de concesión de acceso.
+
+<Info>
+  La cuenta igualmente debe utilizar la autenticación del launcher antes de acceder a su biblioteca.
+</Info>
+
+## Ramas privadas
+
+La sección **Private branches** muestra los accesos especiales asignados al jugador.
+
+Las ramas privadas pueden utilizarse para:
+
+- Betas cerradas.
+- Pruebas de QA.
+- Versiones para prensa.
+- Builds para partners.
+- Grupos internos.
+- Canales limitados de publicación.
+
+Cuando no existe una asignación, el panel indica que el jugador no tiene acceso privado.
+
+<Warning>
+  El acceso a una rama privada es independiente del acceso al juego base.
+
+  Un jugador puede tener acceso al juego sin tener acceso a ninguna rama privada.
+</Warning>
+
+## Bloquear a un jugador
+
+Para una cuenta verificada o activa, el desarrollador puede utilizar **Ban player** para restringirla.
+
+Esta acción puede utilizarse cuando:
+
+- La cuenta incumple las reglas del juego.
+- El acceso debe suspenderse.
+- Existe abuso o actividad no autorizada.
+- Una cuenta de prueba ya no debe utilizar el launcher.
+- El desarrollador necesita impedir nuevos accesos.
+
+Antes de bloquear, revisa:
+
+- Correo.
+- UUID.
+- Acceso actual a juegos.
+- Ramas privadas.
+- Último inicio de sesión.
+- Estado de la cuenta.
+
+<Warning>
+  Bloquear a un jugador es una restricción administrativa.
+
+  Confirma que seleccionaste la cuenta correcta antes de continuar.
+</Warning>
+
+## Resumen de estados
+
+| Estado | Significado | Acción del desarrollador |
+| --- | --- | --- |
+| **Unverified** | El jugador se registró, pero no verificó su correo. | Revisar o eliminar la cuenta no verificada. |
+| **Active** | La cuenta está verificada y puede utilizar el launcher según sus accesos. | Revisar accesos o bloquear al jugador. |
+| **Banned** | La cuenta fue restringida por el desarrollador. | Revisar la cuenta y aplicar la política de recuperación disponible. |
+
+<Note>
+  Los controles exactos para recuperar o desbloquear una cuenta dependen de las acciones disponibles actualmente en el dashboard.
+</Note>
+
+## Sesiones y restricciones
+
+El launcher es responsable de crear y utilizar las sesiones de los usuarios finales.
+
+El dashboard no realiza el inicio de sesión interactivo del jugador. En su lugar, permite al desarrollador:
+
+- Revisar el último inicio de sesión.
+- Revisar el estado actual.
+- Identificar el launcher asociado.
+- Revisar los juegos concedidos.
+- Revisar ramas privadas.
+- Aplicar restricciones administrativas.
+
+De esta manera, la autenticación y la administración permanecen separadas.
+
+## Cuentas de jugadores y launch tokens
+
+Las cuentas de jugadores y los launch tokens resuelven problemas diferentes.
+
+<CardGroup cols={2}>
+  <Card title="Cuentas de jugadores" icon="users">
+    Registran y autentican al usuario final dentro del launcher y mantienen su biblioteca y sus accesos.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/es/game-authentication/launch-tokens"
+  >
+    Validan la conexión técnica de inicio entre el launcher y el runtime del juego.
+  </Card>
+</CardGroup>
+
+```text
+Cuenta de jugador
+  → autentica al usuario final dentro del launcher
+
+Launch token
+  → valida el inicio launcher-juego
+```
+
+## Lista de verificación del desarrollador
+
+Al revisar las cuentas, confirma:
+
+- La cuenta pertenece al launcher esperado.
+- El estado de verificación es correcto.
+- El último inicio de sesión es coherente.
+- El acceso a juegos coincide con lo esperado.
+- Las ramas privadas están correctamente asignadas.
+- Las cuentas no verificadas se eliminan solo cuando corresponde.
+- Las cuentas verificadas se bloquean únicamente después de revisarlas.
+- Los identificadores de jugadores no se exponen públicamente.
+- Los correos se tratan como información privada.
+
+<Check>
+  La administración funciona correctamente cuando el registro y la autenticación ocurren dentro del launcher, mientras el desarrollador revisa accesos y aplica restricciones desde el dashboard.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Recuperación de contraseña"
+    icon="key"
+    href="/es/player-authentication/password-recovery"
+  >
+    Comprende el flujo de recuperación de contraseña del usuario final.
+  </Card>
+
+  <Card
+    title="Game keys"
+    icon="ticket"
+    href="/es/player-authentication/game-keys"
+  >
+    Genera y administra keys para juegos protegidos.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/es/game-authentication/launch-tokens"
+  >
+    Configura la validación de inicio entre el launcher y el juego.
+  </Card>
+</CardGroup>

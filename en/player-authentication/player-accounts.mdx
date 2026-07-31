@@ -1,26 +1,388 @@
 ---
 title: "Player accounts"
-description: "Explain player registration and sign-in."
+description: "Understand launcher registration, authentication, verification, and developer-side player management."
 icon: "users"
 ---
 
-
 # Player accounts
 
-Player accounts are separate from developer workspace accounts.
+Player accounts are the end-user accounts created inside a generated Launcher Forge launcher.
 
-Document:
+They are separate from developer dashboard accounts.
 
-- Registration.
+The launcher handles:
+
+- Player registration.
+- Player sign-in.
 - Email verification.
-- Login.
-- Session behavior.
-- Account restrictions and bans when applicable.
+- Password recovery.
+- End-user sessions.
+- Access to the game library.
 
-{/* PHOTO AREA: replace /images/screenshots/player-accounts.png with your real screenshot. */}
-<Frame caption="Player account registration and sign-in screens">
+The developer dashboard provides visibility and administrative controls for the accounts registered in that launcher.
+
+<Info>
+  A developer account manages the workspace, games, builds, keys, launchers, and player access.
+
+  A player account signs in to the generated launcher and uses the games made available to that launcher.
+</Info>
+
+## Responsibilities by component
+
+<CardGroup cols={2}>
+  <Card title="Launcher" icon="desktop">
+    Handles the player-facing authentication flow:
+
+    - Registration.
+    - Sign-in.
+    - Email verification.
+    - Password recovery.
+    - Session creation.
+    - Game acquisition and access.
+  </Card>
+
+  <Card title="Developer dashboard" icon="user-shield">
+    Provides player administration:
+
+    - View registered accounts.
+    - Review verification and activity status.
+    - Review game access.
+    - Review private branch access.
+    - Delete unverified accounts.
+    - Ban verified or active players.
+  </Card>
+</CardGroup>
+
+<Warning>
+  Developer dashboard accounts and launcher player accounts are different account types.
+
+  Registering as a developer does not automatically create a player account inside the launcher.
+</Warning>
+
+## Player lifecycle
+
+```text
+Player opens the launcher
+        ↓
+Registers an end-user account
+        ↓
+Launcher sends email verification
+        ↓
+Player verifies the email
+        ↓
+Player signs in
+        ↓
+Launcher creates the player session
+        ↓
+Player acquires, redeems, downloads, and launches games
+        ↓
+Developer reviews or restricts access from the dashboard
+```
+
+## 1. Open Players
+
+Sign in to the Launcher Forge developer dashboard.
+
+In the left sidebar, select **Players**.
+
+The page lists the accounts registered through your launcher.
+
+<Frame caption="Open Players and review registered launcher accounts">
   <img
-    src="/images/screenshots/player-accounts.png"
-    alt="Player login and registration"
+    src="/images/screenshots/players-overview.png"
+    alt="Launcher Forge Players page with registered player accounts and View actions"
   />
 </Frame>
+
+## Dashboard summary
+
+The summary cards provide a quick overview of the launcher account population.
+
+| Metric | Description |
+| --- | --- |
+| **Total players** | Total number of registered end-user accounts. |
+| **Active** | Accounts currently considered active. |
+| **New this month** | Accounts registered during the current month. |
+| **Banned** | Accounts currently restricted by the developer. |
+
+Use **Refresh** to retrieve the latest account data.
+
+## Registered accounts table
+
+The table can display:
+
+| Column | Description |
+| --- | --- |
+| **Player** | Email, initials, and player identifier. |
+| **Games** | Number of games currently associated with the account. |
+| **Private branches** | Number of private branches assigned to the player. |
+| **Last login** | Most recent successful launcher sign-in. |
+| **Registered** | Account registration date. |
+| **Actions** | Opens the player details panel. |
+
+You can:
+
+- Search by email.
+- Filter accounts by status.
+- Navigate between result pages.
+- Open an account using **View**.
+
+<Note>
+  The Players section is scoped to the launcher. It does not list developer dashboard accounts.
+</Note>
+
+## 2. View player details
+
+Select **View** from the account row.
+
+Launcher Forge opens the **Player details** panel.
+
+The panel can display:
+
+- Email.
+- Player UUID.
+- Account status.
+- Registration date.
+- Last login.
+- Email verification status.
+- Associated launcher.
+- Game access.
+- Private branch access.
+- Available administrative action.
+
+## Unverified accounts
+
+A newly registered account can appear as **Unverified** when the email verification process has not been completed.
+
+<Frame caption="Review an unverified player account">
+  <img
+    src="/images/screenshots/player-unverified-details.png"
+    alt="Launcher Forge player details showing an unverified account with no game or private branch access"
+  />
+</Frame>
+
+The panel shows:
+
+- **Unverified** account status.
+- Registration date.
+- Last login, which can be `Never`.
+- Email verification state.
+- Launcher associated with the account.
+- No registered game access, when none has been granted.
+- No private branch access, when none has been assigned.
+
+## Delete an unverified account
+
+When the email remains unverified, the developer can use **Delete unverified**.
+
+Use this action for cases such as:
+
+- Registration with an incorrect email address.
+- Duplicate unverified account.
+- Abandoned registration.
+- Test account that was never verified.
+- Unverified account that should not remain in the launcher.
+
+<Warning>
+  Deleting an unverified account permanently removes that registration.
+
+  Confirm the email and account identifier before deleting it.
+</Warning>
+
+This action is intended for accounts that have not completed email verification.
+
+## Verified and active accounts
+
+After verification and a successful launcher sign-in, the account can appear as **Active**.
+
+<Frame caption="Review an active player and their game access">
+  <img
+    src="/images/screenshots/player-active-details.png"
+    alt="Launcher Forge player details showing an active verified account with game access and Ban player action"
+  />
+</Frame>
+
+The panel can show:
+
+- **Active** status.
+- Verified email.
+- Registration date.
+- Last login.
+- Associated launcher.
+- Games granted to the player.
+- Access status for each game.
+- Access type, such as free access.
+- Date when access was granted.
+- Assigned private branches.
+- **Ban player** action.
+
+## Game access
+
+The **Game access** section shows the games associated with the player account.
+
+An access record can include:
+
+| Field | Description |
+| --- | --- |
+| **Game name** | Public game title. |
+| **Slug** | Internal or URL identifier. |
+| **Status** | Current access status. |
+| **Access type** | For example, free or key-based access. |
+| **Granted date** | Date when the player received access. |
+
+Game access can originate from:
+
+- Acquiring a free game.
+- Redeeming a valid CD key.
+- Another supported developer access flow.
+
+<Info>
+  The player account must still use the launcher authentication flow before accessing its library.
+</Info>
+
+## Private branches
+
+The **Private branches** section shows special branch access assigned to the player.
+
+Private branches can be used for:
+
+- Closed beta versions.
+- QA testing.
+- Press previews.
+- Partner builds.
+- Internal testing groups.
+- Limited release channels.
+
+When no branch is assigned, the panel shows that the player has no private access.
+
+<Warning>
+  Private branch access is separate from base-game ownership.
+
+  A player may have access to the game without having access to any private branch.
+</Warning>
+
+## Ban a player
+
+For a verified or active account, the developer can use **Ban player** to restrict the account.
+
+Use this action when:
+
+- The account violates the game's rules.
+- Access must be suspended.
+- The account is involved in abuse or unauthorized activity.
+- A test account should no longer use the launcher.
+- The developer needs to prevent further launcher access.
+
+Before banning a player, review:
+
+- Email.
+- Player UUID.
+- Current game access.
+- Private branch assignments.
+- Last login.
+- Account status.
+
+<Warning>
+  Banning a player is an administrative restriction.
+
+  Verify that you selected the correct account before confirming the action.
+</Warning>
+
+## Account status overview
+
+| Status | Meaning | Available developer action |
+| --- | --- | --- |
+| **Unverified** | The player registered but has not completed email verification. | Review or delete the unverified account. |
+| **Active** | The account is verified and can use the launcher according to its access. | Review access or ban the player. |
+| **Banned** | The developer restricted the account. | Review the account and apply the available recovery policy. |
+
+<Note>
+  The exact recovery or unban controls depend on the actions currently available in the dashboard.
+</Note>
+
+## Sessions and restrictions
+
+The launcher is responsible for creating and using end-user sessions.
+
+The developer dashboard does not perform the player's interactive sign-in. Instead, it allows the developer to:
+
+- Review the last successful login.
+- Review the current account status.
+- Inspect the launcher associated with the account.
+- Inspect granted game access.
+- Inspect private branch access.
+- Apply administrative restrictions.
+
+This keeps authentication and administration as separate responsibilities.
+
+## Player authentication and launch validation
+
+Player accounts and launch tokens solve different problems.
+
+<CardGroup cols={2}>
+  <Card title="Player accounts" icon="users">
+    Register and authenticate the end user inside the launcher and maintain their library and access.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/en/game-authentication/launch-tokens"
+  >
+    Validate the technical startup connection between the launcher and the game runtime.
+  </Card>
+</CardGroup>
+
+```text
+Player account
+  → authenticates the end user in the launcher
+
+Launch token
+  → validates launcher-game startup
+```
+
+## Developer verification checklist
+
+When reviewing player accounts, confirm:
+
+- The account belongs to the expected launcher.
+- Email verification status is correct.
+- Last login information is reasonable.
+- Game access matches the intended entitlement.
+- Private branch access is correctly assigned.
+- Unverified accounts are deleted only when appropriate.
+- Verified accounts are banned only after reviewing the account.
+- Player identifiers are not exposed publicly.
+- Player email addresses are treated as private information.
+
+<Check>
+  Player account management is working correctly when registration and authentication occur inside the launcher, while the developer can review access and apply restrictions from the dashboard.
+</Check>
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="Password recovery"
+    icon="key"
+    href="/en/player-authentication/password-recovery"
+  >
+    Understand the end-user password recovery flow.
+  </Card>
+
+  <Card
+    title="Game keys"
+    icon="ticket"
+    href="/en/player-authentication/game-keys"
+  >
+    Generate and manage access keys for key-protected games.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/en/game-authentication/launch-tokens"
+  >
+    Configure launcher-game startup validation.
+  </Card>
+</CardGroup>
