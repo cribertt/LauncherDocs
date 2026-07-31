@@ -1,24 +1,465 @@
 ---
 title: "Builds"
-description: "Comprende releases estables, patches, hotfixes e historial."
+description: "Publica releases completas, patches y hotfixes, y revisa el historial y los cambios de archivos entre versiones."
 icon: "boxes-stacked"
 ---
 
-
 # Builds
 
+Una build es una versión empaquetada del juego publicada en una rama específica.
+
+Launcher Forge almacena el manifiesto, los hashes de archivos, los metadatos de la release, el ejecutable principal y los artefactos necesarios para que el launcher pueda instalar o actualizar el juego.
+
+<Info>
+  Las builds se publican mediante la CLI interactiva de Launcher Forge. El dashboard se utiliza para revisar ramas, versiones, changelogs, almacenamiento y comparaciones.
+</Info>
+
+## Modelo de publicación
+
+```text
+Carpeta del juego empaquetado
+        ↓
+Launcher Forge CLI
+        ↓
+Seleccionar juego y rama
+        ↓
+Ingresar versión y tipo de release
+        ↓
+Generar manifiesto y hashes
+        ↓
+Seleccionar ejecutable principal
+        ↓
+Subir los archivos requeridos
+        ↓
+Crear la versión en la rama seleccionada
+```
+
+## Tipos de release
+
 <Tabs>
-  <Tab title="STABLE">Base completa de publicación.</Tab>
-  <Tab title="PATCH">Actualización planificada.</Tab>
-  <Tab title="HOTFIX">Corrección urgente.</Tab>
+  <Tab title="STABLE">
+    Es una base completa de publicación.
+
+    Launcher Forge sube la build empaquetada completa, incluyendo archivos que pueden existir en versiones anteriores.
+
+    Utiliza `STABLE` para:
+
+    - La primera versión publicada.
+    - Una nueva base completa.
+    - Cambios importantes en el empaquetado.
+    - Reconstruir el estado completo de la rama.
+  </Tab>
+
+  <Tab title="PATCH">
+    Es una actualización planificada con contenido nuevo, modificado o eliminado.
+
+    Launcher Forge compara el nuevo manifiesto con los hashes existentes y sube los archivos necesarios para la nueva versión.
+
+    Utiliza `PATCH` para:
+
+    - Nuevas funciones.
+    - Actualizaciones de contenido.
+    - Cambios de balance.
+    - Correcciones regulares.
+    - Versiones planificadas posteriores al lanzamiento.
+  </Tab>
+
+  <Tab title="HOTFIX">
+    Es una corrección urgente y enfocada.
+
+    Utiliza el flujo de comparación de manifiestos, pero identifica la release como una corrección urgente.
+
+    Utiliza `HOTFIX` para:
+
+    - Crashes críticos.
+    - Problemas que impiden iniciar el juego.
+    - Errores graves de configuración.
+    - Correcciones urgentes en producción.
+  </Tab>
 </Tabs>
 
-Cada versión debe incluir changelog e historial.
+<Warning>
+  El tipo de release describe el propósito y el comportamiento de subida. No reemplaza la rama. Cada build se publica en una rama seleccionada, como `main`, `beta` o una rama privada.
+</Warning>
 
-{/* PHOTO AREA: replace /images/screenshots/builds.png with your real screenshot. */}
-<Frame caption="Stable, patch, hotfix y changelog">
+## Comparación de tipos
+
+| Tipo | Comportamiento de subida | Uso recomendado |
+| --- | --- | --- |
+| **STABLE** | Sube la build empaquetada completa. | Primera release o nueva base completa. |
+| **PATCH** | Utiliza manifiestos y hashes para subir los cambios requeridos. | Actualización planificada. |
+| **HOTFIX** | Utiliza la comparación y marca la release como urgente. | Corrección crítica y específica. |
+
+## Antes de publicar
+
+Confirma lo siguiente:
+
+- El juego existe en el Catálogo.
+- La ficha del juego está publicada.
+- La validación launcher-juego está configurada.
+- La rama de destino existe.
+- La build empaquetada funciona correctamente.
+- La carpeta contiene todos los archivos de ejecución.
+- El ejecutable correcto está incluido.
+- El número de versión no fue utilizado en la rama.
+- El workspace tiene almacenamiento suficiente.
+
+<Card
+  title="Publicar mediante la CLI interactiva"
+  icon="terminal"
+  href="/es/getting-started/publish-first-build"
+>
+  Revisa el flujo completo de la CLI antes de subir tu primera versión.
+</Card>
+
+## 1. Selecciona el tipo de release
+
+Durante el flujo interactivo, ingresa el número de versión y selecciona `STABLE`, `PATCH` o `HOTFIX`.
+
+<Frame caption="Selecciona la versión y el tipo de release">
   <img
-    src="/images/screenshots/builds.png"
-    alt="Historial de builds"
+    src="/images/screenshots/build-release-type-selection.png"
+    alt="Launcher Forge CLI mostrando STABLE, PATCH y HOTFIX"
   />
 </Frame>
+
+Se recomienda utilizar versionamiento semántico:
+
+```text
+MAJOR.MINOR.PATCH
+```
+
+Ejemplos:
+
+```text
+1.0.0
+1.1.0
+1.1.1
+```
+
+Utiliza un número nuevo para cada publicación dentro de la rama seleccionada.
+
+## 2. Añade el changelog
+
+La CLI solicita notas opcionales para la release.
+
+El changelog debe explicar los cambios visibles incluidos en la versión.
+
+Ejemplo:
+
+```text
+Se añadió reasignación de controles, se mejoraron los tiempos de carga y se corrigió un cierre inesperado al cambiar de región.
+```
+
+Un changelog útil debe ser específico, fácil de revisar, escrito para jugadores o testers y coherente con los archivos incluidos.
+
+No incluyas contraseñas, tokens, URLs privadas, credenciales internas ni datos sensibles de depuración.
+
+## 3. Selecciona la carpeta empaquetada
+
+Selecciona la carpeta raíz del juego compilado.
+
+Ejemplo:
+
+```text
+MiJuegoBuild/
+├── MiJuego.exe
+├── MiJuego_Data/
+├── Librerías de ejecución
+└── Archivos de configuración
+```
+
+No selecciones la carpeta del proyecto del motor, el código fuente, la caché del editor ni archivos temporales.
+
+<Warning>
+  No modifiques, renombres ni muevas la carpeta mientras la CLI genera el manifiesto o sube los archivos.
+</Warning>
+
+## 4. Manifiesto y hashes
+
+Launcher Forge escanea la carpeta y genera un manifiesto.
+
+El manifiesto registra:
+
+- Ruta relativa.
+- Tamaño.
+- Hash SHA-256.
+- Cantidad total de archivos.
+- Cantidad de hashes únicos.
+- Ejecutables detectados.
+
+Los hashes permiten identificar archivos nuevos, modificados, sin cambios o eliminados entre versiones.
+
+## 5. Selecciona el ejecutable principal
+
+Después de generar el manifiesto, la CLI muestra los ejecutables detectados.
+
+Launcher Forge puede marcar uno como **Recommended**.
+
+Selecciona el ejecutable que inicia el juego real.
+
+<Frame caption="Revisa el manifiesto y selecciona el ejecutable principal">
+  <img
+    src="/images/screenshots/build-manifest-and-executable.png"
+    alt="Launcher Forge CLI mostrando el manifiesto y el ejecutable principal"
+  />
+</Frame>
+
+<Warning>
+  Seleccionar el ejecutable incorrecto puede permitir que la build se descargue e instale, pero impedir que el juego se inicie.
+</Warning>
+
+El ejecutable seleccionado queda asociado con la versión y será utilizado por el launcher.
+
+## 6. Sube la build
+
+Después de confirmar, Launcher Forge sube los artefactos necesarios.
+
+En una release `STABLE`, la CLI indica que se subirá el conjunto completo de archivos.
+
+<Frame caption="Sube los archivos del juego empaquetado">
+  <img
+    src="/images/screenshots/build-upload-progress.png"
+    alt="Launcher Forge CLI subiendo archivos de una build STABLE"
+  />
+</Frame>
+
+Mantén abierta la CLI y una conexión estable hasta terminar.
+
+## 7. Confirma la publicación
+
+Cuando termina correctamente, la CLI confirma:
+
+- Número de versión.
+- Tipo de release.
+- Rama de destino.
+- Ejecutable principal.
+- Creación de la build.
+- Subida exitosa.
+
+<Frame caption="Confirma la build publicada correctamente">
+  <img
+    src="/images/screenshots/build-upload-success.png"
+    alt="Launcher Forge CLI confirmando una build publicada correctamente"
+  />
+</Frame>
+
+Presiona **Enter** para volver al menú.
+
+## Revisar builds en el dashboard
+
+Abre **Branches** y selecciona el juego.
+
+El resumen muestra:
+
+- Cantidad de ramas.
+- Total de builds.
+- Uso de almacenamiento.
+- Última versión.
+- Historial de cada rama.
+
+<Frame caption="Revisa builds, almacenamiento y última versión">
+  <img
+    src="/images/screenshots/builds-branch-overview.png"
+    alt="Resumen de ramas mostrando builds, almacenamiento y última versión"
+  />
+</Frame>
+
+## Historial de versiones
+
+Cada rama muestra sus versiones publicadas.
+
+<Frame caption="Revisa el historial y las acciones disponibles">
+  <img
+    src="/images/screenshots/build-version-history.png"
+    alt="Historial de builds con versión, tipo, changelog y acciones"
+  />
+</Frame>
+
+La tabla puede incluir:
+
+| Columna | Descripción |
+| --- | --- |
+| **Depot** | Identificador interno de la build o artefacto. |
+| **Version** | Número de versión publicado. |
+| **Type** | `STABLE`, `PATCH` o `HOTFIX`. |
+| **Size** | Tamaño almacenado. |
+| **Date** | Fecha de publicación. |
+| **Changelog** | Notas de la release. |
+| **Actions** | Herramientas disponibles. |
+
+La versión más reciente se marca con **LATEST**.
+
+Las versiones elegibles también pueden mostrar una acción **Default** en la interfaz actual.
+
+## Editar una build
+
+La acción **Edit** modifica solamente el changelog o las release notes.
+
+No reemplaza:
+
+- Archivos.
+- Manifiesto.
+- Hashes.
+- Número de versión.
+- Tipo.
+- Rama.
+- Ejecutable principal.
+
+Para cambiar el contenido, publica una nueva versión mediante la CLI.
+
+<Warning>
+  No edites el changelog para afirmar que existe un archivo o corrección que no fue incluido en la build.
+</Warning>
+
+## Comparar versiones
+
+Selecciona **Compare** desde una versión.
+
+Elige una versión anterior como build base y compárala con la build actual.
+
+Launcher Forge compara los manifiestos y agrupa los archivos en:
+
+| Grupo | Significado |
+| --- | --- |
+| **Added** | Están en la versión actual, pero no en la base. |
+| **Modified** | Existen en ambas, pero su hash cambió. |
+| **Deleted** | Estaban en la base, pero no en la versión actual. |
+
+<Frame caption="Revisa diferencias de archivos entre versiones">
+  <img
+    src="/images/screenshots/build-comparison-results.png"
+    alt="Comparación de builds mostrando archivos Added, Modified y Deleted"
+  />
+</Frame>
+
+Los resultados pueden mostrar:
+
+- Ruta relativa.
+- Tamaño.
+- Hash SHA-256.
+- Descarga individual, cuando esté disponible.
+
+Esto permite confirmar el contenido de un patch, detectar cambios inesperados, verificar archivos eliminados e investigar actualizaciones demasiado grandes.
+
+## Ejemplo de comparación
+
+```text
+Versión base:   1.1.1
+Versión actual: 3.3.3
+
+Added:    301 archivos
+Modified:   0 archivos
+Deleted:   37 archivos
+```
+
+Una cantidad alta de archivos añadidos puede ser normal al comparar builds completas muy diferentes.
+
+## Historial y actualizaciones del launcher
+
+Cuando se publica una versión más nueva en la rama utilizada por el jugador:
+
+1. El launcher consulta la información de la rama.
+2. Detecta la nueva versión.
+3. Compara el estado instalado con el manifiesto publicado.
+4. Descarga los archivos necesarios.
+5. Elimina archivos obsoletos cuando la transición lo requiere.
+6. Actualiza el juego instalado.
+7. Inicia el juego mediante el ejecutable principal configurado.
+
+<Info>
+  Los archivos transferidos dependen de los manifiestos, hashes, tipo de release y versión instalada.
+</Info>
+
+## Uso de almacenamiento
+
+Los artefactos de builds consumen almacenamiento del workspace.
+
+El resumen muestra:
+
+- Almacenamiento utilizado.
+- Capacidad total del plan.
+- Porcentaje de uso.
+- Espacio restante.
+
+Cuando se alcanza el límite, la CLI puede rechazar la subida hasta liberar espacio o aumentar la capacidad.
+
+## Publicaciones fallidas
+
+Una build puede fallar por motivos como:
+
+- Sesión de CLI inválida o vencida.
+- Falta de permisos.
+- Número de versión duplicado.
+- Carpeta empaquetada inválida.
+- Ningún ejecutable detectado.
+- Límite de almacenamiento.
+- Interrupción de red.
+- Archivos modificados durante el escaneo o subida.
+- Respuesta inesperada del backend.
+
+Corrige la causa y vuelve a publicar.
+
+Una subida incompleta no debe considerarse una versión válida.
+
+## Estrategia recomendada
+
+| Escenario | Rama | Tipo |
+| --- | --- | --- |
+| Primera release pública | `main` | `STABLE` |
+| Nueva base completa | `main` | `STABLE` |
+| Actualización planificada | `main` | `PATCH` |
+| Corrección urgente | `main` | `HOTFIX` |
+| Prueba cerrada | `beta` privada | `PATCH` o `STABLE` |
+| Paquete experimental completo | `development` privada | `STABLE` |
+
+Elige la rama según quién debe recibir la versión. Elige el tipo según el propósito y el comportamiento de subida.
+
+## Lista de verificación
+
+Antes de considerar una build lista, confirma:
+
+- Seleccionaste el juego correcto.
+- Seleccionaste la rama correcta.
+- El número de versión es único.
+- El tipo coincide con la actualización.
+- El changelog es correcto.
+- La carpeta contiene el runtime completo.
+- El ejecutable principal es correcto.
+- La CLI terminó correctamente.
+- La versión aparece en el historial.
+- El tamaño es razonable.
+- La comparación muestra los cambios esperados.
+- El launcher puede descargar, actualizar e iniciar el juego.
+
+<Check>
+  Una build está lista cuando aparece en la rama correcta, su manifiesto está completo, el ejecutable es válido y el launcher puede instalarla e iniciarla correctamente.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Ramas"
+    icon="code-branch"
+    href="/es/games-and-versions/branches"
+  >
+    Crea canales públicos y privados y administra sus accesos.
+  </Card>
+
+  <Card
+    title="Publicar una build"
+    icon="cloud-arrow-up"
+    href="/es/getting-started/publish-first-build"
+  >
+    Sigue el flujo completo de publicación mediante la CLI.
+  </Card>
+
+  <Card
+    title="Probar tu launcher"
+    icon="flask"
+    href="/es/getting-started/test-launcher"
+  >
+    Verifica adquisición, descarga, instalación, actualizaciones e inicio.
+  </Card>
+</CardGroup>

@@ -1,24 +1,470 @@
 ---
 title: "Builds"
-description: "Understand stable releases, patches, hotfixes, and version history."
+description: "Publish complete releases, patches, and hotfixes, then review version history and file-level changes."
 icon: "boxes-stacked"
 ---
 
-
 # Builds
 
+A build is a packaged version of a game published to a specific branch.
+
+Launcher Forge stores the build manifest, file hashes, release metadata, main executable, and uploaded artifacts required by the launcher to install or update the game.
+
+<Info>
+  Builds are published through the Launcher Forge interactive CLI. The dashboard is used to review branches, versions, changelogs, storage, and comparisons.
+</Info>
+
+## Build publishing model
+
+```text
+Packaged game folder
+        ↓
+Launcher Forge CLI
+        ↓
+Select game and branch
+        ↓
+Enter version and release type
+        ↓
+Generate manifest and hashes
+        ↓
+Select the main executable
+        ↓
+Upload required files
+        ↓
+Create the version in the selected branch
+```
+
+## Release types
+
 <Tabs>
-  <Tab title="STABLE">Complete release baseline.</Tab>
-  <Tab title="PATCH">Planned update with changed or new content.</Tab>
-  <Tab title="HOTFIX">Urgent focused correction.</Tab>
+  <Tab title="STABLE">
+    A complete release baseline.
+
+    Launcher Forge uploads the complete packaged build, including files that may already exist in previous versions.
+
+    Use `STABLE` for:
+
+    - The first published version.
+    - A new complete release baseline.
+    - Major packaging changes.
+    - Rebuilding the full branch state.
+  </Tab>
+
+  <Tab title="PATCH">
+    A planned update containing new, changed, or removed content.
+
+    Launcher Forge compares the new manifest with the existing file hashes and uploads the files required by the new version.
+
+    Use `PATCH` for:
+
+    - Feature updates.
+    - Content updates.
+    - Balance changes.
+    - Regular fixes.
+    - Planned post-release versions.
+  </Tab>
+
+  <Tab title="HOTFIX">
+    An urgent and focused correction.
+
+    It uses the manifest comparison flow, while identifying the release as an urgent fix.
+
+    Use `HOTFIX` for:
+
+    - Critical crashes.
+    - Blocking startup problems.
+    - Severe configuration errors.
+    - Urgent production corrections.
+  </Tab>
 </Tabs>
 
-Each version should include a changelog and appear in version history.
+<Warning>
+  The release type describes the purpose and upload behavior of the version. It does not replace the branch. Every build is still published to a selected branch such as `main`, `beta`, or a private testing branch.
+</Warning>
 
-{/* PHOTO AREA: replace /images/screenshots/builds.png with your real screenshot. */}
-<Frame caption="Stable releases, patches, hotfixes, and changelog history">
+## Release type comparison
+
+| Type | Upload behavior | Recommended purpose |
+| --- | --- | --- |
+| **STABLE** | Uploads the complete packaged build. | First release or new full baseline. |
+| **PATCH** | Uses manifest and hash comparison to upload required changes. | Planned update. |
+| **HOTFIX** | Uses the comparison flow and marks the release as urgent. | Critical focused correction. |
+
+## Before publishing
+
+Confirm that:
+
+- The game exists in the Catalog.
+- The game entry is published.
+- Launcher-game validation is configured.
+- The destination branch exists.
+- The packaged build runs correctly.
+- The folder contains the complete runtime output.
+- The correct executable is included.
+- The version number has not already been used in the destination branch.
+- The workspace has enough storage available.
+
+<Card
+  title="Publish through the interactive CLI"
+  icon="terminal"
+  href="/en/getting-started/publish-first-build"
+>
+  Review the complete CLI workflow before uploading your first version.
+</Card>
+
+## 1. Select the release type
+
+During the interactive CLI flow, enter the version number and select `STABLE`, `PATCH`, or `HOTFIX`.
+
+<Frame caption="Select the version number and release type">
   <img
-    src="/images/screenshots/builds.png"
-    alt="Game build history"
+    src="/images/screenshots/build-release-type-selection.png"
+    alt="Launcher Forge CLI showing STABLE, PATCH, and HOTFIX release types"
   />
 </Frame>
+
+A semantic version format is recommended:
+
+```text
+MAJOR.MINOR.PATCH
+```
+
+Examples:
+
+```text
+1.0.0
+1.1.0
+1.1.1
+```
+
+Use a new version number for every publication in the selected branch.
+
+## 2. Add the changelog
+
+The CLI requests optional release notes.
+
+The changelog should explain the visible changes included in the version.
+
+Example:
+
+```text
+Added controller remapping, improved loading times, and fixed a crash when changing regions.
+```
+
+A useful changelog should be:
+
+- Specific.
+- Easy to scan.
+- Written for players or testers.
+- Consistent with the files included in the build.
+
+Do not include passwords, tokens, private infrastructure URLs, internal credentials, or sensitive debugging data.
+
+## 3. Select the packaged build folder
+
+Choose the root folder containing the compiled game.
+
+Example:
+
+```text
+MyGameBuild/
+├── MyGame.exe
+├── MyGame_Data/
+├── Runtime libraries
+└── Configuration files
+```
+
+Do not select the engine project folder, source code directory, editor cache, or temporary build output.
+
+<Warning>
+  Do not modify, rename, or move the selected folder while the CLI is generating the manifest or uploading files.
+</Warning>
+
+## 4. Manifest and file hashes
+
+Launcher Forge scans the packaged folder and generates a manifest.
+
+The manifest records:
+
+- Relative file path.
+- File size.
+- SHA-256 content hash.
+- Total file count.
+- Unique hash count.
+- Executables detected in the package.
+
+These hashes allow Launcher Forge to identify files that are new, modified, unchanged, or removed between versions.
+
+## 5. Select the main executable
+
+After generating the manifest, the CLI lists the executables detected inside the build.
+
+Launcher Forge may mark one executable as **Recommended**.
+
+Select the executable that starts the actual game.
+
+<Frame caption="Review the manifest and select the main executable">
+  <img
+    src="/images/screenshots/build-manifest-and-executable.png"
+    alt="Launcher Forge CLI showing the generated manifest and detected main executable"
+  />
+</Frame>
+
+<Warning>
+  Selecting the wrong executable can allow the build to download and install correctly while preventing the game from starting.
+</Warning>
+
+The selected executable is stored with the version and used by the launcher when the player starts the game.
+
+## 6. Upload the build
+
+After confirmation, Launcher Forge uploads the required artifacts.
+
+For a `STABLE` release, the CLI indicates that the complete set of files will be uploaded.
+
+<Frame caption="Upload the packaged game files">
+  <img
+    src="/images/screenshots/build-upload-progress.png"
+    alt="Launcher Forge CLI uploading files for a STABLE build"
+  />
+</Frame>
+
+Keep the CLI open and maintain a stable connection until the operation finishes.
+
+## 7. Confirm publication
+
+When the upload succeeds, the CLI confirms:
+
+- Version number.
+- Release type.
+- Destination branch.
+- Main executable.
+- Successful build creation.
+- Successful artifact upload.
+
+<Frame caption="Confirm the successfully published build">
+  <img
+    src="/images/screenshots/build-upload-success.png"
+    alt="Launcher Forge CLI confirming a successfully published game build"
+  />
+</Frame>
+
+Press **Enter** to return to the CLI menu.
+
+## Review builds in the dashboard
+
+Open **Branches** and select the game.
+
+The branch overview displays:
+
+- Number of branches.
+- Total builds.
+- Storage usage.
+- Latest version.
+- Build history for each branch.
+
+<Frame caption="Review build and storage information by branch">
+  <img
+    src="/images/screenshots/builds-branch-overview.png"
+    alt="Launcher Forge branch overview showing builds, storage, and latest version"
+  />
+</Frame>
+
+## Version history
+
+Each branch displays its published versions.
+
+<Frame caption="Review the version history and available build actions">
+  <img
+    src="/images/screenshots/build-version-history.png"
+    alt="Launcher Forge build history with version, release type, changelog, and actions"
+  />
+</Frame>
+
+The table can include:
+
+| Column | Description |
+| --- | --- |
+| **Depot** | Internal build or artifact identifier. |
+| **Version** | Published version number. |
+| **Type** | `STABLE`, `PATCH`, or `HOTFIX`. |
+| **Size** | Stored build size. |
+| **Date** | Publication date. |
+| **Changelog** | Release notes for the version. |
+| **Actions** | Available management tools. |
+
+The newest version is marked with **LATEST**.
+
+Eligible versions can also expose a **Default** action in the current interface.
+
+## Edit a build
+
+The **Edit** action updates only the changelog or release notes.
+
+It does not replace:
+
+- Uploaded files.
+- Manifest.
+- Hashes.
+- Version number.
+- Release type.
+- Branch.
+- Main executable.
+
+To change the build contents, publish a new version through the CLI.
+
+<Warning>
+  Never edit a changelog to claim that a file or fix exists when it was not included in the published build.
+</Warning>
+
+## Compare versions
+
+Select **Compare** from a version row.
+
+Choose an earlier version as the base build and compare it with the selected current build.
+
+Launcher Forge compares the stored manifests and groups files into:
+
+| Group | Meaning |
+| --- | --- |
+| **Added** | Present in the current version but not in the base version. |
+| **Modified** | Present in both versions, but the content hash changed. |
+| **Deleted** | Present in the base version but absent from the current version. |
+
+<Frame caption="Review file-level differences between versions">
+  <img
+    src="/images/screenshots/build-comparison-results.png"
+    alt="Launcher Forge build comparison showing added, modified, and deleted files"
+  />
+</Frame>
+
+Comparison results can show:
+
+- Relative file path.
+- File size.
+- SHA-256 hash.
+- Download action, when available.
+
+This helps confirm patch contents, detect unexpected packaging changes, verify removed files, and investigate unusually large updates.
+
+## Build comparison example
+
+```text
+Base version:    1.1.1
+Current version: 3.3.3
+
+Added:    301 files
+Modified:   0 files
+Deleted:   37 files
+```
+
+A large number of added files may be expected when comparing two substantially different complete builds.
+
+## Version history and launcher updates
+
+When a newer version is published to the branch used by the player:
+
+1. The launcher checks the branch version information.
+2. It detects that a newer version is available.
+3. It compares the installed state with the published manifest.
+4. It downloads the required files.
+5. It removes obsolete files when required by the version transition.
+6. It updates the installed game.
+7. It starts the game using the configured main executable.
+
+<Info>
+  The exact files transferred depend on the published manifests, hashes, release type, and the version currently installed by the player.
+</Info>
+
+## Storage usage
+
+Build artifacts count toward workspace storage.
+
+The branch overview shows:
+
+- Storage currently used.
+- Total plan storage.
+- Usage percentage.
+- Remaining capacity.
+
+If the limit is reached, the CLI can reject the upload until storage becomes available or the workspace limit is increased.
+
+## Failed publications
+
+A build can fail before completion because of:
+
+- Invalid or expired CLI session.
+- Missing game or branch permission.
+- Duplicate version number.
+- Invalid packaged folder.
+- No executable detected.
+- Storage limit reached.
+- Network interruption.
+- Files changed during scanning or upload.
+- Unexpected backend response.
+
+Correct the reported cause and publish the version again.
+
+An incomplete upload should not be treated as a valid published version.
+
+## Recommended release strategy
+
+| Scenario | Branch | Release type |
+| --- | --- | --- |
+| First public release | `main` | `STABLE` |
+| Major new baseline | `main` | `STABLE` |
+| Planned production update | `main` | `PATCH` |
+| Urgent production fix | `main` | `HOTFIX` |
+| Closed feature test | Private `beta` | `PATCH` or `STABLE` |
+| Experimental full package | Private `development` | `STABLE` |
+
+Choose the branch based on who should receive the version. Choose the release type based on the purpose and upload behavior of the build.
+
+## Verification checklist
+
+Before considering a build ready, verify:
+
+- The correct game was selected.
+- The correct branch was selected.
+- The version number is unique.
+- The release type matches the intended update.
+- The changelog is accurate.
+- The packaged folder contains the complete runtime.
+- The main executable is correct.
+- The CLI finished successfully.
+- The version appears in branch history.
+- The build size is reasonable.
+- Manifest comparison shows the expected changes.
+- The launcher can download, update, and start the game.
+
+<Check>
+  A build is ready for distribution when it appears in the intended branch, its manifest is complete, the correct executable is configured, and the launcher can install and start it successfully.
+</Check>
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="Branches"
+    icon="code-branch"
+    href="/en/games-and-versions/branches"
+  >
+    Create public and private release channels and manage player access.
+  </Card>
+
+  <Card
+    title="Publish a build"
+    icon="cloud-arrow-up"
+    href="/en/getting-started/publish-first-build"
+  >
+    Follow the complete interactive CLI publishing workflow.
+  </Card>
+
+  <Card
+    title="Test your launcher"
+    icon="flask"
+    href="/en/getting-started/test-launcher"
+  >
+    Verify game acquisition, download, installation, updates, and startup.
+  </Card>
+</CardGroup>
