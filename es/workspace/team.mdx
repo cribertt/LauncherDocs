@@ -1,25 +1,270 @@
 ---
-title: "Miembros del equipo"
-description: "Invita miembros y administra roles y permisos."
-icon: "user-group"
+title: "Team members"
+description: "Invite collaborators, assign roles, and switch between the workspaces available to your account."
+icon: "users"
 ---
 
+# Team members
 
-# Miembros del equipo
+The **Team** page manages the developer accounts that can collaborate inside the active workspace.
 
-Documenta:
+Each member uses their own Launcher Forge account and security settings. Workspace resources are not shared through a common login.
 
-- Invitaciones.
-- Roles.
-- Permisos.
-- Eliminación de miembros.
-- Límites del plan.
-- Acciones reservadas al propietario.
+<Info>
+  The Team page represents membership in the active workspace. Games, launcher configuration, builds, players, subscription, add-ons, and usage remain scoped to that workspace.
+</Info>
 
-{/* PHOTO AREA: replace /images/screenshots/team-members.png with your real screenshot. */}
-<Frame caption="Invitaciones, roles, permisos y eliminación">
+## Roles
+
+Launcher Forge provides three workspace roles.
+
+| Role | Access |
+| --- | --- |
+| **Owner** | Full control of the workspace, including subscription and add-on management. |
+| **Admin** | Can manage workspace resources and operations, but cannot manage subscriptions or add-ons. |
+| **Viewer** | Read-only access. Can review information but cannot modify workspace data. |
+
+### Owner
+
+The Owner can:
+
+- Rename the team or workspace.
+- Invite and remove members.
+- Change member roles.
+- Manage games, launchers, branches, builds, players, and workspace settings.
+- Manage subscriptions.
+- Purchase, renew, or manage add-ons.
+- Review plans, limits, and usage.
+
+A workspace has one Owner.
+
+### Admin
+
+An Admin can perform operational management across the workspace, including:
+
+- Manage games and their configuration.
+- Manage launcher configuration.
+- Create and manage branches.
+- Publish and review builds.
+- Manage players and access.
+- Invite members and update operational roles when the interface permits.
+- Review plan limits and usage.
+
+An Admin cannot:
+
+- Change or cancel the workspace subscription.
+- Purchase, renew, or manage add-ons.
+
+### Viewer
+
+A Viewer has read-only access.
+
+A Viewer can review:
+
+- Team information.
+- Games.
+- Builds and versions.
+- Branches.
+- Player status.
+- Plan and usage information available to the workspace.
+
+A Viewer cannot create, edit, publish, delete, invite, revoke, ban, or change workspace configuration.
+
+## Permission summary
+
+```text
+Owner
+  → full workspace control
+  → subscription and add-ons
+
+Admin
+  → operational workspace control
+  → no subscription or add-on management
+
+Viewer
+  → read-only access
+  → no modifications
+```
+
+## 1. Open Team
+
+Select **Team** from the left sidebar.
+
+The page shows:
+
+- Team or workspace name.
+- Number of active members.
+- Number of pending invitations.
+- Current members.
+- Role assigned to each member.
+- Invitation form.
+- Pending invitations.
+
+<Frame caption="Review members and invite a collaborator">
   <img
-    src="/images/screenshots/team-members.png"
-    alt="Gestión del equipo"
+    src="/images/screenshots/team-members-overview.png"
+    alt="Launcher Forge Team page with the team name, members, invitation form, and pending invitations"
   />
 </Frame>
+
+## 2. Rename the team
+
+Select the pencil icon next to the team name.
+
+Enter the new name and save it.
+
+The team name identifies the workspace throughout the dashboard and workspace selector.
+
+<Note>
+  Renaming the team does not rename the games or launcher. Those resources keep their own names.
+</Note>
+
+## 3. Invite a member
+
+In **Invite a member**:
+
+1. Enter the collaborator's email address.
+2. Select **Admin** or **Viewer**.
+3. Select **Send invitation**.
+
+The invitation link expires after **7 days**.
+
+<Warning>
+  Assign the minimum role required for the collaborator's responsibilities. Use Viewer when the person only needs to review project information.
+</Warning>
+
+## 4. Accept the invitation
+
+The recipient receives an invitation by email.
+
+They must:
+
+1. Open the invitation link.
+2. Sign in to Launcher Forge or create a developer account when required.
+3. Accept the workspace invitation.
+
+After acceptance:
+
+- The account appears under active members.
+- The assigned role becomes active.
+- The workspace becomes available in the account's workspace selector.
+
+Pending invitations remain visible until they are accepted, expire, or are cancelled.
+
+## 5. Change a member role
+
+Use the role selector beside an active member.
+
+Available collaboration roles are:
+
+- **Admin**
+- **Viewer**
+
+<Frame caption="Change an active member between Admin and Viewer">
+  <img
+    src="/images/screenshots/team-member-role-management.png"
+    alt="Launcher Forge Team page with the Admin and Viewer role selector"
+  />
+</Frame>
+
+Role changes affect the member's permissions in the active workspace.
+
+They do not change:
+
+- The member's account credentials.
+- Their role in another workspace.
+- Their access to unrelated workspaces.
+
+## 6. Remove a member
+
+Use the remove-member action beside the account.
+
+Removing a member:
+
+- Removes access to the current workspace.
+- Does not delete the person's Launcher Forge account.
+- Does not delete workspace resources created while they were a member.
+- Does not remove access they may have in another workspace.
+
+Review the account email and role before confirming removal.
+
+## 7. Switch workspaces
+
+An account can belong to more than one workspace by owning one or accepting invitations from other teams.
+
+Open the workspace selector in the top navigation bar.
+
+<Frame caption="Switch between the workspaces available to your account">
+  <img
+    src="/images/screenshots/workspace-switcher.png"
+    alt="Launcher Forge workspace selector showing the active workspace and Team navigation"
+  />
+</Frame>
+
+Selecting another workspace changes the active context for:
+
+- Games.
+- Launcher.
+- Branches and builds.
+- Players.
+- Team members.
+- Plan and subscription.
+- Add-ons.
+- Usage.
+
+<Warning>
+  Workspace data is isolated. Switching workspaces does not merge games, subscriptions, usage, or team permissions.
+</Warning>
+
+## Team-member limits
+
+The number of members allowed in a workspace depends on the active plan.
+
+When the member limit is reached, the workspace may need to:
+
+- Remove an unused member.
+- Upgrade the plan.
+- Use an applicable workspace override or entitlement.
+
+The current limit shown by the dashboard is the source of truth.
+
+## Security recommendations
+
+- Give Admin only to trusted collaborators.
+- Use Viewer for reviewers, stakeholders, or read-only access.
+- Remove members who no longer work on the project.
+- Do not share one developer account between multiple people.
+- Review pending invitations regularly.
+- Verify the email address before sending an invitation.
+
+<Check>
+  Team access is configured correctly when every collaborator uses an individual account and has only the permissions required for their role.
+</Check>
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="Plans and limits"
+    icon="gauge-high"
+    href="/en/workspace-and-account/plans-and-limits"
+  >
+    Review the resource and feature limits applied to the workspace.
+  </Card>
+
+  <Card
+    title="Subscription"
+    icon="credit-card"
+    href="/en/workspace-and-account/subscription"
+  >
+    Understand Owner-only plan and billing management.
+  </Card>
+
+  <Card
+    title="Usage"
+    icon="chart-simple"
+    href="/en/workspace-and-account/usage"
+  >
+    Review storage, bandwidth, games, members, and other workspace usage.
+  </Card>
+</CardGroup>
