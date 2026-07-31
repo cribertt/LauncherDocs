@@ -50,13 +50,27 @@ El instalador de Windows generado utiliza la identidad configurada en esta pági
 </Frame>
 
 <Warning>
-  Define el nombre antes de generar el archivo. Si después cambias el nombre del ejecutable o el icono, elimina el archivo generado y crea uno nuevo.
+  Define el nombre antes de generar el instalador de Windows. Un instalador que ya fue generado conserva el nombre incrustado en el momento de su creación.
 </Warning>
 
-El icono del ejecutable depende del plan:
+## Comportamiento del icono del ejecutable
 
-- Los planes con icono personalizado pueden utilizar el archivo `.ico` configurado.
+El icono del launcher se sincroniza automáticamente mediante la configuración en runtime.
+
+Esto significa que cambiar el icono configurado del launcher no requiere generar nuevamente todo el paquete para que el launcher en ejecución reciba la actualización.
+
+El comportamiento disponible depende del plan activo:
+
+- Los planes con soporte para icono personalizado pueden utilizar el archivo `.ico` configurado.
 - Los planes sin esta función utilizan el icono oficial de Launcher Forge.
+
+<Info>
+  El icono del launcher se actualiza automáticamente mediante la configuración en runtime.
+</Info>
+
+<Warning>
+  El icono incrustado dentro de un instalador de Windows que ya fue generado no se actualiza automáticamente. Elimina el instalador actual y genera uno nuevo si necesitas que el archivo de instalación utilice el nuevo icono.
+</Warning>
 
 ## 2. Abre Linked games
 
@@ -69,7 +83,7 @@ En la sección de administración del launcher, selecciona **Linked games**.
   />
 </Frame>
 
-La página Linked apps muestra:
+La página **Linked apps** muestra:
 
 - Cantidad de juegos vinculados.
 - Cantidad de juegos disponibles.
@@ -119,7 +133,7 @@ Antes de vincular el juego, decide cómo obtendrán acceso los jugadores.
 </Tabs>
 
 <Info>
-  Todos los usuarios del launcher deben autenticarse con una cuenta de usuario final. El modo Key añade el requisito de canje; no reemplaza la autenticación.
+  Todos los usuarios del launcher deben autenticarse mediante una cuenta de usuario final. El modo Key añade el requisito de canje, pero no reemplaza la autenticación.
 </Info>
 
 ## 4. Vincula el juego
@@ -146,9 +160,11 @@ Después de completar la operación:
 
 ## ¿Se puede vincular después de generar el launcher?
 
-Sí. El launcher utiliza actualizaciones de configuración mediante runtime, por lo que cambios como los juegos vinculados pueden reflejarse sin generar un launcher completamente nuevo.
+Sí.
 
-Sin embargo, el orden recomendado es:
+El launcher recibe la configuración de juegos vinculados y contenido mediante actualizaciones en runtime. Puedes vincular o desvincular un juego después de generar el instalador sin crear un instalador nuevo solamente por ese cambio.
+
+Sin embargo, para la primera configuración se recomienda este orden:
 
 1. Cambiar el nombre del launcher.
 2. Vincular el juego.
@@ -156,7 +172,7 @@ Sin embargo, el orden recomendado es:
 4. Generar el launcher.
 5. Probar el flujo completo.
 
-Así la primera prueba queda completa y se evitan confusiones.
+De esta forma, la primera prueba queda completa y se reducen los errores de configuración.
 
 ## 5. Abre Generate executable
 
@@ -190,7 +206,7 @@ Launcher Forge conserva un máximo de un archivo generado por cada formato.
 Para crear otro posteriormente, primero debes eliminar el archivo actual.
 
 <Info>
-  La base del launcher se actualiza mediante runtime. No necesitas regenerarlo por cada build o actualización de contenido del juego.
+  La base del launcher y su configuración en runtime pueden actualizarse automáticamente. No necesitas regenerar el launcher por cada build, juego vinculado, cambio visual o actualización de contenido.
 </Info>
 
 ## 6. Genera el archivo
@@ -208,13 +224,17 @@ Para generar el instalador de Windows, selecciona **Generate file**.
   />
 </Frame>
 
-El archivo utiliza la información de la configuración del launcher:
+El archivo generado utiliza la información de la configuración del launcher:
 
-- Nombre.
+- Nombre del launcher.
 - Versión técnica.
 - Canal.
-- Icono, cuando el plan lo permite.
+- Icono del instalador, cuando el plan lo permite.
 - Identidad actual del launcher.
+
+<Note>
+  El instalador generado conserva el nombre y el icono disponibles en el momento en que fue creado.
+</Note>
 
 ## 7. Descarga el launcher generado
 
@@ -247,8 +267,12 @@ Ahora puedes:
 - Guardarlo dentro de tu sistema de distribución.
 
 <Warning>
-  Si cambias el nombre o el icono del ejecutable, elimina el archivo actual y genera uno nuevo.
+  Si cambias el nombre del launcher o necesitas que el instalador de Windows utilice otro icono incrustado, elimina el instalador actual y genera uno nuevo.
 </Warning>
+
+<Info>
+  Cambiar el icono del launcher en runtime no requiere regenerar el instalador para que las instalaciones existentes reciban la actualización. Solamente permanece sin cambios el icono incrustado dentro del archivo instalador.
+</Info>
 
 ## 8. Instala y abre el launcher
 
@@ -285,15 +309,18 @@ El jugador selecciona **Acquire** para añadir el juego gratuito a su cuenta.
   />
 </Frame>
 
+Después de adquirirlo, el juego pasa a formar parte de la biblioteca de la cuenta del usuario final.
+
 ### Juego protegido mediante key
 
 Cuando **Key** estaba activado:
 
 1. El jugador inicia sesión.
 2. El launcher solicita una CD key válida.
-3. El jugador canjea la key.
-4. El juego se añade a la cuenta.
-5. El jugador puede instalarlo.
+3. El jugador ingresa y canjea la key.
+4. Launcher Forge valida la key.
+5. El juego se añade a la cuenta.
+6. El jugador puede instalarlo.
 
 <Warning>
   Un juego protegido no queda desbloqueado solamente por aparecer en el launcher. El usuario final debe canjear una key válida y activa.
@@ -318,7 +345,7 @@ El launcher muestra:
   />
 </Frame>
 
-Espera hasta que el estado del juego indique que está listo.
+Espera hasta que el estado del juego cambie a **Ready**.
 
 Luego inicia el juego desde el launcher.
 
@@ -333,12 +360,13 @@ Prueba:
 - Adquisición de un juego gratuito.
 - Solicitud de CD key en un juego protegido.
 - Canje de una key válida.
-- Rechazo de una key inválida o revocada.
+- Rechazo de una key inválida, vencida o revocada.
 - Descarga correcta.
 - Instalación correcta.
 - Inicio mediante el ejecutable seleccionado.
-- Detección de una nueva versión.
-- Actualización del juego.
+- Detección de una nueva versión publicada.
+- Actualización correcta del juego.
+- Actualización correcta del icono del launcher mediante runtime.
 - Mensajes de error comprensibles.
 
 <Check>
@@ -366,9 +394,18 @@ Esa sección explica:
 Regresa a **Generate executable** cuando necesites:
 
 - Descargar nuevamente el instalador.
-- Revisar los logs.
-- Eliminar el EXE.
-- Eliminar el ZIP.
-- Generar un reemplazo después de cambiar la identidad del launcher.
+- Revisar los logs de generación.
+- Eliminar el EXE actual.
+- Eliminar el ZIP actual.
+- Generar un reemplazo después de cambiar el nombre del launcher.
+- Generar un nuevo instalador con otro icono incrustado.
 
-Eliminar el setup generado no elimina el launcher, los juegos vinculados, las builds ni las cuentas de jugadores.
+Eliminar un setup generado no elimina:
+
+- El launcher.
+- Los juegos vinculados.
+- Las builds.
+- Las versiones publicadas.
+- Las cuentas de usuarios finales.
+- Las CD keys.
+- Los registros de propiedad de los jugadores.

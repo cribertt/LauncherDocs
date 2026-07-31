@@ -1,6 +1,6 @@
 ---
 title: "Añadir tu primer juego"
-description: "Crea un juego desde el Catálogo, revisa su estado de borrador y publícalo para que sea visible en el launcher."
+description: "Crea un juego desde el Catálogo, publica su ficha y prepáralo para la validación con el launcher y la distribución de builds."
 icon: "gamepad"
 ---
 
@@ -8,13 +8,43 @@ icon: "gamepad"
 
 Los juegos se crean y administran desde la sección **Catalog** o **Catálogo** del dashboard de Launcher Forge.
 
-Como actualmente cada cuenta utiliza un único workspace y un único launcher, todos los juegos creados en el Catálogo pertenecen a ese workspace y pueden mostrarse en el launcher existente después de publicarlos.
+Actualmente, cada cuenta de Launcher Forge utiliza un único workspace y un único launcher. Todos los juegos creados en el Catálogo pertenecen a ese workspace y posteriormente pueden conectarse con el launcher existente.
 
 <Warning>
-  Cada juego nuevo se crea como **Draft** o **Borrador** de manera predeterminada. Un borrador no es público y no aparece en el launcher para los jugadores.
+  Cada juego nuevo se crea como **Draft** o **Borrador** de manera predeterminada.
+
+  Un borrador solamente está disponible dentro del dashboard de desarrollador. No puede distribuirse mediante el launcher hasta cambiar su estado a **Published** y vincularlo con el launcher.
 </Warning>
 
-Para que el juego sea visible, primero debes crearlo, abrir su editor, cambiar su estado de publicación a **Published** y guardar los cambios.
+<Card title="Requerido antes de publicar tu primera build" icon="shield-halved">
+  Antes de subir la primera build de producción, configura la conexión de validación entre el launcher y el juego.
+
+  Esta validación permite que el launcher reconozca el runtime del juego y establezca una conexión de ejecución confiable.
+
+  No corresponde a la autenticación del usuario final, la propiedad del juego ni la validación de CD keys. Es específicamente la conexión técnica entre el launcher de Launcher Forge y el ejecutable del juego.
+
+  Completa la validación launcher-juego antes de publicar la primera build que distribuirás.
+</Card>
+
+## Cómo funciona el proceso completo
+
+Crear el juego es solamente la primera parte del flujo de distribución.
+
+```text
+Crear el juego en el Catálogo
+        ↓
+Publicar la ficha del juego
+        ↓
+Configurar la validación launcher-juego
+        ↓
+Publicar la build empaquetada
+        ↓
+Vincular el juego con el launcher
+        ↓
+Generar y probar el launcher
+```
+
+La ficha del juego, la build empaquetada y la validación con el launcher son elementos separados del sistema.
 
 ## Antes de comenzar
 
@@ -25,8 +55,9 @@ Prepara la siguiente información:
 - Uno o más géneros.
 - Una imagen de portada.
 - Una build empaquetada para un paso posterior.
+- La integración del motor que utilizarás para la validación con el launcher.
 
-La build no se sube durante la creación del juego. Las builds se publican por separado mediante la CLI interactiva de Launcher Forge.
+La build no se sube durante la creación del juego. Las builds se publican posteriormente mediante la CLI interactiva de Launcher Forge.
 
 ## 1. Abre el Catálogo
 
@@ -51,11 +82,11 @@ Selecciona **New Game** en la esquina superior derecha.
   />
 </Frame>
 
-## 2. Completa la información inicial del juego
+## 2. Completa la información inicial
 
 Launcher Forge abrirá la página **Create new game**.
 
-El juego será creado como borrador, tal como indica el mensaje:
+La interfaz indica que el juego será creado inicialmente como borrador:
 
 ```text
 It will be created as a draft
@@ -65,15 +96,25 @@ Completa los campos disponibles.
 
 ### Nombre del juego
 
-Ingresa el nombre público que los jugadores verán en el launcher.
+Ingresa el nombre público que identificará al juego dentro de Launcher Forge.
 
-Utiliza un nombre definitivo y fácil de reconocer. Podrás modificarlo más adelante.
+El nombre puede aparecer en:
+
+- El Catálogo.
+- Las tarjetas del launcher.
+- La biblioteca.
+- La información de releases.
+- La selección del juego dentro de la CLI.
+
+Utiliza un nombre definitivo y fácil de reconocer. Podrás modificarlo más adelante cuando sea necesario.
 
 ### Descripción
 
-Describe el universo, las mecánicas o la propuesta principal del juego.
+Describe el universo, las mecánicas, el género o la propuesta principal del juego.
 
-El formulario permite hasta `500` caracteres para esta descripción inicial.
+La descripción inicial permite hasta `500` caracteres.
+
+Escribe información destinada a describir el juego. Evita notas internas, credenciales, URLs privadas o información de infraestructura.
 
 ### Géneros
 
@@ -91,9 +132,11 @@ Algunos ejemplos disponibles son:
 - Horror.
 - Indie.
 
+Debes seleccionar al menos un género antes de crear el juego.
+
 ### Portada del juego
 
-La portada es opcional durante la creación inicial, pero es recomendable añadirla.
+La portada es opcional durante la creación inicial, pero se recomienda añadirla.
 
 La interfaz acepta:
 
@@ -104,7 +147,7 @@ La interfaz acepta:
 
 El tamaño máximo indicado por el formulario es de `10 MB`.
 
-Launcher Forge recomienda una imagen de `1920 × 1080` para obtener una mejor visualización dentro del launcher.
+Launcher Forge recomienda una imagen de `1920 × 1080` para obtener una mejor presentación dentro del launcher.
 
 <Frame caption="Completa la información del juego y añade una portada opcional">
   <img
@@ -114,7 +157,7 @@ Launcher Forge recomienda una imagen de `1920 × 1080` para obtener una mejor vi
 </Frame>
 
 <Note>
-  El nombre del juego y al menos un género son obligatorios. La portada es opcional, pero mejora la presentación dentro del launcher.
+  El nombre del juego y al menos un género son obligatorios. La portada es opcional, pero mejora su presentación dentro del Catálogo y el launcher.
 </Note>
 
 ## 3. Crea el juego
@@ -126,8 +169,16 @@ Launcher Forge creará el juego y lo mostrará en el Catálogo.
 El juego recién creado aparecerá con el estado **Draft**.
 
 <Info>
-  Draft significa que el juego existe dentro de tu workspace, pero solamente tú puedes verlo en el dashboard de desarrollador. Los jugadores todavía no pueden verlo en el launcher.
+  Draft significa que el juego existe dentro del workspace, pero todavía no está listo para distribuirse mediante el launcher.
 </Info>
+
+En este punto:
+
+- El juego existe en el Catálogo.
+- Todavía no tiene una build publicada.
+- Todavía no está vinculado con el launcher.
+- La validación launcher-juego puede no estar configurada.
+- Los jugadores no pueden obtenerlo ni instalarlo.
 
 ## 4. Abre el editor del juego
 
@@ -138,15 +189,35 @@ Pasa el cursor sobre la tarjeta y selecciona el icono de lápiz identificado com
 <Frame caption="Abre el juego en borrador mediante Edit game">
   <img
     src="/images/screenshots/draft-game-edit.png"
-    alt="Tarjeta de un juego en borrador con el botón Edit game destacado"
+    alt="Tarjeta de juego en borrador con el botón Edit game destacado"
   />
 </Frame>
 
-El editor permite revisar y modificar la información antes de publicar el juego.
+El editor permite revisar y modificar el juego antes de habilitar su ficha para la distribución.
 
-## 5. Abre la pestaña Publishing
+## 5. Revisa la información
 
-Dentro del editor del juego, selecciona la pestaña **Publishing**.
+Dentro del editor, revisa la pestaña **Information**.
+
+Confirma:
+
+- Nombre del juego.
+- Descripción corta.
+- Descripción completa.
+- Géneros seleccionados.
+- Portada.
+- Banner, cuando esté disponible.
+- Otros metadatos.
+
+Guarda los cambios antes de continuar.
+
+<Note>
+  Publicar controla el estado de la ficha del juego. No sube automáticamente una build, no conecta el runtime ni vincula el juego con el launcher.
+</Note>
+
+## 6. Abre la pestaña Publishing
+
+Dentro del editor, selecciona **Publishing**.
 
 <Frame caption="Abre la pestaña Publishing dentro del editor">
   <img
@@ -159,15 +230,15 @@ La pestaña Publishing ofrece tres estados:
 
 | Estado | Comportamiento |
 | --- | --- |
-| **Published** | Visible en el launcher para todos los usuarios con acceso. |
-| **Draft** | Visible solamente para ti en el dashboard de desarrollador. |
-| **Archived** | Oculto del launcher. |
+| **Published** | La ficha queda disponible para distribuirse y puede vincularse con el launcher. |
+| **Draft** | El juego continúa en preparación dentro del dashboard. |
+| **Archived** | El juego queda oculto de la distribución sin ser eliminado. |
 
-## 6. Publica el juego
+## 7. Publica la ficha del juego
 
 Selecciona **Published**.
 
-Luego selecciona **Save changes**.
+Luego presiona **Save changes**.
 
 <Frame caption="Selecciona Published y guarda los cambios">
   <img
@@ -178,50 +249,130 @@ Luego selecciona **Save changes**.
 
 Después de guardar:
 
-- El juego dejará de ser un borrador.
-- Aparecerá dentro del filtro **Published**.
-- Aumentará el contador de juegos publicados.
-- Será visible dentro del launcher.
+- El juego deja de ser un borrador.
+- Aparece dentro del filtro **Published**.
+- Aumenta el contador de juegos publicados.
+- Queda disponible para vincularlo con el launcher.
 
 <Warning>
   Seleccionar Published no es suficiente por sí solo. También debes presionar **Save changes** o el nuevo estado no será aplicado.
 </Warning>
 
+<Info>
+  Published no significa que el juego aparezca inmediatamente dentro de todos los launchers.
+
+  Todavía debes vincularlo con el launcher del workspace para que forme parte de su biblioteca.
+</Info>
+
 ## Draft, Published y Archived
 
 <Tabs>
   <Tab title="Draft">
-    Utiliza Draft mientras la información esté incompleta o mientras preparas sus imágenes, configuración, ramas y primera build.
+    Utiliza Draft mientras la información esté incompleta o mientras preparas:
 
-    Los juegos en Draft no son visibles para los jugadores.
+    - Imágenes.
+    - Descripciones.
+    - Validación con el launcher.
+    - Ramas.
+    - Builds.
+    - Información de releases.
+
+    Los juegos en Draft no están disponibles para distribuirse.
   </Tab>
 
   <Tab title="Published">
-    Utiliza Published cuando el juego esté listo para aparecer dentro del launcher.
+    Utiliza Published cuando la ficha del juego esté lista para participar en el flujo de distribución.
 
-    Publicar el juego hace visible su ficha, pero no sube automáticamente una build.
+    Publicar la ficha permite vincular el juego con el launcher, pero no sube los archivos empaquetados.
   </Tab>
 
   <Tab title="Archived">
-    Utiliza Archived cuando el juego ya no deba aparecer en el launcher.
+    Utiliza Archived cuando el juego ya no deba estar disponible para distribuirse.
 
-    Archivar no significa eliminar el juego.
+    Archivar no elimina:
+
+    - El juego.
+    - Sus ramas.
+    - Sus builds.
+    - Sus versiones.
+    - Sus archivos almacenados.
   </Tab>
 </Tabs>
 
-## Importante: publicar el juego no es lo mismo que publicar una build
+## Importante: publicar el juego no es publicar una build
 
-Cambiar el estado del juego a **Published** controla su visibilidad dentro del launcher.
+Cambiar el estado a **Published** solamente controla el estado de publicación de su ficha.
 
 No realiza automáticamente las siguientes acciones:
 
-- Subir los archivos del juego.
-- Crear una rama.
+- Subir los archivos.
+- Crear el manifiesto.
 - Crear una versión.
-- Publicar una build estable, patch o hotfix.
-- Configurar el ejecutable.
+- Publicar una release STABLE, PATCH o HOTFIX.
+- Seleccionar el ejecutable principal.
+- Configurar la validación launcher-juego.
+- Vincular el juego con el launcher.
+- Generar el instalador del launcher.
 
 Las builds se publican por separado mediante la CLI interactiva de Launcher Forge.
+
+## Requerido: configura la validación launcher-juego
+
+Antes de publicar la primera build destinada a distribución, configura la conexión entre el launcher y el runtime del juego.
+
+El objetivo de esta validación es permitir que el launcher reconozca y valide el juego que inicia.
+
+Es una conexión launcher-juego.
+
+No se encarga de:
+
+- Registrar usuarios finales.
+- Iniciar sesiones de jugadores.
+- Verificar la propiedad de un juego.
+- Canjear CD keys.
+- Administrar la biblioteca del jugador.
+
+Esos son servicios separados del launcher.
+
+La validación launcher-juego representa la relación técnica entre:
+
+```text
+Launcher de Launcher Forge
+        ↓
+Ejecutable del juego
+        ↓
+Integración de validación
+        ↓
+Conexión launcher-juego confiable
+```
+
+La implementación depende del motor:
+
+<CardGroup cols={2}>
+  <Card
+    title="Unreal Engine"
+    icon="gamepad"
+    href="/es/engine-integrations/unreal-engine"
+  >
+    Instala y configura la integración de Launcher Forge para Unreal Engine.
+  </Card>
+
+  <Card
+    title="Unity"
+    icon="cube"
+    href="/es/engine-integrations/unity"
+  >
+    Instala y configura la integración de Launcher Forge para Unity.
+  </Card>
+</CardGroup>
+
+Para revisar el contrato completo de validación, continúa con:
+
+[Launch tokens](/es/game-authentication/launch-tokens)
+
+<Warning>
+  No publiques la primera build de producción hasta que el juego pueda reconocer y validar correctamente su conexión con el launcher.
+</Warning>
 
 ## Verificación final
 
@@ -230,15 +381,24 @@ Antes de continuar, comprueba:
 - El juego aparece en el Catálogo.
 - Su estado es **Published**.
 - La información es correcta.
-- Tiene al menos un género seleccionado.
+- Tiene al menos un género.
 - La portada se muestra correctamente.
-- El juego aparece dentro del launcher.
-- Estás listo para configurar ramas y publicar una build.
+- Está disponible para vincularse.
+- Seleccionaste la integración correcta para el motor.
+- La validación launcher-juego está configurada.
+- La build empaquetada funciona correctamente en tu equipo.
+- Estás listo para crear la primera versión mediante la CLI.
 
 <Check>
-  Tu juego fue creado y publicado correctamente. Ahora es visible dentro del launcher, pero todavía necesita una build válida para que los jugadores puedan instalarlo y ejecutarlo.
+  La ficha del juego fue creada y publicada correctamente. Completa la validación launcher-juego antes de subir la primera build distribuible.
 </Check>
 
 ## Siguiente paso
 
-Continúa con [Publicar tu primera build](/es/getting-started/publish-first-build).
+Antes de publicar tu primera build, continúa con:
+
+[Configurar la validación launcher-juego](/es/game-authentication/launch-tokens)
+
+Después de validar la conexión entre el launcher y el juego, continúa con:
+
+[Publicar tu primera build](/es/getting-started/publish-first-build)

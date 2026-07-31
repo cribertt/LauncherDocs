@@ -50,13 +50,27 @@ The generated Windows installer uses the launcher identity configured on this pa
 </Frame>
 
 <Warning>
-  Finalize the launcher name before generating the file. If you later change the executable name or icon, delete the previously generated file and generate a new one.
+  Finalize the launcher name before generating the Windows installer. An installer that has already been generated keeps the name embedded at generation time.
 </Warning>
 
-The executable icon depends on the active plan:
+## Executable icon behavior
+
+The launcher icon is synchronized automatically through the runtime configuration.
+
+This means that changing the configured launcher icon does not require generating a completely new launcher package for the runtime launcher to receive the update.
+
+The available icon behavior depends on the active plan:
 
 - Plans with custom icon support can use the configured `.ico` file.
 - Plans without custom icon support use the official Launcher Forge icon.
+
+<Info>
+  The launcher icon is updated automatically through the runtime configuration.
+</Info>
+
+<Warning>
+  The icon embedded in an already generated Windows installer does not update automatically. Delete the current installer and generate a new one if the setup file must use the new icon.
+</Warning>
 
 ## 2. Open Linked games
 
@@ -69,7 +83,7 @@ In the launcher management area, select **Linked games**.
   />
 </Frame>
 
-The Linked apps page shows:
+The **Linked apps** page shows:
 
 - Number of linked games.
 - Number of available games.
@@ -146,17 +160,19 @@ After the operation finishes:
 
 ## Can the game be linked after generating the launcher?
 
-Yes. The launcher uses runtime configuration updates, so changes such as linked games can be reflected without generating a completely new launcher file.
+Yes.
 
-However, the recommended order is:
+The launcher receives linked-game and content configuration through runtime updates. You can link or unlink a game after generating the installer without generating a new installer only for that change.
+
+However, the recommended initial order is:
 
 1. Rename the launcher.
 2. Link the game.
 3. Review the game access mode.
 4. Generate the launcher.
-5. Test the complete flow.
+5. Test the complete player flow.
 
-This produces a complete first test and reduces confusion.
+This produces a complete first test and reduces configuration mistakes.
 
 ## 5. Open Generate executable
 
@@ -190,7 +206,7 @@ Launcher Forge keeps a maximum of one generated file per output type.
 To generate a replacement later, delete the current file first.
 
 <Info>
-  The launcher base can update through runtime. You do not need to regenerate the launcher for every game build or content update.
+  The launcher base and its runtime configuration can update automatically. You do not need to regenerate the launcher for every game build, linked-game change, visual update, or content update.
 </Info>
 
 ## 6. Generate the selected file
@@ -213,8 +229,12 @@ The generated file uses information from the launcher configuration:
 - Launcher name.
 - Technical version.
 - Channel.
-- Executable icon, when supported.
+- Installer icon, when supported.
 - Current launcher identity.
+
+<Note>
+  The generated installer keeps the launcher name and installer icon that were available when the file was created.
+</Note>
 
 ## 7. Download the generated launcher
 
@@ -247,8 +267,12 @@ You can now:
 - Store it in your release distribution system.
 
 <Warning>
-  If you change the launcher executable name or icon, delete the current generated file and create a new one.
+  If you change the launcher name or need the generated Windows installer to use a different embedded icon, delete the current installer and generate a new one.
 </Warning>
+
+<Info>
+  Changing the runtime launcher icon does not require regenerating the installer for existing launcher installations to receive the launcher icon update. Only the icon embedded in the installer file remains unchanged.
+</Info>
 
 ## 8. Install and open the launcher
 
@@ -285,15 +309,18 @@ The player selects **Acquire** to add the free game to their account.
   />
 </Frame>
 
+After acquiring it, the game becomes part of the end-user account library.
+
 ### Key-protected game
 
 When **Key** was enabled:
 
 1. The player signs in.
 2. The launcher requests a valid CD key.
-3. The player redeems the key.
-4. The game is added to the account.
-5. The player can install it.
+3. The player enters and redeems the key.
+4. Launcher Forge validates the key.
+5. The game is added to the account.
+6. The player can install it.
 
 <Warning>
   A key-protected game is not unlocked merely because it is visible in the launcher. The end user must redeem a valid, active key.
@@ -318,7 +345,7 @@ The launcher displays:
   />
 </Frame>
 
-Wait until the game status becomes ready.
+Wait until the game status becomes **Ready**.
 
 Then start the game from the launcher.
 
@@ -333,12 +360,13 @@ Test the following:
 - Free game can be acquired.
 - Key-protected game requests a CD key.
 - Valid key can be redeemed.
-- Invalid or revoked key is rejected.
+- Invalid, expired, or revoked key is rejected.
 - Game downloads successfully.
 - Game installs successfully.
 - Game starts using the correct executable.
-- Launcher can detect a new published version.
-- Game can update successfully.
+- Launcher detects a newly published version.
+- Game updates successfully.
+- Runtime launcher icon changes are received correctly.
 - Errors provide understandable recovery information.
 
 <Check>
@@ -359,7 +387,7 @@ That section explains:
 - How the token is passed to the game.
 - How the game validates the player session.
 - Which authenticated player data is available.
-- How Unreal Engine and Unity integrations use the result.
+- How Unreal Engine and Unity integrations use the validation result.
 
 ## Managing the generated setup
 
@@ -369,6 +397,15 @@ Return to **Generate executable** whenever you need to:
 - Review generation logs.
 - Delete the current EXE.
 - Delete the current ZIP.
-- Generate a replacement after changing the launcher identity.
+- Generate a replacement after changing the launcher name.
+- Generate a replacement installer with a different embedded icon.
 
-Deleting a generated setup does not delete the launcher, linked games, game builds, or player accounts.
+Deleting a generated setup does not delete:
+
+- The launcher.
+- Linked games.
+- Game builds.
+- Published versions.
+- End-user accounts.
+- CD keys.
+- Player ownership records.
