@@ -94,11 +94,10 @@
                 ]
               },
               {
-                "group": "Games and Releases",
+                "group": "Releases",
                 "pages": [
                   "en/games-and-releases/branches",
-                  "en/games-and-releases/builds",
-                  "en/games-and-releases/updates"
+                  "en/games-and-releases/builds"
                 ]
               },
               {
@@ -222,11 +221,10 @@
                 ]
               },
               {
-                "group": "Juegos y versiones",
+                "group": "Versiones",
                 "pages": [
                   "es/games-and-releases/branches",
-                  "es/games-and-releases/builds",
-                  "es/games-and-releases/updates"
+                  "es/games-and-releases/builds"
                 ]
               },
               {
