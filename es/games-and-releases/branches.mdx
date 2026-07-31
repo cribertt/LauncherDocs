@@ -1,25 +1,474 @@
 ---
 title: "Ramas"
-description: "Organiza stable, beta, alpha, development y ramas privadas."
+description: "Crea canales públicos y privados, administra el acceso de jugadores y compara builds entre versiones."
 icon: "code-branch"
 ---
 
-
 # Ramas
 
-| Rama | Propósito |
-| --- | --- |
-| **Stable** | Producción. |
-| **Beta** | Pruebas previas públicas o limitadas. |
-| **Alpha** | Validación temprana. |
-| **Development** | Desarrollo interno y QA. |
+Las ramas organizan las builds y versiones publicadas para un juego.
 
-Las ramas pueden ser públicas o privadas según el plan.
+Pueden representar diferentes canales de distribución, por ejemplo:
 
-{/* PHOTO AREA: replace /images/screenshots/branches.png with your real screenshot. */}
-<Frame caption="Stable, beta, alpha, development y privadas">
+- `main`
+- `stable`
+- `beta`
+- `alpha`
+- `development`
+- `nightly`
+- Un canal privado de pruebas
+
+Los nombres no están limitados a una lista fija. Utiliza nombres que expliquen claramente el propósito de cada canal.
+
+<Info>
+  Una rama es un canal de publicación. `STABLE`, `PATCH` y `HOTFIX` son tipos de release seleccionados durante la publicación con la CLI; no son tipos de visibilidad de una rama.
+</Info>
+
+## Ramas públicas y privadas
+
+<CardGroup cols={2}>
+  <Card title="Rama pública" icon="globe">
+    Está disponible mediante el flujo normal del launcher para los jugadores que tengan acceso al juego.
+
+    Utilízala para producción, betas públicas, demos u otros canales abiertos.
+  </Card>
+
+  <Card title="Rama privada" icon="lock">
+    Solo puede ser vista e instalada por jugadores registrados en el launcher que recibieron acceso explícito.
+
+    Utilízala para QA, betas cerradas, prensa, partners y pruebas internas.
+  </Card>
+</CardGroup>
+
+<Note>
+  La disponibilidad y los límites de ramas privadas dependen del plan activo del workspace.
+</Note>
+
+## Cómo participan en la publicación
+
+```text
+Crear o seleccionar una rama
+        ↓
+Publicar una build mediante la CLI
+        ↓
+La versión aparece dentro de la rama
+        ↓
+Rama pública: acceso mediante el flujo normal
+Rama privada: solo jugadores autorizados
+        ↓
+Comparar versiones o editar el changelog cuando sea necesario
+```
+
+## 1. Abre Branches
+
+Inicia sesión en el dashboard de Launcher Forge.
+
+En el menú lateral izquierdo, selecciona **Branches**.
+
+Launcher Forge mostrará los juegos disponibles en el workspace.
+
+Selecciona el juego que deseas administrar.
+
+<Frame caption="Abre Branches y selecciona un juego">
   <img
-    src="/images/screenshots/branches.png"
-    alt="Ramas del juego"
+    src="/images/screenshots/branches-game-selection.png"
+    alt="Página Branches de Launcher Forge con la tarjeta de un juego seleccionada"
   />
 </Frame>
+
+La tarjeta puede mostrar:
+
+- Portada.
+- Nombre.
+- Slug.
+- Descripción.
+- Cantidad de ramas.
+
+## 2. Revisa el resumen
+
+Después de abrir el juego, Launcher Forge muestra el resumen de ramas y builds.
+
+<Frame caption="Revisa ramas, builds, almacenamiento y última versión">
+  <img
+    src="/images/screenshots/branches-overview.png"
+    alt="Resumen de ramas con cantidad de builds, almacenamiento y última versión"
+  />
+</Frame>
+
+El resumen puede incluir:
+
+| Métrica | Descripción |
+| --- | --- |
+| **Branches** | Cantidad de ramas creadas para el juego. |
+| **Total builds** | Cantidad total de builds publicadas. |
+| **Storage** | Almacenamiento utilizado por los archivos. |
+| **Latest version** | Versión publicada más reciente. |
+
+Cada sección de rama puede mostrar:
+
+- Nombre.
+- Visibilidad o estado predeterminado.
+- Cantidad de builds.
+- Identificador depot.
+- Versión.
+- Tipo de release.
+- Tamaño.
+- Fecha.
+- Changelog.
+- Acciones disponibles.
+
+## Rama predeterminada
+
+Un juego normalmente comienza con una rama predeterminada como `main`.
+
+La rama se identifica mediante la etiqueta **DEFAULT**.
+
+Utilízala como canal principal de distribución, salvo que tu estrategia requiera otro canal.
+
+<Warning>
+  No publiques builds incompletas o internas en una rama de producción. Crea una rama pública de pruebas o una rama privada.
+</Warning>
+
+## 3. Crea una rama
+
+Selecciona **New branch**.
+
+Launcher Forge abrirá el formulario de creación.
+
+<Frame caption="Crea una rama pública o privada">
+  <img
+    src="/images/screenshots/branch-create-form.png"
+    alt="Formulario Create new branch con nombre y visibilidad"
+  />
+</Frame>
+
+Completa:
+
+### Nombre
+
+Ingresa un nombre claro.
+
+Ejemplos:
+
+```text
+beta
+alpha
+development
+nightly
+press-preview
+qa-testing
+```
+
+Utiliza un nombre estable, ya que la rama pasa a formar parte del flujo de publicación.
+
+### Visibilidad
+
+Selecciona:
+
+- **Public**
+- **Private**
+
+Luego presiona **Create**.
+
+## Comportamiento de una rama pública
+
+Una rama pública participa en el flujo normal de distribución del launcher.
+
+Los jugadores que ya tengan acceso al juego pueden recibir las builds publicadas en esa rama según la configuración del launcher y la release.
+
+Usos habituales:
+
+- Producción principal.
+- Beta pública.
+- Demo.
+- Early access.
+- Entorno público de pruebas.
+
+## Comportamiento de una rama privada
+
+Una rama privada está restringida a jugadores invitados.
+
+Después de crearla, muestra la etiqueta **PRIVATE** y la acción **Access**.
+
+<Frame caption="Revisa una rama privada sin builds">
+  <img
+    src="/images/screenshots/private-branch-empty.png"
+    alt="Rama privada con acciones Access, Delete y Upload build"
+  />
+</Frame>
+
+Puede contener sus propias builds de manera independiente de `main` o de otras ramas públicas.
+
+<Info>
+  Conceder acceso privado no publica una build automáticamente. La rama todavía debe recibir una versión mediante la CLI.
+</Info>
+
+## 4. Concede acceso a una rama privada
+
+Selecciona **Access**.
+
+Se abrirá la ventana **Branch access**.
+
+Busca a un jugador registrado por nombre o correo, selecciona la cuenta y presiona **Grant access**.
+
+<Frame caption="Busca un jugador registrado y concede acceso">
+  <img
+    src="/images/screenshots/private-branch-grant-access.png"
+    alt="Ventana Branch access con búsqueda de jugador y botón Grant access"
+  />
+</Frame>
+
+Solo pueden seleccionarse cuentas registradas dentro del launcher.
+
+<Warning>
+  Cuando el juego requiere una CD key, el jugador debe canjear primero una key válida para el juego base antes de recibir acceso a la rama privada.
+</Warning>
+
+Después de conceder el acceso:
+
+- La cuenta aparece en **Authorized players**.
+- Se registra la fecha de concesión.
+- El jugador puede ver e instalar la rama privada desde el launcher.
+- El desarrollador puede revocar posteriormente la asignación.
+
+<Frame caption="Revisa los jugadores autorizados">
+  <img
+    src="/images/screenshots/private-branch-access-granted.png"
+    alt="Ventana Branch access con un jugador autorizado y acción Revoke"
+  />
+</Frame>
+
+## Revocar acceso privado
+
+Selecciona **Revoke** junto al jugador cuando ya no deba utilizar la rama.
+
+Motivos habituales:
+
+- Finalizó la prueba cerrada.
+- El jugador salió del grupo de QA.
+- Terminó el acceso para prensa.
+- Se eliminó el acceso de un partner.
+- La cuenta ya no debe recibir builds internas.
+
+<Warning>
+  Revocar una rama privada es distinto de bloquear al jugador o eliminar su acceso al juego base.
+</Warning>
+
+## 5. Publica una build en la rama
+
+Selecciona **Upload build** dentro de la rama de destino.
+
+La publicación continúa mediante la CLI interactiva de Launcher Forge.
+
+Durante el flujo confirma:
+
+- Juego.
+- Rama de destino.
+- Número de versión.
+- Tipo de release.
+- Changelog.
+- Carpeta empaquetada.
+- Ejecutable principal.
+
+La versión publicada aparecerá dentro de la rama seleccionada.
+
+<Card
+  title="Publicar una build mediante la CLI"
+  icon="cloud-arrow-up"
+  href="/es/getting-started/publish-first-build"
+>
+  Revisa el flujo interactivo completo antes de subir una versión.
+</Card>
+
+## Tabla de builds
+
+Una rama con versiones publicadas muestra una tabla.
+
+<Frame caption="Revisa las acciones disponibles para cada build">
+  <img
+    src="/images/screenshots/branch-build-actions.png"
+    alt="Tabla de builds con acciones Edit, Default y Compare"
+  />
+</Frame>
+
+Puede incluir:
+
+| Columna | Descripción |
+| --- | --- |
+| **Depot** | Identificador interno de la build o artefacto. |
+| **Version** | Número de versión publicado. |
+| **Type** | `STABLE`, `PATCH` o `HOTFIX`. |
+| **Size** | Tamaño almacenado. |
+| **Date** | Fecha de publicación. |
+| **Changelog** | Notas asociadas con la versión. |
+| **Actions** | Operaciones disponibles. |
+
+La versión más reciente puede mostrar la etiqueta **LATEST**.
+
+## Editar una build
+
+Selecciona **Edit** cuando necesites actualizar el changelog.
+
+Esta acción solamente modifica el changelog o las release notes de la versión.
+
+No reemplaza:
+
+- Archivos de la build.
+- Número de versión.
+- Tipo de release.
+- Ejecutable principal.
+- Rama.
+- Manifiesto generado.
+
+Para cambiar los archivos empaquetados, publica una nueva versión mediante la CLI.
+
+<Warning>
+  No utilices el editor del changelog para describir archivos que nunca fueron incluidos en la build publicada.
+</Warning>
+
+## 6. Compara builds
+
+Selecciona **Compare** en la build que deseas revisar.
+
+Launcher Forge abrirá la comparación y utilizará esa versión como build actual.
+
+Selecciona una versión anterior como **Base build**.
+
+<Frame caption="Selecciona la versión anterior utilizada como base">
+  <img
+    src="/images/screenshots/branch-compare-select-base.png"
+    alt="Ventana Compare builds con selección de build anterior y actual"
+  />
+</Frame>
+
+Selecciona **Compare** para procesar los manifiestos.
+
+<Frame caption="Inicia la comparación entre builds">
+  <img
+    src="/images/screenshots/branch-compare-submit.png"
+    alt="Ventana Compare builds con el botón Compare destacado"
+  />
+</Frame>
+
+## Cómo funciona la comparación
+
+Launcher Forge compara los manifiestos y hashes de archivos de ambas versiones.
+
+Los resultados se agrupan en:
+
+| Grupo | Significado |
+| --- | --- |
+| **Added** | Archivos presentes en la build actual, pero no en la base. |
+| **Modified** | Archivos presentes en ambas builds cuyo hash cambió. |
+| **Deleted** | Archivos presentes en la build base, pero ausentes en la actual. |
+
+<Frame caption="Revisa archivos añadidos, modificados y eliminados">
+  <img
+    src="/images/screenshots/branch-compare-results.png"
+    alt="Resultados de comparación con pestañas Added, Modified y Deleted"
+  />
+</Frame>
+
+Los resultados pueden mostrar:
+
+- Ruta relativa.
+- Tamaño.
+- Hash de contenido.
+- Acción de descarga, cuando esté disponible.
+
+La comparación permite comprobar:
+
+- Qué archivos cambiaron.
+- Si un patch contiene los archivos esperados.
+- Si se eliminaron archivos obsoletos.
+- Si el empaquetado cambió inesperadamente.
+- Si las versiones son adecuadas para continuar las pruebas.
+
+## Ejemplo
+
+```text
+Build base:   1.1.1
+Build actual: 3.3.3
+
+Added:    301 archivos
+Modified:   0 archivos
+Deleted:   37 archivos
+```
+
+Una cantidad alta de archivos añadidos puede ser normal al comparar builds muy diferentes o releases completas.
+
+## Eliminar una rama
+
+Las ramas que no son predeterminadas pueden mostrar **Delete** cuando la acción está permitida.
+
+Antes de eliminar, confirma:
+
+- No es el canal necesario para producción.
+- Sus builds ya no son necesarias.
+- Ningún tester activo depende de ella.
+- Los jugadores privados ya no requieren acceso.
+- Revisaste los changelogs y comparaciones importantes.
+
+<Warning>
+  Eliminar una rama es distinto de revocar el acceso de un jugador. Revisa la rama y sus builds antes de confirmar.
+</Warning>
+
+## Estrategia recomendada
+
+| Rama | Visibilidad | Uso recomendado |
+| --- | --- | --- |
+| `main` | Pública | Canal principal de producción. |
+| `beta` | Pública o privada | Pruebas de funciones antes de producción. |
+| `alpha` | Privada | Validación temprana con jugadores seleccionados. |
+| `development` | Privada | Desarrollo interno y QA. |
+| `nightly` | Privada | Builds frecuentes o experimentales. |
+| `press-preview` | Privada | Acceso limitado para prensa o partners. |
+
+La estructura exacta depende del tamaño del proyecto y de su proceso de releases.
+
+## Lista de verificación
+
+Antes de utilizar ramas en producción, comprueba:
+
+- La rama predeterminada es correcta.
+- La visibilidad pública o privada fue seleccionada intencionalmente.
+- Los usuarios privados están registrados en el launcher.
+- Los jugadores de juegos protegidos canjearon primero la key del juego base.
+- Las builds se publican en la rama correcta.
+- Los números de versión son únicos para la rama seleccionada.
+- Los changelogs describen correctamente cada release.
+- La comparación coincide con los cambios esperados.
+- El acceso privado se revoca cuando deja de ser necesario.
+- Las builds de prueba no se publican en producción.
+
+<Check>
+  La administración está lista cuando cada versión se publica en el canal correcto y las builds privadas solo son visibles para jugadores autorizados.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Publicar una build"
+    icon="cloud-arrow-up"
+    href="/es/getting-started/publish-first-build"
+  >
+    Publica una versión en una rama mediante la CLI interactiva.
+  </Card>
+
+  <Card
+    title="Cuentas de jugadores"
+    icon="users"
+    href="/es/player-authentication/player-accounts"
+  >
+    Revisa jugadores registrados, acceso a juegos y ramas privadas.
+  </Card>
+
+  <Card
+    title="Game keys"
+    icon="ticket"
+    href="/es/player-authentication/game-keys"
+  >
+    Administra el acceso para juegos configurados con CD keys.
+  </Card>
+</CardGroup>

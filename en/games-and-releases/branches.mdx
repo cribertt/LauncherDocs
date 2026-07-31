@@ -1,25 +1,474 @@
 ---
 title: "Branches"
-description: "Organize stable, beta, alpha, development, public, and private channels."
+description: "Create public and private release channels, manage player access, and compare builds between versions."
 icon: "code-branch"
 ---
 
-
 # Branches
 
-| Branch | Purpose |
-| --- | --- |
-| **Stable** | Production-ready releases. |
-| **Beta** | Limited or public pre-release testing. |
-| **Alpha** | Early feature validation. |
-| **Development** | Internal development and QA. |
+Branches organize the builds and versions published for a game.
 
-Branches can be public or private when supported by the workspace plan.
+They can represent different distribution channels, such as:
 
-{/* PHOTO AREA: replace /images/screenshots/branches.png with your real screenshot. */}
-<Frame caption="Stable, beta, alpha, development, and private branches">
+- `main`
+- `stable`
+- `beta`
+- `alpha`
+- `development`
+- `nightly`
+- A private testing channel
+
+Branch names are not limited to a fixed list. Choose names that clearly describe how each channel will be used.
+
+<Info>
+  A branch is a release channel. `STABLE`, `PATCH`, and `HOTFIX` are build release types selected during CLI publishing; they are not branch visibility types.
+</Info>
+
+## Public and private branches
+
+<CardGroup cols={2}>
+  <Card title="Public branch" icon="globe">
+    Available through the normal launcher distribution flow for players who have access to the game.
+
+    Use public branches for production releases, public betas, demos, or other open channels.
+  </Card>
+
+  <Card title="Private branch" icon="lock">
+    Visible and installable only by registered launcher players who were explicitly granted access.
+
+    Use private branches for QA, closed betas, press previews, partner builds, and internal testing.
+  </Card>
+</CardGroup>
+
+<Note>
+  Private branch availability and limits depend on the active workspace plan.
+</Note>
+
+## How branches fit into the publishing flow
+
+```text
+Create or select a branch
+        ↓
+Publish a build through the CLI
+        ↓
+The version appears inside the branch
+        ↓
+Public branch: available through normal game access
+Private branch: available only to authorized players
+        ↓
+Compare versions or update the changelog when needed
+```
+
+## 1. Open Branches
+
+Sign in to the Launcher Forge dashboard.
+
+In the left sidebar, select **Branches**.
+
+Launcher Forge displays the games available in the workspace.
+
+Select the game you want to manage.
+
+<Frame caption="Open Branches and select a game">
   <img
-    src="/images/screenshots/branches.png"
-    alt="Game branches"
+    src="/images/screenshots/branches-game-selection.png"
+    alt="Launcher Forge Branches page with a game card selected"
   />
 </Frame>
+
+The game card can display:
+
+- Cover image.
+- Game name.
+- Slug.
+- Description.
+- Current branch count.
+
+## 2. Review the branch overview
+
+After opening the game, Launcher Forge displays its branch and build summary.
+
+<Frame caption="Review branches, builds, storage, and the latest version">
+  <img
+    src="/images/screenshots/branches-overview.png"
+    alt="Launcher Forge branch overview with branch count, total builds, storage, and latest version"
+  />
+</Frame>
+
+The summary can include:
+
+| Metric | Description |
+| --- | --- |
+| **Branches** | Number of branches currently created for the game. |
+| **Total builds** | Total number of published builds across the game. |
+| **Storage** | Storage used by the game's build files. |
+| **Latest version** | Most recently published game version. |
+
+Each branch section can display:
+
+- Branch name.
+- Visibility or default status.
+- Number of builds.
+- Depot identifier.
+- Version.
+- Release type.
+- Build size.
+- Publication date.
+- Changelog.
+- Available actions.
+
+## Default branch
+
+A game normally begins with a default branch such as `main`.
+
+The default branch is identified by the **DEFAULT** badge.
+
+Use it as the primary distribution channel unless your release strategy requires another channel.
+
+<Warning>
+  Do not use a production branch for unfinished or internal builds. Create a separate public test branch or private branch instead.
+</Warning>
+
+## 3. Create a branch
+
+Select **New branch**.
+
+Launcher Forge opens the branch creation form.
+
+<Frame caption="Create a public or private branch">
+  <img
+    src="/images/screenshots/branch-create-form.png"
+    alt="Launcher Forge Create new branch form with name and visibility fields"
+  />
+</Frame>
+
+Complete:
+
+### Name
+
+Enter a clear branch name.
+
+Examples:
+
+```text
+beta
+alpha
+development
+nightly
+press-preview
+qa-testing
+```
+
+Use a stable name because the branch becomes part of the publishing workflow.
+
+### Visibility
+
+Choose:
+
+- **Public**
+- **Private**
+
+Then select **Create**.
+
+## Public branch behavior
+
+A public branch participates in the normal launcher distribution flow.
+
+Players who already have access to the game can receive the builds published to that branch according to the launcher and release configuration.
+
+Typical uses:
+
+- Main production channel.
+- Public beta.
+- Demo channel.
+- Early-access channel.
+- Public test environment.
+
+## Private branch behavior
+
+A private branch is restricted to invited launcher players.
+
+After creating it, the branch displays the **PRIVATE** badge and an **Access** action.
+
+<Frame caption="Review an empty private branch">
+  <img
+    src="/images/screenshots/private-branch-empty.png"
+    alt="Launcher Forge private branch with Access, Delete, and Upload build actions"
+  />
+</Frame>
+
+A private branch can contain its own builds independently from the default or other public branches.
+
+<Info>
+  Granting private branch access does not publish a build automatically. The branch must still receive a version through the CLI.
+</Info>
+
+## 4. Grant access to a private branch
+
+Select **Access** on the private branch.
+
+The **Branch access** dialog opens.
+
+Search for a registered launcher player by name or email, select the matching account, and choose **Grant access**.
+
+<Frame caption="Search for a registered player and grant access">
+  <img
+    src="/images/screenshots/private-branch-grant-access.png"
+    alt="Launcher Forge Branch access dialog with player search and Grant access button"
+  />
+</Frame>
+
+Only accounts registered in the launcher can be selected.
+
+<Warning>
+  For a game protected by a CD key, the player must redeem a valid key for the base game before receiving access to its private branch.
+</Warning>
+
+After access is granted:
+
+- The player appears under **Authorized players**.
+- The access grant date is recorded.
+- The player can view and install the private branch through the launcher.
+- The developer can later revoke the assignment.
+
+<Frame caption="Review authorized players for the private branch">
+  <img
+    src="/images/screenshots/private-branch-access-granted.png"
+    alt="Launcher Forge Branch access dialog showing an authorized player and Revoke action"
+  />
+</Frame>
+
+## Revoke private branch access
+
+Select **Revoke** next to an authorized player when that account should no longer use the private branch.
+
+Typical reasons include:
+
+- Closed test ended.
+- Player left the QA group.
+- Press preview access expired.
+- Partner access was removed.
+- Account should no longer receive internal builds.
+
+<Warning>
+  Revoking private branch access is separate from banning the player or removing access to the base game.
+</Warning>
+
+## 5. Publish a build to a branch
+
+Select **Upload build** from the target branch.
+
+Build publishing continues through the Launcher Forge interactive CLI.
+
+During the CLI flow, confirm:
+
+- Game.
+- Destination branch.
+- Version number.
+- Release type.
+- Changelog.
+- Packaged build folder.
+- Main executable.
+
+The published version then appears in the selected branch.
+
+<Card
+  title="Publish a build with the CLI"
+  icon="cloud-arrow-up"
+  href="/en/getting-started/publish-first-build"
+>
+  Review the complete interactive publishing workflow before uploading a version.
+</Card>
+
+## Branch build table
+
+A branch with published versions displays a build table.
+
+<Frame caption="Review build actions inside a branch">
+  <img
+    src="/images/screenshots/branch-build-actions.png"
+    alt="Launcher Forge branch build table with Edit, Default, and Compare actions"
+  />
+</Frame>
+
+The table can include:
+
+| Column | Description |
+| --- | --- |
+| **Depot** | Internal build or artifact identifier. |
+| **Version** | Published version number. |
+| **Type** | `STABLE`, `PATCH`, or `HOTFIX`. |
+| **Size** | Stored build size. |
+| **Date** | Publication date. |
+| **Changelog** | Release notes associated with the version. |
+| **Actions** | Actions available for that build. |
+
+The newest version can display the **LATEST** badge.
+
+## Edit a build
+
+Select **Edit** when you need to update the changelog.
+
+The edit action only changes the version's changelog or release notes.
+
+It does not replace:
+
+- Build files.
+- Version number.
+- Release type.
+- Main executable.
+- Branch.
+- Generated manifest.
+
+To change the packaged files, publish a new version through the CLI.
+
+<Warning>
+  Do not use the changelog editor to represent files that were never included in the published build.
+</Warning>
+
+## 6. Compare builds
+
+Select **Compare** on the build you want to review.
+
+Launcher Forge opens the comparison dialog and treats the selected version as the current build.
+
+Choose an earlier version as the **Base build**.
+
+<Frame caption="Select the previous version used as the comparison base">
+  <img
+    src="/images/screenshots/branch-compare-select-base.png"
+    alt="Launcher Forge Compare builds dialog with previous and current build selection"
+  />
+</Frame>
+
+Select **Compare** to process the manifests.
+
+<Frame caption="Start the build comparison">
+  <img
+    src="/images/screenshots/branch-compare-submit.png"
+    alt="Launcher Forge Compare builds dialog with the Compare button highlighted"
+  />
+</Frame>
+
+## How comparison works
+
+Launcher Forge compares the file manifests and hashes of both versions.
+
+Files are grouped into:
+
+| Group | Meaning |
+| --- | --- |
+| **Added** | Files present in the current build but not in the base build. |
+| **Modified** | Files present in both builds whose content hash changed. |
+| **Deleted** | Files present in the base build but missing from the current build. |
+
+<Frame caption="Review added, modified, and deleted files">
+  <img
+    src="/images/screenshots/branch-compare-results.png"
+    alt="Launcher Forge build comparison results with Added, Modified, and Deleted tabs"
+  />
+</Frame>
+
+The results can display:
+
+- Relative file path.
+- File size.
+- Content hash.
+- Download action, when available.
+
+This helps verify:
+
+- Which files changed between releases.
+- Whether a patch contains the expected files.
+- Whether obsolete files were removed.
+- Whether the packaged output changed unexpectedly.
+- Whether two versions are suitable for further testing.
+
+## Comparison example
+
+```text
+Base build:    1.1.1
+Current build: 3.3.3
+
+Added:    301 files
+Modified:   0 files
+Deleted:   37 files
+```
+
+A large number of added files can be expected when comparing substantially different builds or complete release baselines.
+
+## Delete a branch
+
+Non-default branches can expose a **Delete** action when deletion is allowed.
+
+Before deleting a branch, verify:
+
+- It is not the required production channel.
+- Its builds are no longer needed.
+- No active testers depend on it.
+- Authorized private players no longer need access.
+- Important changelogs or comparison results were reviewed.
+
+<Warning>
+  Deleting a branch is different from revoking player access. Review the branch and its builds before confirming deletion.
+</Warning>
+
+## Recommended branch strategy
+
+| Branch | Visibility | Recommended use |
+| --- | --- | --- |
+| `main` | Public | Primary production channel. |
+| `beta` | Public or private | Feature testing before production. |
+| `alpha` | Private | Early validation with selected players. |
+| `development` | Private | Internal development and QA. |
+| `nightly` | Private | Frequent automated or experimental builds. |
+| `press-preview` | Private | Limited access for press or partners. |
+
+The exact structure depends on the size of the project and release process.
+
+## Verification checklist
+
+Before using branches in production, verify:
+
+- The default branch is correct.
+- Public and private visibility is configured intentionally.
+- Private branch users are registered in the launcher.
+- Key-protected players redeemed the base-game key first.
+- Builds are published to the correct branch.
+- Version numbers are unique for the selected branch.
+- Changelogs accurately describe each release.
+- Comparison results match the expected file changes.
+- Private access is revoked when no longer required.
+- Test builds are not published to the production branch.
+
+<Check>
+  Branch management is ready when each version is published to the intended channel and private builds are visible only to authorized launcher players.
+</Check>
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="Publish a build"
+    icon="cloud-arrow-up"
+    href="/en/getting-started/publish-first-build"
+  >
+    Publish a new version to a selected branch through the interactive CLI.
+  </Card>
+
+  <Card
+    title="Player accounts"
+    icon="users"
+    href="/en/player-authentication/player-accounts"
+  >
+    Review registered players, game access, and private branch assignments.
+  </Card>
+
+  <Card
+    title="Game keys"
+    icon="ticket"
+    href="/en/player-authentication/game-keys"
+  >
+    Manage access for games configured to require CD keys.
+  </Card>
+</CardGroup>
