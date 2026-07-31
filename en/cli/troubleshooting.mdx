@@ -1,36 +1,376 @@
 ---
-title: "Common CLI errors"
-description: "Resolve common authentication, resource, executable, network, and interrupted-upload errors."
+title: "CLI troubleshooting"
+description: "Resolve common Launcher Forge CLI authentication, publishing, and upload errors."
 icon: "triangle-exclamation"
 ---
 
+# CLI troubleshooting
 
-# Common CLI errors
+Use this page when the Launcher Forge CLI cannot authenticate, list a game or branch, scan a build, detect an executable, or complete an upload.
 
-## Authentication error
+<Info>
+  The CLI is interactive. Do not attempt to solve these issues by using undocumented deployment commands or flags.
+</Info>
 
-Sign in again and confirm the expected account and workspace.
+## Quick diagnosis
 
-## Game or branch not found
+| Symptom | Most likely cause | First action |
+| --- | --- | --- |
+| The CLI requests login again | Missing or expired local session | Sign in again. |
+| Login is rejected | Wrong account type or credentials | Use the developer account email and password. |
+| A game is missing | Account lacks access or game data was not refreshed | Log out, sign in again, and review dashboard access. |
+| A branch is missing | The branch does not exist or is not available to the account | Create or review the branch in the dashboard. |
+| Version is rejected | The version already exists in the branch | Use a new version number. |
+| No executable is detected | Wrong folder or missing Windows executable | Select the packaged build root. |
+| Upload stops | Network, storage, permission, or changed-file issue | Review the last CLI message and correct the reported cause. |
 
-Verify access, visibility, and the selected workspace.
+## No active session
+
+### Message
+
+```text
+No active session. Sign in to continue.
+```
+
+### Cause
+
+The CLI has no valid local developer session, or the previous session expired.
+
+### Resolution
+
+1. Enter the developer account email.
+2. Enter the account password.
+3. Wait for the account overview to load.
+
+Use **Logout** and sign in again when the CLI displays the wrong account or outdated permissions.
+
+## Email or password rejected
+
+### Cause
+
+Possible causes include:
+
+- Incorrect developer email.
+- Incorrect password.
+- Player account credentials were used.
+- The developer account was created through OAuth and has no password.
+- The account is restricted.
+
+### Resolution
+
+- Use the developer dashboard account, not a launcher player account.
+- Confirm the email address.
+- Reset the developer password when necessary.
+- Create a Launcher Forge password for an OAuth account before using the CLI.
+
+<Card
+  title="Password recovery"
+  icon="key"
+  href="/en/player-authentication/password-recovery"
+>
+  Review the developer account reset-link flow and the separate launcher player OTP flow.
+</Card>
+
+## The game does not appear
+
+### Cause
+
+The authenticated account cannot access the game, or the CLI session contains outdated account data.
+
+### Resolution
+
+1. Confirm that the game exists in the current workspace.
+2. Confirm that the account has permission to publish it.
+3. Open the dashboard's CLI page and confirm that CLI access is enabled.
+4. Use **Logout**, sign in again, and select **List games**.
+
+<Note>
+  Draft or dashboard configuration can affect the distribution workflow, but game creation and publishing status are managed from the Catalog rather than the CLI.
+</Note>
+
+## CLI access is not enabled
+
+The dashboard game summary displays the current **CLI access** state.
+
+When access is unavailable:
+
+- Review the game configuration.
+- Review workspace permissions.
+- Review the active plan and entitlements.
+- Refresh the dashboard after changing access.
+
+The CLI cannot bypass a disabled backend permission.
+
+## The branch does not appear
+
+### Cause
+
+The branch may not exist, may belong to another game, or may not be available to the authenticated account.
+
+### Resolution
+
+1. Open **Branches** in the dashboard.
+2. Select the correct game.
+3. Confirm the branch exists.
+4. Confirm its name and visibility.
+5. Restart the upload flow.
+
+<Card
+  title="Manage branches"
+  icon="code-branch"
+  href="/en/games-and-versions/branches"
+>
+  Create public or private branches and review their build history.
+</Card>
+
+## Duplicate version
+
+### Cause
+
+The selected version number is already published in the destination branch.
+
+### Resolution
+
+Use a new version number.
+
+Example:
+
+```text
+Existing: 1.0.0
+New:      1.0.1
+```
+
+Do not try to overwrite an existing version. Publish a new version through the CLI.
+
+## Invalid build folder
+
+### Cause
+
+The selected folder is not the packaged game root.
+
+Common incorrect selections include:
+
+- Engine project folder.
+- Source code folder.
+- Unity or Unreal editor project.
+- Build cache.
+- Parent folder that does not contain the runtime.
+- Empty or incomplete export.
+
+### Resolution
+
+Select the folder that contains the compiled game executable and all runtime files.
+
+Example:
+
+```text
+MyGameBuild/
+├── MyGame.exe
+├── MyGame_Data/
+└── Required runtime files
+```
+
+## No executable detected
+
+### Cause
+
+The selected folder does not contain a detectable Windows executable, or the export is incomplete.
+
+### Resolution
+
+- Confirm that the packaged output contains the game's `.exe`.
+- Select the correct build root.
+- Repackage the game when the executable is missing.
+- Do not select the source project directory.
+
+## Wrong executable selected
+
+### Symptom
+
+The launcher downloads and installs the game, but starting it opens the wrong program or fails.
+
+### Cause
+
+A helper, crash reporter, server executable, or another `.exe` was selected as the main executable.
+
+### Resolution
+
+Publish a new version and select the executable that starts the actual game.
+
+<Warning>
+  Editing a build from the dashboard only changes its changelog. It does not replace the main executable or the uploaded files.
+</Warning>
+
+## Files changed during scanning or upload
+
+### Cause
+
+The packaged folder was modified after the CLI started generating hashes.
+
+This can happen when:
+
+- The engine is still exporting files.
+- Antivirus or another program modifies the folder.
+- A build script continues writing files.
+- Files are renamed or deleted manually.
+
+### Resolution
+
+1. Finish the packaging process.
+2. Close tools that can modify the output.
+3. Use a clean, stable build folder.
+4. Restart the upload.
 
 ## Storage limit reached
 
-Review workspace usage and plan limits.
+### Cause
 
-## Executable not found
+The workspace does not have enough available storage for the build artifacts.
 
-Confirm the packaged folder and configured executable path.
+### Resolution
 
-## Network error or interrupted upload
+- Review storage usage in the dashboard.
+- Reduce unnecessary files in the packaged output.
+- Increase workspace storage through the applicable plan or add-on.
+- Retry after capacity is available.
 
-Keep the terminal open, maintain a stable connection, and retry after confirming the previous upload is no longer active.
+<Warning>
+  Do not remove runtime files only to reduce size. Test the reduced package locally before publishing it.
+</Warning>
 
-{/* PHOTO AREA: replace /images/screenshots/cli-errors.png with your real screenshot. */}
-<Frame caption="Example CLI error and recovery information">
-  <img
-    src="/images/screenshots/cli-errors.png"
-    alt="CLI error message"
-  />
-</Frame>
+## Network interruption or timeout
+
+### Cause
+
+The connection was interrupted while uploading files or communicating with the backend.
+
+### Resolution
+
+- Confirm the internet connection is stable.
+- Keep the CLI open.
+- Avoid changing the build folder.
+- Restart the publication after the failed operation ends.
+- Retry later when the backend is temporarily unavailable.
+
+An incomplete upload should not be considered a published version unless the CLI reports success and the version appears in the dashboard.
+
+## Unauthorized or forbidden response
+
+### Symptoms
+
+```text
+401 Unauthorized
+403 Forbidden
+```
+
+### Cause
+
+The session expired, the account lacks permission, or access to the requested game or branch was denied.
+
+### Resolution
+
+1. Use **Logout**.
+2. Sign in again.
+3. Confirm workspace and game permissions in the dashboard.
+4. Retry the operation.
+
+## Manifest or hash error
+
+### Cause
+
+A file could not be read consistently, the build folder changed, or the packaged output contains a damaged file.
+
+### Resolution
+
+- Copy the build to a clean folder.
+- Confirm all files are readable.
+- Repackage the game when necessary.
+- Restart the upload without modifying the folder.
+
+## Upload completed but the version is missing
+
+### Resolution
+
+1. Confirm that the CLI displayed a successful build creation message.
+2. Open **Branches** in the dashboard.
+3. Select the correct game and branch.
+4. Refresh the page.
+5. Review whether a different game or branch was selected during the CLI flow.
+
+When the CLI did not confirm success, publish the version again after correcting the reported error.
+
+## The launcher does not detect the new version
+
+Check:
+
+- The build was published to the intended branch.
+- The player is using that branch.
+- The version appears in branch history.
+- The game is linked to the launcher.
+- The launcher can reach the backend.
+- The installed game is not already on the same version.
+
+Private branches additionally require explicit player access.
+
+## CLI does not open
+
+Check that:
+
+- The downloaded file is the Windows CLI executable.
+- The download completed.
+- The file was not moved while running.
+- Windows permissions allow it to execute.
+
+Run it again from a normal local folder such as the desktop.
+
+When Windows security software blocks or quarantines the executable, review the local security notification before retrying.
+
+## Information to collect for support
+
+When an error cannot be resolved, collect:
+
+- CLI version from **Version info**.
+- Game name and application ID.
+- Destination branch.
+- Version number.
+- Release type.
+- Last visible error message.
+- Whether authentication succeeded.
+- Approximate time of the failure.
+
+Do not include:
+
+- Passwords.
+- Launch tokens.
+- Local session credentials.
+- Active CD keys.
+- Full private URLs.
+- Sensitive player data.
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="CLI overview"
+    icon="terminal"
+    href="/en/launcher-forge-cli/overview"
+  >
+    Review download, execution, authentication, account usage, and menu options.
+  </Card>
+
+  <Card
+    title="Publish your first build"
+    icon="cloud-arrow-up"
+    href="/en/getting-started/publish-first-build"
+  >
+    Follow every prompt in the interactive publishing workflow.
+  </Card>
+
+  <Card
+    title="Builds"
+    icon="boxes-stacked"
+    href="/en/games-and-versions/builds"
+  >
+    Understand release types, manifests, hashes, version history, and comparisons.
+  </Card>
+</CardGroup>

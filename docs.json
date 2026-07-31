@@ -103,10 +103,7 @@
               {
                 "group": "Launcher Forge CLI",
                 "pages": [
-                  "en/cli/installation",
-                  "en/cli/authentication",
-                  "en/cli/publish-build",
-                  "en/cli/how-uploads-work",
+                  "en/cli/overview",
                   "en/cli/troubleshooting"
                 ]
               },
@@ -230,10 +227,7 @@
               {
                 "group": "CLI de Launcher Forge",
                 "pages": [
-                  "es/cli/installation",
-                  "es/cli/authentication",
-                  "es/cli/publish-build",
-                  "es/cli/how-uploads-work",
+                  "es/cli/overview",
                   "es/cli/troubleshooting"
                 ]
               },

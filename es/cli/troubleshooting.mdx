@@ -1,36 +1,376 @@
 ---
-title: "Errores comunes de la CLI"
-description: "Resuelve autenticación, recursos, ejecutable, red y cargas interrumpidas."
+title: "Solución de problemas de la CLI"
+description: "Resuelve errores comunes de autenticación, publicación y subida en Launcher Forge CLI."
 icon: "triangle-exclamation"
 ---
 
+# Solución de problemas de la CLI
 
-# Errores comunes de la CLI
+Utiliza esta página cuando la CLI no pueda iniciar sesión, listar un juego o una rama, analizar una build, detectar un ejecutable o completar una subida.
 
-## Error de autenticación
+<Info>
+  La CLI es interactiva. No intentes resolver estos problemas mediante comandos de despliegue o parámetros no documentados.
+</Info>
 
-Inicia sesión nuevamente.
+## Diagnóstico rápido
 
-## Juego o rama inexistente
+| Problema | Causa probable | Primera acción |
+| --- | --- | --- |
+| La CLI vuelve a pedir login | La sesión local no existe o venció | Inicia sesión nuevamente. |
+| El login es rechazado | Credenciales o tipo de cuenta incorrectos | Usa el correo y contraseña de desarrollador. |
+| No aparece un juego | La cuenta no tiene acceso o la sesión está desactualizada | Cierra sesión, vuelve a entrar y revisa el dashboard. |
+| No aparece una rama | No existe o no está disponible para la cuenta | Revisa o crea la rama desde el dashboard. |
+| La versión es rechazada | Ya existe en la rama | Utiliza un número nuevo. |
+| No detecta ejecutable | Carpeta incorrecta o exportación incompleta | Selecciona la raíz de la build empaquetada. |
+| La subida se detiene | Red, almacenamiento, permisos o archivos modificados | Revisa el último mensaje y corrige la causa indicada. |
 
-Revisa workspace, permisos y visibilidad.
+## No hay una sesión activa
 
-## Límite de almacenamiento
+### Mensaje
 
-Revisa uso y plan.
+```text
+No hay una sesión activa. Inicia sesión para continuar.
+```
 
-## Ejecutable no encontrado
+### Causa
 
-Comprueba carpeta empaquetada y ruta configurada.
+La CLI no tiene una sesión local válida o la sesión anterior venció.
 
-## Error de red o carga interrumpida
+### Solución
 
-Mantén abierta la terminal y reintenta cuando la carga anterior ya no esté activa.
+1. Ingresa el correo de la cuenta de desarrollador.
+2. Ingresa su contraseña.
+3. Espera a que se cargue el resumen de la cuenta.
 
-{/* PHOTO AREA: replace /images/screenshots/cli-errors.png with your real screenshot. */}
-<Frame caption="Ejemplo de error y recuperación">
-  <img
-    src="/images/screenshots/cli-errors.png"
-    alt="Error de CLI"
-  />
-</Frame>
+Utiliza **Logout** e inicia sesión nuevamente cuando la CLI muestre una cuenta o permisos incorrectos.
+
+## Correo o contraseña rechazados
+
+### Causa
+
+Puede ocurrir por:
+
+- Correo de desarrollador incorrecto.
+- Contraseña incorrecta.
+- Uso de credenciales de una cuenta de jugador.
+- Cuenta creada mediante OAuth sin una contraseña configurada.
+- Cuenta restringida.
+
+### Solución
+
+- Utiliza la cuenta del dashboard, no una cuenta de jugador.
+- Confirma el correo.
+- Restablece la contraseña cuando sea necesario.
+- Configura una contraseña de Launcher Forge para una cuenta OAuth antes de usar la CLI.
+
+<Card
+  title="Recuperación de contraseña"
+  icon="key"
+  href="/es/player-authentication/password-recovery"
+>
+  Revisa el enlace con token para desarrolladores y el flujo OTP separado para jugadores.
+</Card>
+
+## El juego no aparece
+
+### Causa
+
+La cuenta autenticada no tiene acceso al juego o la sesión conserva información anterior.
+
+### Solución
+
+1. Confirma que el juego existe en el workspace actual.
+2. Confirma que la cuenta puede publicarlo.
+3. Abre la página CLI del dashboard y verifica que **CLI access** esté habilitado.
+4. Utiliza **Logout**, vuelve a iniciar sesión y selecciona **List games**.
+
+<Note>
+  El estado del Catálogo puede afectar el flujo de distribución, pero la creación y publicación de la ficha se administran desde el dashboard, no desde la CLI.
+</Note>
+
+## El acceso a la CLI no está habilitado
+
+El resumen del juego en el dashboard muestra el estado de **CLI access**.
+
+Cuando no esté disponible:
+
+- Revisa la configuración del juego.
+- Revisa los permisos del workspace.
+- Revisa el plan y sus límites.
+- Actualiza el dashboard después de cambiar el acceso.
+
+La CLI no puede ignorar un permiso deshabilitado por el backend.
+
+## La rama no aparece
+
+### Causa
+
+La rama puede no existir, pertenecer a otro juego o no estar disponible para la cuenta.
+
+### Solución
+
+1. Abre **Branches**.
+2. Selecciona el juego correcto.
+3. Confirma que la rama existe.
+4. Confirma su nombre y visibilidad.
+5. Reinicia el flujo de publicación.
+
+<Card
+  title="Administrar ramas"
+  icon="code-branch"
+  href="/es/games-and-versions/branches"
+>
+  Crea ramas públicas o privadas y revisa su historial.
+</Card>
+
+## Versión duplicada
+
+### Causa
+
+El número ya fue publicado en la rama de destino.
+
+### Solución
+
+Utiliza una versión nueva.
+
+Ejemplo:
+
+```text
+Existente: 1.0.0
+Nueva:     1.0.1
+```
+
+No intentes reemplazar una versión existente. Publica una nueva versión mediante la CLI.
+
+## Carpeta de build inválida
+
+### Causa
+
+La carpeta seleccionada no corresponde a la raíz del juego empaquetado.
+
+Selecciones incorrectas habituales:
+
+- Carpeta del proyecto del motor.
+- Código fuente.
+- Proyecto de Unity o Unreal.
+- Caché de compilación.
+- Carpeta superior que no contiene el runtime.
+- Exportación vacía o incompleta.
+
+### Solución
+
+Selecciona la carpeta que contiene el ejecutable compilado y todos sus archivos de ejecución.
+
+Ejemplo:
+
+```text
+MiJuegoBuild/
+├── MiJuego.exe
+├── MiJuego_Data/
+└── Archivos de ejecución requeridos
+```
+
+## No se detectó un ejecutable
+
+### Causa
+
+La carpeta no contiene un ejecutable de Windows detectable o la exportación está incompleta.
+
+### Solución
+
+- Confirma que la build contiene el `.exe` del juego.
+- Selecciona la raíz correcta.
+- Vuelve a empaquetar cuando falte el ejecutable.
+- No selecciones el proyecto fuente.
+
+## Se seleccionó el ejecutable incorrecto
+
+### Síntoma
+
+El launcher descarga e instala el juego, pero abre otro programa o no puede iniciarlo.
+
+### Causa
+
+Se seleccionó un helper, crash reporter, servidor u otro `.exe`.
+
+### Solución
+
+Publica una versión nueva y selecciona el ejecutable que inicia el juego real.
+
+<Warning>
+  Editar una build desde el dashboard solo modifica el changelog. No reemplaza el ejecutable principal ni los archivos.
+</Warning>
+
+## Los archivos cambiaron durante el análisis o la subida
+
+### Causa
+
+La carpeta fue modificada después de que la CLI comenzó a generar hashes.
+
+Puede ocurrir cuando:
+
+- El motor continúa exportando.
+- Un antivirus u otro programa modifica archivos.
+- Un script sigue escribiendo en la carpeta.
+- Se renombran o eliminan archivos manualmente.
+
+### Solución
+
+1. Finaliza el empaquetado.
+2. Cierra las herramientas que puedan modificar la salida.
+3. Utiliza una carpeta limpia y estable.
+4. Reinicia la publicación.
+
+## Límite de almacenamiento alcanzado
+
+### Causa
+
+El workspace no tiene espacio suficiente para los artefactos.
+
+### Solución
+
+- Revisa el almacenamiento en el dashboard.
+- Elimina archivos innecesarios del empaquetado.
+- Aumenta la capacidad mediante el plan o add-on correspondiente.
+- Vuelve a intentar cuando exista espacio.
+
+<Warning>
+  No elimines archivos necesarios solamente para reducir el tamaño. Prueba localmente el paquete reducido antes de publicarlo.
+</Warning>
+
+## Interrupción de red o timeout
+
+### Causa
+
+La conexión se interrumpió durante la subida o la comunicación con el backend.
+
+### Solución
+
+- Confirma que la conexión sea estable.
+- Mantén abierta la CLI.
+- No cambies la carpeta.
+- Reinicia la publicación cuando termine la operación fallida.
+- Vuelve a intentar más tarde cuando el backend no esté disponible.
+
+Una subida incompleta no debe considerarse publicada salvo que la CLI confirme el éxito y la versión aparezca en el dashboard.
+
+## Respuesta Unauthorized o Forbidden
+
+### Mensajes
+
+```text
+401 Unauthorized
+403 Forbidden
+```
+
+### Causa
+
+La sesión venció, faltan permisos o se rechazó el acceso al juego o rama.
+
+### Solución
+
+1. Utiliza **Logout**.
+2. Inicia sesión nuevamente.
+3. Confirma permisos en el dashboard.
+4. Repite la operación.
+
+## Error de manifiesto o hash
+
+### Causa
+
+Un archivo no pudo leerse de forma consistente, la carpeta cambió o contiene un archivo dañado.
+
+### Solución
+
+- Copia la build a una carpeta limpia.
+- Confirma que todos los archivos puedan leerse.
+- Vuelve a empaquetar cuando sea necesario.
+- Reinicia la subida sin modificar la carpeta.
+
+## La subida terminó, pero no aparece la versión
+
+### Solución
+
+1. Confirma que la CLI mostró el mensaje de creación exitosa.
+2. Abre **Branches**.
+3. Selecciona el juego y rama correctos.
+4. Actualiza la página.
+5. Revisa si seleccionaste otro juego o rama durante el flujo.
+
+Cuando la CLI no confirmó el éxito, vuelve a publicar después de corregir el error indicado.
+
+## El launcher no detecta la versión nueva
+
+Comprueba:
+
+- La build fue publicada en la rama correcta.
+- El jugador utiliza esa rama.
+- La versión aparece en el historial.
+- El juego está vinculado con el launcher.
+- El launcher puede comunicarse con el backend.
+- El juego instalado no utiliza ya la misma versión.
+
+Las ramas privadas también requieren acceso explícito para el jugador.
+
+## La CLI no abre
+
+Comprueba:
+
+- El archivo descargado corresponde a la CLI de Windows.
+- La descarga terminó.
+- El archivo no fue movido mientras se ejecutaba.
+- Windows permite ejecutarlo.
+
+Vuelve a abrirlo desde una carpeta local normal, como el escritorio.
+
+Cuando el software de seguridad de Windows bloquee o coloque el archivo en cuarentena, revisa la notificación local antes de volver a intentarlo.
+
+## Información para soporte
+
+Cuando el problema continúe, reúne:
+
+- Versión de la CLI desde **Version info**.
+- Nombre del juego y Application ID.
+- Rama de destino.
+- Número de versión.
+- Tipo de release.
+- Último mensaje de error.
+- Si la autenticación se completó.
+- Hora aproximada del fallo.
+
+No incluyas:
+
+- Contraseñas.
+- Launch tokens.
+- Credenciales de sesión.
+- CD keys activas.
+- URLs privadas completas.
+- Datos sensibles de jugadores.
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Introducción a la CLI"
+    icon="terminal"
+    href="/es/launcher-forge-cli/overview"
+  >
+    Revisa descarga, ejecución, autenticación, uso y opciones del menú.
+  </Card>
+
+  <Card
+    title="Publicar tu primera build"
+    icon="cloud-arrow-up"
+    href="/es/getting-started/publish-first-build"
+  >
+    Sigue todas las preguntas del flujo interactivo.
+  </Card>
+
+  <Card
+    title="Builds"
+    icon="boxes-stacked"
+    href="/es/games-and-versions/builds"
+  >
+    Comprende tipos de release, manifiestos, hashes, historial y comparaciones.
+  </Card>
+</CardGroup>

@@ -1,0 +1,243 @@
+---
+title: "CLI de Launcher Forge"
+description: "Descarga, ejecuta, autentica y utiliza la CLI interactiva de Launcher Forge."
+icon: "terminal"
+---
+
+# CLI de Launcher Forge
+
+La CLI de Launcher Forge es una aplicación interactiva para Windows utilizada para publicar builds empaquetadas de un juego.
+
+El programa guía todo el flujo mediante menús y preguntas. No necesitas construir comandos de despliegue ni utilizar parámetros manuales.
+
+<Info>
+  La CLI es un ejecutable portable. No requiere un proceso de instalación. Puedes guardarla en el escritorio o en otra carpeta y ejecutarla directamente.
+</Info>
+
+## Qué permite hacer
+
+La CLI permite al desarrollador:
+
+- Autenticarse con una cuenta de desarrollador de Launcher Forge.
+- Revisar el uso y los límites del workspace.
+- Listar los juegos disponibles.
+- Consultar versiones publicadas.
+- Publicar una build en una rama.
+- Revisar la versión instalada de la CLI.
+- Cerrar la sesión local mediante Logout.
+
+<Warning>
+  La CLI utiliza credenciales de desarrollador. Las cuentas de jugadores del launcher no pueden utilizarse para publicar builds.
+</Warning>
+
+## Descargar la CLI
+
+Abre el dashboard de Launcher Forge y selecciona **CLI** en el menú lateral.
+
+Selecciona el juego que deseas revisar y abre su página de publicación mediante CLI.
+
+La página muestra:
+
+- Application ID.
+- Cantidad de ramas.
+- Rama predeterminada.
+- Estado de acceso a la CLI.
+- Descarga de la CLI para Windows.
+- Resumen del flujo interactivo.
+
+Selecciona **Download CLI**.
+
+<Frame caption="Descarga la CLI desde el dashboard">
+  <img
+    src="/images/screenshots/cli-game-download.png"
+    alt="Página del dashboard con la acción Download CLI"
+  />
+</Frame>
+
+## Ejecutar la CLI
+
+Después de descargar el ejecutable:
+
+1. Muévelo al escritorio o a otra carpeta.
+2. Abre el ejecutable directamente.
+3. Mantén abierta la ventana mientras utilizas la CLI.
+
+No existe un asistente de instalación ni debes instalarla localmente.
+
+<Note>
+  Descarga un ejecutable nuevo cuando Launcher Forge publique una nueva versión. Utiliza **Version info** para consultar la versión que estás ejecutando.
+</Note>
+
+## Autenticación
+
+Cuando no existe una sesión local válida, la CLI solicita el correo y la contraseña de la cuenta de desarrollador.
+
+<Frame caption="Inicia sesión cuando no existe una sesión activa">
+  <img
+    src="/images/screenshots/cli-login.png"
+    alt="Launcher Forge CLI solicitando el correo de la cuenta de desarrollador"
+  />
+</Frame>
+
+Utiliza la misma cuenta que tiene acceso al workspace y a los juegos que deseas publicar.
+
+Después de iniciar sesión correctamente, la CLI conserva una sesión local para evitar solicitar las credenciales cada vez que se abre.
+
+### Cuentas creadas mediante OAuth
+
+Cuando la cuenta fue creada mediante Google, GitHub u otro proveedor OAuth, la CLI igualmente necesita correo y contraseña.
+
+Configura una contraseña para la cuenta de Launcher Forge antes de intentar iniciar sesión mediante la CLI.
+
+<Warning>
+  No compartas la CLI junto con los datos de la sesión local. Utiliza **Logout** antes de usarla en un computador compartido.
+</Warning>
+
+## Resumen de la cuenta
+
+Después de autenticarse, la CLI muestra un resumen.
+
+Puede incluir:
+
+- Correo del desarrollador.
+- Plan actual.
+- Estado de la cuenta.
+- Almacenamiento utilizado y disponible.
+- Ancho de banda utilizado y disponible.
+- Juegos utilizados y permitidos.
+
+Esta información ayuda a confirmar que la cuenta y los límites correctos están activos antes de publicar.
+
+## Menú principal
+
+La CLI presenta un menú interactivo.
+
+<Frame caption="Resumen de la cuenta y menú principal">
+  <img
+    src="/images/screenshots/cli-main-menu.png"
+    alt="Menú principal de Launcher Forge CLI con Upload build seleccionado"
+  />
+</Frame>
+
+| Opción | Función |
+| --- | --- |
+| **Upload build** | Inicia el flujo interactivo para publicar una build. |
+| **Account / usage** | Muestra la cuenta, plan, almacenamiento, ancho de banda y uso de juegos. |
+| **List games** | Lista los juegos disponibles para la cuenta autenticada. |
+| **List versions** | Lista las versiones publicadas de un juego disponible. |
+| **Version info** | Muestra información de la versión actual de la CLI. |
+| **Logout** | Elimina o invalida la sesión local y vuelve a la autenticación. |
+| **Exit** | Cierra la aplicación. |
+
+Utiliza las flechas para seleccionar una opción y presiona **Enter**.
+
+## Publicar builds
+
+La publicación comienza desde **Upload build**.
+
+El flujo solicita:
+
+1. Juego.
+2. Rama.
+3. Número de versión.
+4. Tipo de release.
+5. Changelog.
+6. Carpeta de la build empaquetada.
+7. Ejecutable principal.
+8. Confirmación final de la subida.
+
+El procedimiento completo está documentado en una página separada para evitar repetirlo en toda la sección de la CLI.
+
+<CardGroup cols={2}>
+  <Card
+    title="Publicar tu primera build"
+    icon="cloud-arrow-up"
+    href="/es/getting-started/publish-first-build"
+  >
+    Sigue el flujo completo, desde la autenticación hasta la confirmación de la subida.
+  </Card>
+
+  <Card
+    title="Comprender las builds"
+    icon="boxes-stacked"
+    href="/es/games-and-versions/builds"
+  >
+    Revisa STABLE, PATCH, HOTFIX, manifiestos, hashes, ejecutables y comparaciones.
+  </Card>
+</CardGroup>
+
+## Sesión de la CLI
+
+La sesión de la CLI es independiente de la sesión abierta actualmente en el navegador.
+
+Utiliza **Logout** cuando:
+
+- Quieras cambiar de cuenta de desarrollador.
+- Utilizaste un computador compartido.
+- La sesión actual dejó de ser válida.
+- Aparecen permisos, workspace o juegos incorrectos.
+
+Cerrar la aplicación mediante **Exit** no necesariamente cierra la sesión.
+
+## Qué no hace la CLI
+
+La CLI no permite:
+
+- Crear cuentas de desarrollador.
+- Crear juegos en el Catálogo.
+- Crear cuentas de jugadores.
+- Configurar templates.
+- Configurar game keys.
+- Generar el instalador del launcher.
+- Editar los archivos de una build existente.
+- Reemplazar una versión publicada.
+
+Estas tareas se realizan desde el dashboard o mediante una nueva versión.
+
+## Flujo recomendado
+
+```text
+Crear y publicar la ficha del juego
+        ↓
+Configurar la validación launcher-juego
+        ↓
+Crear o seleccionar la rama de destino
+        ↓
+Empaquetar y probar el juego localmente
+        ↓
+Abrir la CLI
+        ↓
+Seleccionar Upload build
+        ↓
+Completar las preguntas
+        ↓
+Revisar la versión desde el dashboard
+```
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Solución de problemas"
+    icon="triangle-exclamation"
+    href="/es/launcher-forge-cli/troubleshooting"
+  >
+    Resuelve errores de autenticación, permisos, carpetas, ejecutables, almacenamiento y subida.
+  </Card>
+
+  <Card
+    title="Ramas"
+    icon="code-branch"
+    href="/es/games-and-versions/branches"
+  >
+    Crea canales públicos o privados antes de publicar una versión.
+  </Card>
+
+  <Card
+    title="Probar tu launcher"
+    icon="flask"
+    href="/es/getting-started/test-launcher"
+  >
+    Verifica descarga, instalación, actualizaciones e inicio después de publicar.
+  </Card>
+</CardGroup>

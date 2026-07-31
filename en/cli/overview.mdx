@@ -1,0 +1,243 @@
+---
+title: "Launcher Forge CLI"
+description: "Download, run, authenticate, and navigate the interactive Launcher Forge CLI."
+icon: "terminal"
+---
+
+# Launcher Forge CLI
+
+The Launcher Forge CLI is an interactive Windows application used to publish packaged game builds.
+
+It guides you through the complete workflow using menus and prompts. You do not need to construct deployment commands or provide command-line flags.
+
+<Info>
+  The CLI is a portable executable. It does not require an installation process. You can keep it on your desktop or in another folder and run it directly.
+</Info>
+
+## What the CLI does
+
+The CLI allows a developer to:
+
+- Authenticate with a Launcher Forge developer account.
+- Review workspace usage and plan limits.
+- List available games.
+- List published versions.
+- Publish a build to a selected branch.
+- Review the installed CLI version.
+- Close the local session with Logout.
+
+<Warning>
+  The CLI uses developer account credentials. Launcher player accounts cannot be used to publish builds.
+</Warning>
+
+## Download the CLI
+
+Open the Launcher Forge dashboard and select **CLI** from the left sidebar.
+
+Select the game you want to review and open its CLI publishing page.
+
+The page displays:
+
+- Application ID.
+- Number of branches.
+- Default branch.
+- CLI access status.
+- Windows CLI download.
+- A summary of the interactive publishing workflow.
+
+Select **Download CLI**.
+
+<Frame caption="Download the Launcher Forge CLI from the dashboard">
+  <img
+    src="/images/screenshots/cli-game-download.png"
+    alt="Launcher Forge dashboard page with the Download CLI action"
+  />
+</Frame>
+
+## Run the CLI
+
+After downloading the executable:
+
+1. Move it to the desktop or another folder.
+2. Open the executable directly.
+3. Keep the terminal window open while using the CLI.
+
+No setup wizard or local installation is required.
+
+<Note>
+  Download a newer executable when Launcher Forge publishes a new CLI version. Use **Version info** from the menu to review the version currently running.
+</Note>
+
+## Authentication
+
+When no valid local session exists, the CLI requests the developer account email and password.
+
+<Frame caption="Sign in when no active CLI session exists">
+  <img
+    src="/images/screenshots/cli-login.png"
+    alt="Launcher Forge CLI requesting the developer account email"
+  />
+</Frame>
+
+Use the same developer account that has access to the workspace and games you want to publish.
+
+After a successful login, the CLI stores a local session so you do not need to authenticate every time it starts.
+
+### Accounts created through OAuth
+
+When the developer account was created through Google, GitHub, or another OAuth provider, the CLI still requires an email and password.
+
+Create a password for the account from Launcher Forge before attempting to sign in through the CLI.
+
+<Warning>
+  Do not share the CLI executable together with local session data. Use **Logout** before using the CLI on a shared computer.
+</Warning>
+
+## Account overview
+
+After authentication, the CLI displays an account summary.
+
+It can include:
+
+- Developer email.
+- Current plan.
+- Account status.
+- Storage used and available.
+- Bandwidth used and available.
+- Games used and allowed.
+
+This information helps confirm that the correct account and workspace are active before publishing.
+
+## Main menu
+
+The CLI presents an interactive menu.
+
+<Frame caption="Launcher Forge CLI account overview and main menu">
+  <img
+    src="/images/screenshots/cli-main-menu.png"
+    alt="Launcher Forge CLI main menu with Upload build selected"
+  />
+</Frame>
+
+| Option | Purpose |
+| --- | --- |
+| **Upload build** | Starts the interactive build publishing workflow. |
+| **Account / usage** | Displays the current account, plan, storage, bandwidth, and game usage. |
+| **List games** | Lists the games available to the authenticated developer account. |
+| **List versions** | Lists published versions for an available game. |
+| **Version info** | Displays information about the current CLI version. |
+| **Logout** | Deletes or invalidates the local CLI session and returns to authentication. |
+| **Exit** | Closes the application. |
+
+Use the arrow keys to select an option and press **Enter**.
+
+## Publishing builds
+
+Build publishing starts from **Upload build**.
+
+The workflow requests:
+
+1. Game.
+2. Branch.
+3. Version number.
+4. Release type.
+5. Changelog.
+6. Packaged build folder.
+7. Main executable.
+8. Final upload confirmation.
+
+The complete step-by-step process is documented separately to avoid repeating it on every CLI page.
+
+<CardGroup cols={2}>
+  <Card
+    title="Publish your first build"
+    icon="cloud-arrow-up"
+    href="/en/getting-started/publish-first-build"
+  >
+    Follow the complete interactive workflow, from authentication to successful upload.
+  </Card>
+
+  <Card
+    title="Understand builds"
+    icon="boxes-stacked"
+    href="/en/games-and-versions/builds"
+  >
+    Learn how STABLE, PATCH, HOTFIX, manifests, hashes, executables, and comparisons work.
+  </Card>
+</CardGroup>
+
+## CLI session
+
+The CLI session is independent from the session currently open in your web browser.
+
+Use **Logout** when:
+
+- You want to change developer accounts.
+- You used a shared computer.
+- The current session is no longer valid.
+- The wrong workspace or game permissions are displayed.
+
+Closing the CLI with **Exit** does not necessarily log the account out.
+
+## What the CLI does not do
+
+The CLI does not:
+
+- Create developer accounts.
+- Create games in the Catalog.
+- Create launcher player accounts.
+- Configure launcher templates.
+- Configure game keys.
+- Generate the launcher installer.
+- Edit an existing build's files.
+- Replace a published version.
+
+These tasks are performed through the dashboard or by publishing a new version.
+
+## Recommended workflow
+
+```text
+Create and publish the game entry
+        ↓
+Configure launcher-game validation
+        ↓
+Create or select the destination branch
+        ↓
+Package and test the game locally
+        ↓
+Open the CLI
+        ↓
+Select Upload build
+        ↓
+Complete the interactive prompts
+        ↓
+Review the version from the dashboard
+```
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="CLI troubleshooting"
+    icon="triangle-exclamation"
+    href="/en/launcher-forge-cli/troubleshooting"
+  >
+    Resolve authentication, permission, folder, executable, storage, and upload errors.
+  </Card>
+
+  <Card
+    title="Branches"
+    icon="code-branch"
+    href="/en/games-and-versions/branches"
+  >
+    Create public or private publishing channels before uploading a version.
+  </Card>
+
+  <Card
+    title="Test your launcher"
+    icon="flask"
+    href="/en/getting-started/test-launcher"
+  >
+    Verify download, installation, updates, and game startup after publishing.
+  </Card>
+</CardGroup>
