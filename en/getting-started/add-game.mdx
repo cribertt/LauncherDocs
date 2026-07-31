@@ -1,6 +1,6 @@
 ---
 title: "Add your first game"
-description: "Create a game from the Catalog, publish its catalog entry, and prepare it for launcher validation and build distribution."
+description: "Create a game from the Catalog, publish its entry, and prepare it for launcher validation and build distribution."
 icon: "gamepad"
 ---
 
@@ -10,25 +10,27 @@ Games are created and managed from the **Catalog** section of the Launcher Forge
 
 Each Launcher Forge account currently uses one workspace and one launcher. Every game created in the Catalog belongs to that workspace and can later be connected to the existing launcher.
 
-<Warning>
-  Every new game is created as a **Draft** by default.
+<Note>
+  New games are created as **Draft** by default.
 
-  A draft is only available inside the developer dashboard. It is not available for launcher distribution until its publishing status is changed to **Published** and the game is linked to the launcher.
-</Warning>
+  A draft remains inside the developer dashboard until you change its publishing status to **Published** and save the changes.
+</Note>
 
-<Card title="Required before publishing your first build" icon="shield-halved">
-  Before uploading the first production build, configure the validation connection between the launcher and the game.
+<Card
+  title="Configure launcher-game validation"
+  icon="shield-halved"
+  href="/en/game-authentication/launch-tokens"
+>
+  Before publishing your first distributable build, connect the game runtime with the Launcher Forge launcher.
 
-  This validation allows the launcher to recognize the game runtime and establish a trusted launch connection.
+  This integration establishes the technical connection between the launcher and the game executable, allowing the launcher to recognize and validate the game it starts.
 
-  It is not end-user authentication, ownership validation, or CD key validation. It is specifically the technical connection between the Launcher Forge launcher and the game executable.
-
-  Complete the launcher-game validation before publishing the first build that you intend to distribute.
+  Open the launcher-game validation guide →
 </Card>
 
 ## How the complete process works
 
-Creating a game is only the first part of the distribution flow.
+Creating a game in the Catalog is only the first part of the distribution process.
 
 ```text
 Create the game in the Catalog
@@ -44,7 +46,12 @@ Link the game to the launcher
 Generate and test the launcher
 ```
 
-The game entry, the packaged build, and the launcher-game validation are separate parts of the system.
+These are separate parts of the system:
+
+- The **Catalog entry** contains the game information shown by Launcher Forge.
+- The **launcher-game validation** establishes the trusted technical connection between the launcher and the game runtime.
+- The **published build** contains the packaged game files.
+- The **linked game configuration** makes the game available inside the launcher.
 
 ## Before you begin
 
@@ -55,7 +62,7 @@ Prepare the following information:
 - One or more genres.
 - A cover image.
 - A packaged game build for a later step.
-- The engine integration that will be used for launcher validation.
+- The engine integration you will use for launcher-game validation.
 
 The game build is not uploaded during game creation. Builds are published later through the Launcher Forge interactive CLI.
 
@@ -104,7 +111,7 @@ The name can appear in:
 - Launcher game cards.
 - The launcher library.
 - Release information.
-- Build selection inside the CLI.
+- Game selection inside the CLI.
 
 Use a recognizable final name. You can edit it later when necessary.
 
@@ -114,7 +121,7 @@ Describe the game's universe, mechanics, genre, or main proposition.
 
 The initial description supports up to `500` characters.
 
-Write information intended to describe the game. Avoid internal development notes, credentials, private URLs, or infrastructure details.
+Write information intended to describe the game to players. Avoid internal development notes, credentials, private URLs, or infrastructure information.
 
 ### Genres
 
@@ -168,17 +175,17 @@ Launcher Forge creates the game and returns it to the Catalog.
 
 The newly created game appears with the **Draft** status.
 
-<Info>
-  Draft means that the game exists inside your workspace but is not ready for launcher distribution.
-</Info>
-
 At this point:
 
 - The game exists in the Catalog.
-- It does not have a published build yet.
-- It is not linked to the launcher yet.
-- Launcher-game validation may not be configured yet.
-- Players cannot obtain or install it from the launcher.
+- It does not have a published build.
+- It is not linked to the launcher.
+- Launcher-game validation may not be configured.
+- It is not available for launcher distribution.
+
+<Info>
+  Draft is a preparation state. It allows you to configure the game before making its Catalog entry available for distribution.
+</Info>
 
 ## 4. Open the game editor
 
@@ -193,11 +200,11 @@ Move the pointer over the card and select the pencil icon labeled **Edit game**.
   />
 </Frame>
 
-The editor allows you to review and modify the game before making its Catalog entry available for distribution.
+The editor allows you to review and modify the game before publishing its Catalog entry.
 
 ## 5. Review the game information
 
-Inside the game editor, review the **Information** tab.
+Inside the game editor, open the **Information** tab.
 
 Confirm:
 
@@ -209,10 +216,10 @@ Confirm:
 - Banner image, when available.
 - Other game metadata.
 
-Save the changes before continuing.
+Save any changes before continuing.
 
 <Note>
-  Publishing controls the game's Catalog status. It does not automatically upload a build, connect the game runtime, or link the game to the launcher.
+  Publishing controls the status of the game entry. It does not upload a build, connect the game runtime, or link the game to the launcher.
 </Note>
 
 ## 6. Open the Publishing tab
@@ -232,7 +239,7 @@ The Publishing tab provides three statuses:
 | --- | --- |
 | **Published** | The game entry is available for launcher distribution and can be linked to the launcher. |
 | **Draft** | The game remains under preparation inside the developer dashboard. |
-| **Archived** | The game is hidden from launcher distribution without being deleted. |
+| **Archived** | The game is removed from launcher distribution without being deleted. |
 
 ## 7. Publish the game entry
 
@@ -255,13 +262,11 @@ After saving:
 - The game becomes available to be linked to the launcher.
 
 <Warning>
-  Selecting Published is not enough by itself. You must also select **Save changes** or the new status will not be applied.
+  Selecting **Published** is not enough by itself. You must also select **Save changes** or the new status will not be applied.
 </Warning>
 
 <Info>
-  Published does not mean that the game immediately appears inside every launcher.
-
-  The game must still be linked to the workspace launcher before it becomes part of its library.
+  Publishing the game entry does not automatically add it to the launcher library. You must still link the game to the workspace launcher.
 </Info>
 
 ## Draft, Published, and Archived
@@ -272,7 +277,7 @@ After saving:
 
     - Images.
     - Descriptions.
-    - Launcher validation.
+    - Launcher-game validation.
     - Branches.
     - Builds.
     - Release information.
@@ -283,7 +288,7 @@ After saving:
   <Tab title="Published">
     Use Published when the game entry is ready to participate in the launcher distribution flow.
 
-    Publishing the entry allows the game to be linked to the launcher, but it does not upload the packaged game files.
+    Publishing allows the game to be linked to the launcher, but it does not upload the packaged game files.
   </Tab>
 
   <Tab title="Archived">
@@ -299,16 +304,16 @@ After saving:
   </Tab>
 </Tabs>
 
-## Important: publishing the game is not the same as publishing a build
+## Publishing the game is not publishing a build
 
 Changing the game status to **Published** only controls its Catalog publishing state.
 
 It does not:
 
-- Upload the game files.
-- Create a build manifest.
+- Upload the packaged game files.
+- Generate a build manifest.
 - Create a version.
-- Publish a STABLE, PATCH, or HOTFIX release.
+- Publish a `STABLE`, `PATCH`, or `HOTFIX` release.
 - Select the main executable.
 - Configure launcher-game validation.
 - Link the game to the launcher.
@@ -316,37 +321,33 @@ It does not:
 
 Game builds are published separately through the Launcher Forge interactive CLI.
 
-## Required: configure launcher-game validation
+## Configure launcher-game validation
 
-Before publishing the first build intended for distribution, configure the connection between the launcher and the game runtime.
+Before uploading the first build intended for distribution, configure the technical connection between the launcher and the game runtime.
 
-The purpose of this validation is to allow the launcher to recognize and validate the game it starts.
-
-It is a launcher-to-game connection.
-
-It is not responsible for:
-
-- Registering end users.
-- Signing players in.
-- Verifying game ownership.
-- Redeeming CD keys.
-- Managing the player's library.
-
-Those are separate launcher services.
-
-The launcher-game validation flow is responsible for the technical relationship between:
+This validation allows the Launcher Forge launcher to recognize and validate the game executable that it starts.
 
 ```text
 Launcher Forge launcher
         ↓
-Game executable
+Starts the game executable
         ↓
-Launcher validation integration
+Provides the launcher validation data
         ↓
-Trusted launcher-game connection
+Game integration validates the connection
+        ↓
+Trusted launcher-game startup
 ```
 
-The implementation depends on the game engine:
+This connection is separate from:
+
+- End-user registration.
+- End-user login.
+- Game ownership.
+- CD key redemption.
+- Player libraries.
+
+Those features belong to the end-user and game-access systems. Launcher-game validation specifically covers the connection between the launcher and the game runtime.
 
 <CardGroup cols={2}>
   <Card
@@ -354,7 +355,7 @@ The implementation depends on the game engine:
     icon="gamepad"
     href="/en/engine-integrations/unreal-engine"
   >
-    Install and configure the Launcher Forge Unreal Engine integration.
+    Install and configure the Launcher Forge validation integration for Unreal Engine.
   </Card>
 
   <Card
@@ -362,17 +363,19 @@ The implementation depends on the game engine:
     icon="cube"
     href="/en/engine-integrations/unity"
   >
-    Install and configure the Launcher Forge Unity integration.
+    Install and configure the Launcher Forge validation integration for Unity.
   </Card>
 </CardGroup>
 
-For the complete launcher validation contract, continue with:
+<Card
+  title="Open the launcher-game validation guide"
+  icon="shield-halved"
+  href="/en/game-authentication/launch-tokens"
+>
+  Review the validation flow, launch-token contract, runtime startup process, and engine integration requirements before publishing the first distributable build.
 
-[Launch tokens](/en/game-authentication/launch-tokens)
-
-<Warning>
-  Do not publish the first production build until the game can correctly recognize and validate its connection with the launcher.
-</Warning>
+  Open Launch tokens →
+</Card>
 
 ## Final verification
 
@@ -380,25 +383,31 @@ Before continuing, verify:
 
 - The game appears in the Catalog.
 - Its status is **Published**.
-- The information is correct.
+- The game information is correct.
 - At least one genre is selected.
 - The cover is displayed correctly.
 - The game is available to be linked.
-- The correct engine integration has been selected.
+- You selected the appropriate engine integration.
 - Launcher-game validation is configured.
-- The packaged game starts correctly on your computer.
+- The packaged game runs correctly on your computer.
 - You are ready to create the first version through the CLI.
 
 <Check>
-  Your game entry has been created and published successfully. Complete the launcher-game validation before uploading the first distributable build.
+  The game entry has been created and published successfully.
 </Check>
 
 ## Next step
 
-Before publishing your first build, continue with:
+<Card
+  title="Configure launcher-game validation"
+  icon="shield-halved"
+  href="/en/game-authentication/launch-tokens"
+>
+  Connect the game runtime with Launcher Forge and validate the launcher-game startup flow before uploading your first distributable build.
 
-[Configure launcher-game validation](/en/game-authentication/launch-tokens)
+  Continue to Launch tokens →
+</Card>
 
-After validating the connection between the launcher and the game, continue with:
+After completing the validation integration, continue with:
 
 [Publish your first build](/en/getting-started/publish-first-build)
