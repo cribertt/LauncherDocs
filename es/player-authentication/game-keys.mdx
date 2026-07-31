@@ -1,26 +1,349 @@
 ---
 title: "Game keys"
-description: "Genera, activa, revoca y administra claves."
+description: "Genera, distribuye, revoca y administra keys de acceso para juegos protegidos."
 icon: "ticket"
 ---
 
-
 # Game keys
 
-Documenta:
+Las game keys permiten conceder acceso a juegos configurados para requerir una key dentro del launcher.
 
-- Generación.
-- Límites por lote.
-- Activación.
-- Expiración.
-- Revocación.
-- Estado e historial.
-- Propiedad después de activar.
+Son útiles para:
 
-{/* PHOTO AREA: replace /images/screenshots/game-keys.png with your real screenshot. */}
-<Frame caption="Generación y gestión de claves">
+- Juegos de pago.
+- Pruebas privadas.
+- Campañas promocionales.
+- Sorteos.
+- Acceso para prensa.
+- Distribuciones controladas.
+
+<Warning>
+  Solo puedes generar y utilizar game keys cuando el juego fue configurado para requerir una key antes de vincularlo con el launcher.
+
+  Dentro de la configuración del launcher, abre **Linked games**, activa **Key** para el juego y luego selecciona **Link**.
+</Warning>
+
+## Antes de generar keys
+
+Confirma lo siguiente:
+
+- El juego existe dentro del Catálogo.
+- El juego está publicado.
+- El juego está vinculado con el launcher.
+- **Key** fue activado al momento de vincularlo.
+- El plan del workspace permite generar keys.
+- El juego tiene una build disponible para distribuir.
+
+<CardGroup cols={2}>
+  <Card title="Acceso gratuito" icon="unlock">
+    Deja **Key** desactivado al vincular el juego.
+
+    Los usuarios finales pueden adquirirlo sin ingresar una CD key.
+  </Card>
+
+  <Card title="Acceso mediante key" icon="key">
+    Activa **Key** antes de vincular el juego.
+
+    Los usuarios finales deben canjear una key válida antes de añadirlo a su biblioteca.
+  </Card>
+</CardGroup>
+
+<Info>
+  Activar Key no reemplaza la autenticación del usuario final. Los jugadores igualmente deben registrarse o iniciar sesión antes de canjear una key.
+</Info>
+
+## Cómo funciona el flujo
+
+```text
+Configurar el juego para requerir una key
+        ↓
+Vincular el juego con el launcher
+        ↓
+Generar una o más keys
+        ↓
+Entregar una key a un jugador
+        ↓
+El jugador inicia sesión
+        ↓
+El jugador canjea la key
+        ↓
+El juego se añade a su biblioteca
+```
+
+## 1. Abre CD Keys
+
+Inicia sesión en el dashboard de Launcher Forge.
+
+En el menú lateral izquierdo, selecciona **CD Keys**.
+
+Luego selecciona el juego para el cual deseas generar keys.
+
+<Frame caption="Abre CD Keys y selecciona el juego protegido">
   <img
-    src="/images/screenshots/game-keys.png"
-    alt="Administración de keys"
+    src="/images/screenshots/game-keys-management.png"
+    alt="Página CD Keys de Launcher Forge con selección del juego, generación e historial"
   />
 </Frame>
+
+<Note>
+  Genera keys solamente para juegos vinculados con el requisito Key activado.
+</Note>
+
+## 2. Elige la cantidad
+
+Ingresa la cantidad de keys que deseas generar.
+
+El límite depende del plan activo.
+
+La página muestra:
+
+- Cantidad máxima permitida por lote.
+- Keys generadas durante el período actual.
+- Keys restantes.
+- Fecha de reinicio del período.
+
+<Warning>
+  No generes más keys de las necesarias. Cada key funciona como una credencial transferible de acceso.
+</Warning>
+
+## 3. Define una fecha de expiración
+
+La fecha de expiración es opcional.
+
+Deja el campo vacío para crear keys sin vencimiento.
+
+Configura una fecha cuando la key solo deba poder canjearse durante un período limitado.
+
+Ejemplos:
+
+- Playtests temporales.
+- Períodos de revisión para prensa.
+- Sorteos por tiempo limitado.
+- Campañas promocionales.
+
+<Info>
+  La fecha de expiración controla hasta cuándo puede canjearse la key. No elimina automáticamente un juego que ya fue añadido correctamente a la biblioteca, salvo que tu política de acceso implemente expresamente ese comportamiento.
+</Info>
+
+## 4. Añade una nota interna
+
+Utiliza **Internal note** para registrar el propósito del lote.
+
+Ejemplos:
+
+```text
+Acceso para prensa
+Testers de beta cerrada
+Sorteo de la comunidad
+Campaña con partner
+Equipo de QA
+```
+
+Las notas internas ayudan a identificar dónde fueron distribuidas las keys.
+
+No incluyas contraseñas, datos personales, información de pago ni credenciales privadas.
+
+## 5. Genera las keys
+
+Selecciona **Generate key** o **Generate keys**, según la cantidad indicada.
+
+Launcher Forge generará las keys y abrirá la ventana **Generated keys**.
+
+<Frame caption="Guarda o descarga las keys recién generadas">
+  <img
+    src="/images/screenshots/game-keys-generated.png"
+    alt="Ventana Generated keys con acciones para copiar y descargar un archivo TXT"
+  />
+</Frame>
+
+<Warning>
+  Guarda las keys antes de cerrar la ventana.
+
+  Copia cada key o utiliza **Download .txt** para almacenar el lote generado.
+</Warning>
+
+El formato utilizado es:
+
+```text
+XXXXX-XXXXX-XXXXX
+```
+
+Ejemplo:
+
+```text
+9AE33-E8DEE-45704
+```
+
+## 6. Guarda y distribuye las keys de forma segura
+
+Puedes distribuirlas mediante:
+
+- Tu tienda oficial.
+- Una campaña por correo.
+- Un grupo privado de testers.
+- Un portal para partners.
+- Una plataforma de sorteos.
+- Tu propia integración comercial.
+
+Buenas prácticas:
+
+- Envía cada key únicamente al destinatario previsto.
+- No publiques keys activas completas en capturas.
+- Registra la campaña o grupo asociado.
+- Utiliza vencimiento para accesos temporales.
+- Revoca las keys filtradas o comprometidas.
+
+## 7. Revisa el historial
+
+La tabla **Key history** muestra las keys generadas para el juego seleccionado.
+
+La información disponible puede incluir:
+
+| Columna | Descripción |
+| --- | --- |
+| **Key** | Key de acceso generada. |
+| **Status** | Estado actual. |
+| **Expiration** | Fecha límite de canje, cuando fue configurada. |
+| **Note** | Referencia interna del lote o campaña. |
+| **Redeemed by** | Cuenta que canjeó la key, cuando corresponda. |
+| **Generated** | Fecha y hora de creación. |
+| **Actions** | Operaciones administrativas disponibles. |
+
+Utiliza el buscador y los filtros de estado para localizar keys específicas.
+
+También puedes ajustar la cantidad de filas mostradas por página.
+
+## Estados de una key
+
+Una key puede pasar por diferentes estados.
+
+| Estado | Significado |
+| --- | --- |
+| **Active** | Todavía puede canjearse. |
+| **Redeemed** | Fue canjeada correctamente por un usuario final. |
+| **Expired** | Alcanzó su fecha de expiración antes del canje. |
+| **Revoked** | Fue desactivada manualmente por el desarrollador. |
+
+<Note>
+  Las etiquetas exactas mostradas por el dashboard pueden variar según el estado actual y los filtros disponibles.
+</Note>
+
+## 8. Copia una key
+
+Utiliza **Copy** para copiar una key desde el historial.
+
+Ten cuidado al pegarla en:
+
+- Conversaciones de soporte.
+- Correos.
+- Documentos de prueba.
+- Issues públicos.
+- Capturas de pantalla.
+
+Cualquier persona que reciba una key activa puede intentar canjearla.
+
+## 9. Revoca una key
+
+Utiliza **Revoke** cuando una key ya no deba conceder acceso.
+
+Motivos habituales:
+
+- Se publicó accidentalmente.
+- Fue enviada al destinatario incorrecto.
+- Una campaña fue cancelada.
+- Se retiró una invitación de prueba.
+- La key ya no debe poder canjearse.
+
+<Warning>
+  Revocar una key impide futuros canjes.
+
+  Antes de confirmar, verifica que seleccionaste la key correcta.
+</Warning>
+
+## Flujo de canje del jugador
+
+Para un juego protegido mediante key:
+
+1. El usuario se registra o inicia sesión en el launcher.
+2. Abre la interfaz de canje.
+3. Ingresa la CD key.
+4. Envía la key.
+5. Launcher Forge valida su estado.
+6. El juego se añade a la biblioteca.
+7. El jugador puede descargarlo e instalarlo.
+
+La key debe rechazarse cuando:
+
+- Es inválida.
+- Está vencida.
+- Fue revocada.
+- Ya fue utilizada, cuando las keys son de un solo uso.
+- Pertenece a otro juego.
+- Tiene un formato incorrecto.
+
+## Game keys y launch tokens
+
+Ambos sistemas cumplen funciones distintas.
+
+<CardGroup cols={2}>
+  <Card title="Game keys" icon="ticket">
+    Controlan si un usuario final puede añadir un juego protegido a su biblioteca.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/es/game-authentication/launch-tokens"
+  >
+    Validan la conexión técnica de inicio entre el launcher y el runtime del juego.
+  </Card>
+</CardGroup>
+
+Un juego puede utilizar ambos:
+
+```text
+CD key
+  → concede acceso al juego
+
+Launch token
+  → valida el inicio launcher-juego
+```
+
+## Lista de verificación
+
+Antes de distribuir keys, comprueba:
+
+- Key fue activado antes de vincular el juego.
+- Seleccionaste el juego correcto.
+- La cantidad es correcta.
+- La fecha de expiración es correcta o está vacía intencionalmente.
+- La nota interna identifica el lote.
+- Copiaste o descargaste las keys generadas.
+- Las keys activas se almacenan de forma segura.
+- El canje funciona dentro del launcher.
+- Las keys inválidas y revocadas son rechazadas.
+- El juego aparece en la biblioteca después del canje correcto.
+
+<Check>
+  El flujo está listo cuando una key válida concede acceso al juego correcto y las keys inválidas, vencidas o revocadas son rechazadas.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={2}>
+  <Card
+    title="Probar tu launcher"
+    icon="flask"
+    href="/es/getting-started/test-launcher"
+  >
+    Prueba la adquisición gratuita, el canje de keys, la descarga, la instalación y el inicio del juego.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/es/game-authentication/launch-tokens"
+  >
+    Configura la conexión de validación entre el launcher y el juego.
+  </Card>
+</CardGroup>

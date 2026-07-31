@@ -1,28 +1,349 @@
 ---
 title: "Game keys"
-description: "Generate, activate, revoke, and manage access keys."
+description: "Generate, distribute, revoke, and manage access keys for key-protected games."
 icon: "ticket"
 ---
 
-
 # Game keys
 
-Game keys can grant access to a game.
+Game keys grant access to games configured to require a key inside the launcher.
 
-Document:
+They are useful for:
 
-- Key generation.
-- Batch limits.
-- Activation.
-- Expiration.
-- Revocation.
-- Status and history.
-- Player ownership after activation.
+- Paid games.
+- Private testing.
+- Promotional campaigns.
+- Giveaways.
+- Press access.
+- Controlled distributions.
 
-{/* PHOTO AREA: replace /images/screenshots/game-keys.png with your real screenshot. */}
-<Frame caption="Generating and managing game access keys">
+<Warning>
+  You can generate and use game keys only when the game was configured to require a key before it was linked to the launcher.
+
+  In the launcher configuration, open **Linked games**, enable **Key** for the game, and then select **Link**.
+</Warning>
+
+## Before generating keys
+
+Confirm that:
+
+- The game exists in the Catalog.
+- The game is published.
+- The game is linked to the launcher.
+- **Key** was enabled when linking the game.
+- The workspace plan allows key generation.
+- The game has a build available for distribution.
+
+<CardGroup cols={2}>
+  <Card title="Free access" icon="unlock">
+    Leave **Key** disabled when linking the game.
+
+    End users can acquire the game without entering a CD key.
+  </Card>
+
+  <Card title="Key-protected access" icon="key">
+    Enable **Key** before linking the game.
+
+    End users must redeem a valid key before the game becomes available in their library.
+  </Card>
+</CardGroup>
+
+<Info>
+  Enabling Key does not replace end-user authentication. Players still need to register or sign in to the launcher before redeeming a key.
+</Info>
+
+## How the key flow works
+
+```text
+Configure the game to require a key
+        ↓
+Link the game to the launcher
+        ↓
+Generate one or more keys
+        ↓
+Distribute a key to a player
+        ↓
+The player signs in to the launcher
+        ↓
+The player redeems the key
+        ↓
+The game is added to the player's library
+```
+
+## 1. Open CD Keys
+
+Sign in to the Launcher Forge dashboard.
+
+In the left sidebar, select **CD Keys**.
+
+Then select the game for which you want to generate keys.
+
+<Frame caption="Open CD Keys and select the key-protected game">
   <img
-    src="/images/screenshots/game-keys.png"
-    alt="Game key management"
+    src="/images/screenshots/game-keys-management.png"
+    alt="Launcher Forge CD Keys page with game selection, key generation form, and key history"
   />
 </Frame>
+
+<Note>
+  Only generate keys for games that were linked with the Key requirement enabled.
+</Note>
+
+## 2. Choose the quantity
+
+Enter the number of keys you want to generate.
+
+The generation limit depends on the active plan.
+
+The page shows:
+
+- Maximum keys allowed per batch.
+- Number of keys already generated during the current period.
+- Number of keys remaining.
+- Date when the generation period resets.
+
+<Warning>
+  Do not generate more keys than you need. Treat each generated key as a transferable access credential.
+</Warning>
+
+## 3. Set an expiration date
+
+The expiration date is optional.
+
+Leave the field empty to create keys without expiration.
+
+Set a date when the key should only be redeemable during a limited period.
+
+Examples:
+
+- Temporary playtests.
+- Press review periods.
+- Limited-time giveaways.
+- Promotional campaigns.
+
+<Info>
+  The expiration date controls when the key can be redeemed. It does not remove a game that was already successfully added to a player's library unless your access policy explicitly supports that behavior.
+</Info>
+
+## 4. Add an internal note
+
+Use the **Internal note** field to record the purpose of the batch.
+
+Examples:
+
+```text
+Press access
+Closed beta testers
+Community giveaway
+Partner campaign
+QA team
+```
+
+Internal notes help identify where keys were distributed.
+
+Do not include passwords, personal data, payment information, or private credentials.
+
+## 5. Generate the keys
+
+Select **Generate key** or **Generate keys**, depending on the selected quantity.
+
+Launcher Forge creates the requested keys and opens the **Generated keys** dialog.
+
+<Frame caption="Save or download the newly generated keys">
+  <img
+    src="/images/screenshots/game-keys-generated.png"
+    alt="Launcher Forge Generated keys dialog with copy and Download txt actions"
+  />
+</Frame>
+
+<Warning>
+  Save the generated keys before closing the dialog.
+
+  Copy each key or use **Download .txt** to store the generated batch.
+</Warning>
+
+The generated key format follows this structure:
+
+```text
+XXXXX-XXXXX-XXXXX
+```
+
+Example:
+
+```text
+9AE33-E8DEE-45704
+```
+
+## 6. Store and distribute keys safely
+
+You can distribute keys through:
+
+- Your official store.
+- An email campaign.
+- A private testing group.
+- A partner portal.
+- A giveaway platform.
+- Your own commerce integration.
+
+Recommended practices:
+
+- Send each key only to its intended recipient.
+- Avoid publishing complete active keys in public screenshots.
+- Keep a record of the campaign or recipient group.
+- Use expiration dates for temporary access.
+- Revoke leaked or compromised keys.
+
+## 7. Review key history
+
+The **Key history** table shows the generated keys for the selected game.
+
+Available information can include:
+
+| Column | Description |
+| --- | --- |
+| **Key** | Generated access key. |
+| **Status** | Current key state. |
+| **Expiration** | Redemption deadline, when configured. |
+| **Note** | Internal batch or campaign reference. |
+| **Redeemed by** | Account that redeemed the key, when available. |
+| **Generated** | Creation date and time. |
+| **Actions** | Available management operations. |
+
+Use the search field and status filters to locate specific keys.
+
+The number of rows displayed per page can also be adjusted.
+
+## Key statuses
+
+A key can move through different states.
+
+| Status | Meaning |
+| --- | --- |
+| **Active** | The key can still be redeemed. |
+| **Redeemed** | The key was successfully used by an end user. |
+| **Expired** | The expiration date was reached before redemption. |
+| **Revoked** | The developer manually disabled the key. |
+
+<Note>
+  The exact status labels displayed by the dashboard may depend on the current key state and available filters.
+</Note>
+
+## 8. Copy a key
+
+Use **Copy** to copy a key from the history table.
+
+Be careful when pasting it into:
+
+- Support conversations.
+- Emails.
+- Test documents.
+- Public issue trackers.
+- Screenshots.
+
+A copied active key can be redeemed by anyone who receives it.
+
+## 9. Revoke a key
+
+Use **Revoke** when a key should no longer grant access.
+
+Common reasons include:
+
+- The key was exposed publicly.
+- It was sent to the wrong recipient.
+- A campaign was cancelled.
+- A testing invitation was withdrawn.
+- The key should no longer be redeemable.
+
+<Warning>
+  Revocation prevents future redemption of the key.
+
+  Before revoking, verify that you selected the correct key.
+</Warning>
+
+## Player redemption flow
+
+For a key-protected game, the end-user flow is:
+
+1. Register or sign in to the launcher.
+2. Open the key redemption interface.
+3. Enter the CD key.
+4. Submit the key.
+5. Launcher Forge validates its status.
+6. The game is added to the player's library.
+7. The player can download and install the game.
+
+A key should be rejected when it is:
+
+- Invalid.
+- Expired.
+- Revoked.
+- Already redeemed, when keys are single-use.
+- Associated with another game.
+- Entered in an incorrect format.
+
+## Key protection and launch tokens
+
+Game keys and launch tokens have different responsibilities.
+
+<CardGroup cols={2}>
+  <Card title="Game keys" icon="ticket">
+    Control whether an end user can add a key-protected game to their library.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/en/game-authentication/launch-tokens"
+  >
+    Validate the technical startup connection between the launcher and the game runtime.
+  </Card>
+</CardGroup>
+
+A game can use both systems:
+
+```text
+CD key
+  → grants access to the game
+
+Launch token
+  → validates launcher-game startup
+```
+
+## Recommended checklist
+
+Before distributing keys, verify:
+
+- Key access was enabled before linking the game.
+- The correct game is selected.
+- The quantity is correct.
+- The expiration date is correct or intentionally empty.
+- The internal note identifies the batch.
+- The generated keys were copied or downloaded.
+- Active keys are stored securely.
+- The redemption flow works in the launcher.
+- Invalid and revoked keys are rejected.
+- The game appears in the library after successful redemption.
+
+<Check>
+  Your key distribution flow is ready when a valid key grants access to the correct game and invalid, expired, or revoked keys are rejected.
+</Check>
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card
+    title="Test your launcher"
+    icon="flask"
+    href="/en/getting-started/test-launcher"
+  >
+    Test free acquisition, key redemption, download, installation, and game startup.
+  </Card>
+
+  <Card
+    title="Launch tokens"
+    icon="shield-halved"
+    href="/en/game-authentication/launch-tokens"
+  >
+    Configure the validation connection between the launcher and the game.
+  </Card>
+</CardGroup>
