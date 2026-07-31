@@ -1,24 +1,219 @@
 ---
 title: "Uso"
-description: "Consulta almacenamiento y ancho de banda."
-icon: "chart-line"
+description: "Revisa almacenamiento, ancho de banda, juegos, launchers, miembros, ramas y consumo de funciones."
+icon: "chart-simple"
 ---
-
 
 # Uso
 
-Debe mostrar:
+El uso se mide para el workspace activo.
 
+No se combina entre todos los workspaces que pertenecen a una misma cuenta.
+
+<Info>
+  Confirma siempre el workspace activo en la barra superior antes de revisar límites o uso.
+</Info>
+
+## Categorías principales
+
+| Categoría | Qué representa |
+| --- | --- |
+| **Almacenamiento** | Builds, manifiestos y otros archivos del workspace. |
+| **Ancho de banda** | Datos transferidos mediante descargas y actualizaciones. |
+| **Juegos** | Juegos creados en el workspace. |
+| **Launchers** | Launchers asociados. Actualmente se utiliza uno por workspace. |
+| **Miembros** | Miembros aceptados que utilizan un cupo. |
+| **Ramas** | Canales creados por juego. |
+| **Funciones** | Uso de ramas privadas, templates, analytics, API o Commerce. |
+
+## Dónde aparece
+
+El uso puede mostrarse en:
+
+- Indicador del plan en la barra superior.
+- Páginas de suscripción y planes.
+- Tarjeta de almacenamiento en Branches.
+- Contador de miembros.
+- Contadores de juegos y launcher.
+- Vista **Account / usage** de la CLI.
+- Páginas de add-ons.
+
+## Resumen de la CLI
+
+Después de autenticarse, la CLI puede mostrar:
+
+- Plan.
 - Almacenamiento usado y total.
 - Ancho de banda usado y total.
-- Período correspondiente.
-- Advertencias.
-- Efectos al alcanzar límites.
+- Juegos utilizados y permitidos.
 
-{/* PHOTO AREA: replace /images/screenshots/workspace-usage.png with your real screenshot. */}
-<Frame caption="Almacenamiento y ancho de banda">
-  <img
-    src="/images/screenshots/workspace-usage.png"
-    alt="Uso del workspace"
-  />
-</Frame>
+Esto permite confirmar la cuenta y capacidad antes de publicar.
+
+<Card
+  title="CLI de Launcher Forge"
+  icon="terminal"
+  href="/es/launcher-forge-cli/overview"
+>
+  Revisa el resumen de cuenta y el menú de publicación.
+</Card>
+
+## Almacenamiento
+
+El almacenamiento se consume mediante artefactos del workspace, como archivos de builds publicadas y datos asociados.
+
+Antes de subir una build, revisa:
+
+- Uso actual.
+- Capacidad total.
+- Tamaño de la build.
+- Espacio restante.
+- Add-ons activos.
+
+Una release `STABLE` puede requerir más datos que un `PATCH` o `HOTFIX`, según los manifiestos y hashes.
+
+<Warning>
+  No elimines archivos necesarios solamente para ajustarte al límite. Prueba localmente el paquete final.
+</Warning>
+
+## Ancho de banda
+
+Representa los datos transferidos a los jugadores mediante descargas y actualizaciones.
+
+Puede verse afectado por:
+
+- Jugadores activos.
+- Tamaño de la build.
+- Frecuencia de actualizaciones.
+- Cantidad de archivos modificados.
+- Descargas repetidas.
+- Grupos de pruebas.
+
+Un add-on puede proporcionar ancho de banda adicional.
+
+## Juegos y launchers
+
+El uso de juegos aumenta al crear un juego en el Catálogo.
+
+El launcher pertenece al workspace. Actualmente Launcher Forge utiliza uno por workspace.
+
+Cuando se alcanza un límite, el dashboard puede impedir crear otro recurso.
+
+## Miembros
+
+Los miembros aceptados utilizan la capacidad de miembros del plan.
+
+Revisa:
+
+- Miembros activos.
+- Invitaciones pendientes.
+- Miembros sin uso.
+- Rol de cada cuenta.
+
+Eliminar un miembro libera el acceso sin borrar su cuenta.
+
+## Ramas
+
+El plan puede limitar:
+
+- Cantidad de ramas por juego.
+- Disponibilidad de ramas privadas.
+
+Antes de crear una rama, revisa los canales existentes y elimina ramas no predeterminadas solo cuando sus builds y accesos ya no sean necesarios.
+
+## Capacidad mediante add-ons
+
+Los add-ons aumentan una categoría específica.
+
+```text
+Almacenamiento del plan
+        +
+Add-on de almacenamiento
+        =
+Capacidad efectiva
+```
+
+La capacidad adicional:
+
+- Pertenece al workspace.
+- No cambia el nombre del plan base.
+- Puede vencer por separado.
+- Es administrada por el Owner.
+
+## Cuando se alcanza un límite
+
+Launcher Forge puede restringir:
+
+- Subir otra build.
+- Crear otro juego.
+- Invitar otro miembro.
+- Crear otra rama.
+- Activar una función no incluida.
+
+Posibles acciones:
+
+1. Eliminar o archivar recursos sin uso cuando esté disponible.
+2. Reducir archivos innecesarios.
+3. Eliminar miembros sin uso.
+4. Eliminar ramas no predeterminadas obsoletas.
+5. Mejorar el plan.
+6. Comprar un add-on.
+7. Solicitar un entitlement personalizado cuando esté disponible.
+
+## Uso después de cambiar de plan
+
+Después de un upgrade, el workspace recibe la nueva capacidad cuando el plan queda activo.
+
+Después de un downgrade, compara el uso con los nuevos límites.
+
+Un workspace por encima del límite puede quedar impedido de crear recursos adicionales hasta reducir el uso.
+
+## Acceso por rol
+
+| Rol | Revisar uso | Modificar recursos | Comprar capacidad |
+| --- | --- | --- | --- |
+| **Owner** | Sí | Sí | Sí |
+| **Admin** | Sí | Sí | No |
+| **Viewer** | Solo lectura | No | No |
+
+## Revisión recomendada
+
+Revisa el uso:
+
+- Antes de publicar una build grande.
+- Antes de invitar otro miembro.
+- Antes de crear otro juego o rama.
+- Antes de bajar de plan.
+- Antes de un lanzamiento público.
+- Cuando aparezcan avisos de almacenamiento o ancho de banda.
+
+<Check>
+  El uso está controlado cuando existe capacidad suficiente para la próxima build, actualización, invitación y tráfico esperado.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Planes y límites"
+    icon="gauge-high"
+    href="/es/workspace-and-account/plans-and-limits"
+  >
+    Comprende qué capacidad incluye el plan.
+  </Card>
+
+  <Card
+    title="Suscripción"
+    icon="credit-card"
+    href="/es/workspace-and-account/subscription"
+  >
+    Mejora el plan o revisa las acciones exclusivas del Owner.
+  </Card>
+
+  <Card
+    title="Builds"
+    icon="boxes-stacked"
+    href="/es/games-and-versions/builds"
+  >
+    Comprende cómo las builds afectan almacenamiento y ancho de banda.
+  </Card>
+</CardGroup>

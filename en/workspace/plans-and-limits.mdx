@@ -1,30 +1,168 @@
 ---
 title: "Plans and limits"
-description: "Understand workspace limits and plan-specific features."
+description: "Understand how workspace plans control capacity, features, and resource creation."
 icon: "gauge-high"
 ---
 
-
 # Plans and limits
 
-Plan limits can include:
+Every workspace has an active plan.
 
-- Launchers.
-- Games.
-- Members.
-- Storage.
-- Bandwidth.
-- Branches.
-- Templates.
+The plan controls the capacity and product capabilities available to that workspace. It is not assigned globally to the developer account.
+
+<Info>
+  When an account belongs to multiple workspaces, each workspace can have a different plan, subscription, usage level, and set of add-ons.
+</Info>
+
+## Workspace-scoped limits
+
+Plans can define limits for:
+
+| Category | What it controls |
+| --- | --- |
+| **Launchers** | Number of launchers available to the workspace. Launcher Forge currently uses one launcher per workspace. |
+| **Games** | Number of games that can be created and managed. |
+| **Team members** | Number of accepted collaborators allowed in Team. |
+| **Storage** | Capacity for builds, manifests, artifacts, and stored workspace files. |
+| **Bandwidth** | Transfer allowance used by game downloads and updates. |
+| **Branches per game** | Number of release channels available for each game. |
+| **Private branches** | Whether restricted branches can be created. |
+| **Custom templates** | Whether paid or custom launcher templates can be used. |
+| **Analytics** | Availability of analytics and reporting features. |
+| **API access** | Availability of external API functionality. |
+| **Commerce integrations** | Availability of commerce-related integrations. |
+| **Additional entitlements** | Other plan-specific capabilities shown by the dashboard. |
+
+The exact values shown on the **Subscription** page are the source of truth.
+
+## Capacity limits and feature entitlements
+
+Launcher Forge uses two kinds of plan rules.
+
+<CardGroup cols={2}>
+  <Card title="Capacity limits" icon="ruler">
+    Numeric limits such as games, members, storage, bandwidth, and branches.
+  </Card>
+
+  <Card title="Feature entitlements" icon="toggle-on">
+    Features enabled or disabled by the plan, such as private branches, custom templates, analytics, API access, or commerce integrations.
+  </Card>
+</CardGroup>
+
+## Current plan
+
+The active plan is displayed in the top navigation bar and on the Subscription page.
+
+The dashboard can show:
+
+- Plan name.
+- Billing interval.
+- Current status.
+- Included limits.
+- Included features.
+- Current subscription period.
+- Available upgrades or downgrades.
+
+## When a limit is reached
+
+Depending on the resource, Launcher Forge can prevent a new action, such as:
+
+- Creating another game.
+- Inviting another member.
+- Creating another branch.
+- Uploading a build that exceeds storage capacity.
+- Using a feature not included in the plan.
+
+Existing resources are not described as becoming part of another workspace. They remain associated with the workspace that created them.
+
+<Warning>
+  Before changing to a lower plan, review current usage. A workspace above the new limits may need to reduce usage or upgrade before new resource-creating actions become available.
+</Warning>
+
+## Add-ons and overrides
+
+Add-ons can increase specific capacity without changing the base plan.
+
+Examples include:
+
+- Additional storage.
+- Additional bandwidth.
+
+Add-ons:
+
+- Belong to the workspace.
+- Are billed separately from the base subscription.
+- Have their own active or expiration period.
+- Can be managed only by the Owner.
+
+Administrative overrides can also adjust entitlements for testing, support, or custom agreements when available.
+
+## Plan comparison
+
+When comparing plans, review both numbers and features.
+
+A higher plan can provide:
+
+- More games.
+- More team members.
+- More storage.
+- More bandwidth.
+- More branches.
+- Private branches.
+- Custom templates.
 - Analytics.
-- API access.
+- API or commerce capabilities.
 
-The dashboard is the current source of truth for the active workspace plan and available entitlements.
+Do not select a plan only by storage. Review the complete feature set required by the project.
 
-{/* PHOTO AREA: replace /images/screenshots/plans-and-limits.png with your real screenshot. */}
-<Frame caption="Plan features and workspace limits">
-  <img
-    src="/images/screenshots/plans-and-limits.png"
-    alt="Launcher Forge plans and limits"
-  />
-</Frame>
+## Role access
+
+| Role | View plan and limits | Change plan | Manage add-ons |
+| --- | --- | --- | --- |
+| **Owner** | Yes | Yes | Yes |
+| **Admin** | Yes | No | No |
+| **Viewer** | Read-only when exposed | No | No |
+
+## Recommended review
+
+Before selecting a plan, estimate:
+
+- Number of games.
+- Number of collaborators.
+- Packaged build sizes.
+- Number of active versions and branches.
+- Expected downloads and update traffic.
+- Need for private branches.
+- Need for custom templates, analytics, API, or commerce tools.
+
+<Check>
+  The correct plan is the one that supports the project's current resources and next release cycle without relying on permissions or capacity that are not included.
+</Check>
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="Subscription"
+    icon="credit-card"
+    href="/en/workspace-and-account/subscription"
+  >
+    Manage the base workspace plan and billing period.
+  </Card>
+
+  <Card
+    title="Usage"
+    icon="chart-simple"
+    href="/en/workspace-and-account/usage"
+  >
+    Understand how current resource consumption is measured.
+  </Card>
+
+  <Card
+    title="Team members"
+    icon="users"
+    href="/en/workspace-and-account/team-members"
+  >
+    Review member limits and workspace roles.
+  </Card>
+</CardGroup>

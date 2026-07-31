@@ -1,28 +1,168 @@
 ---
 title: "Planes y límites"
-description: "Comprende límites y funciones del plan."
+description: "Comprende cómo el plan del workspace controla capacidad, funciones y creación de recursos."
 icon: "gauge-high"
 ---
 
-
 # Planes y límites
 
-- Launchers.
-- Juegos.
-- Miembros.
-- Almacenamiento.
-- Ancho de banda.
-- Ramas.
-- Templates.
-- Analítica.
-- API.
+Cada workspace tiene un plan activo.
 
-El dashboard es la fuente actual del plan y entitlements.
+El plan controla la capacidad y las funciones disponibles para ese workspace. No se asigna globalmente a la cuenta del desarrollador.
 
-{/* PHOTO AREA: replace /images/screenshots/plans-and-limits.png with your real screenshot. */}
-<Frame caption="Funciones y límites del workspace">
-  <img
-    src="/images/screenshots/plans-and-limits.png"
-    alt="Planes y límites"
-  />
-</Frame>
+<Info>
+  Cuando una cuenta pertenece a varios workspaces, cada uno puede tener un plan, suscripción, uso y add-ons diferentes.
+</Info>
+
+## Límites por workspace
+
+Los planes pueden definir:
+
+| Categoría | Qué controla |
+| --- | --- |
+| **Launchers** | Cantidad disponible. Actualmente Launcher Forge utiliza un launcher por workspace. |
+| **Juegos** | Cantidad de juegos que pueden crearse y administrarse. |
+| **Miembros** | Cantidad de colaboradores aceptados en Team. |
+| **Almacenamiento** | Capacidad para builds, manifiestos, artefactos y archivos. |
+| **Ancho de banda** | Transferencia utilizada por descargas y actualizaciones. |
+| **Ramas por juego** | Cantidad de canales disponibles para cada juego. |
+| **Ramas privadas** | Permiso para crear ramas restringidas. |
+| **Templates personalizados** | Acceso a templates pagados o personalizados. |
+| **Analytics** | Acceso a analítica y reportes. |
+| **API** | Acceso a funcionalidades de API externa. |
+| **Integraciones Commerce** | Acceso a funciones comerciales. |
+| **Otros entitlements** | Capacidades adicionales mostradas por el dashboard. |
+
+Los valores actuales mostrados en **Subscription** son la fuente de verdad.
+
+## Capacidad y funciones
+
+Launcher Forge utiliza dos tipos de reglas.
+
+<CardGroup cols={2}>
+  <Card title="Límites de capacidad" icon="ruler">
+    Valores numéricos como juegos, miembros, almacenamiento, ancho de banda y ramas.
+  </Card>
+
+  <Card title="Entitlements de funciones" icon="toggle-on">
+    Funciones activadas o desactivadas, como ramas privadas, templates, analytics, API o Commerce.
+  </Card>
+</CardGroup>
+
+## Plan actual
+
+El plan activo aparece en la barra superior y en la página Subscription.
+
+El dashboard puede mostrar:
+
+- Nombre del plan.
+- Período mensual o anual.
+- Estado.
+- Límites incluidos.
+- Funciones incluidas.
+- Período actual.
+- Opciones de upgrade o downgrade.
+
+## Cuando se alcanza un límite
+
+Según el recurso, Launcher Forge puede impedir:
+
+- Crear otro juego.
+- Invitar otro miembro.
+- Crear otra rama.
+- Subir una build que exceda el almacenamiento.
+- Utilizar una función no incluida.
+
+Los recursos continúan perteneciendo al workspace que los creó.
+
+<Warning>
+  Antes de bajar de plan, revisa el uso actual. Un workspace por encima de los nuevos límites puede necesitar reducir consumo o mejorar el plan antes de crear nuevos recursos.
+</Warning>
+
+## Add-ons y overrides
+
+Los add-ons permiten aumentar una capacidad específica sin cambiar el plan base.
+
+Ejemplos:
+
+- Almacenamiento adicional.
+- Ancho de banda adicional.
+
+Los add-ons:
+
+- Pertenecen al workspace.
+- Se cobran por separado.
+- Tienen su propio período activo o fecha de expiración.
+- Solo pueden ser administrados por el Owner.
+
+Los overrides administrativos también pueden ajustar entitlements para pruebas, soporte o acuerdos personalizados cuando estén disponibles.
+
+## Comparar planes
+
+Al comparar, revisa números y funciones.
+
+Un plan superior puede ofrecer:
+
+- Más juegos.
+- Más miembros.
+- Más almacenamiento.
+- Más ancho de banda.
+- Más ramas.
+- Ramas privadas.
+- Templates personalizados.
+- Analytics.
+- API o Commerce.
+
+No elijas un plan solamente por almacenamiento. Revisa todas las funciones que necesita el proyecto.
+
+## Acceso por rol
+
+| Rol | Ver plan y límites | Cambiar plan | Administrar add-ons |
+| --- | --- | --- | --- |
+| **Owner** | Sí | Sí | Sí |
+| **Admin** | Sí | No | No |
+| **Viewer** | Solo lectura cuando esté disponible | No | No |
+
+## Revisión recomendada
+
+Antes de elegir un plan, estima:
+
+- Cantidad de juegos.
+- Cantidad de colaboradores.
+- Tamaño de las builds.
+- Versiones y ramas activas.
+- Descargas y tráfico de actualización.
+- Necesidad de ramas privadas.
+- Necesidad de templates, analytics, API o Commerce.
+
+<Check>
+  El plan correcto es el que soporta los recursos actuales y el próximo ciclo de publicación sin depender de capacidades no incluidas.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Suscripción"
+    icon="credit-card"
+    href="/es/workspace-and-account/subscription"
+  >
+    Administra el plan base y su período de facturación.
+  </Card>
+
+  <Card
+    title="Uso"
+    icon="chart-simple"
+    href="/es/workspace-and-account/usage"
+  >
+    Comprende cómo se mide el consumo actual.
+  </Card>
+
+  <Card
+    title="Miembros del equipo"
+    icon="users"
+    href="/es/workspace-and-account/team-members"
+  >
+    Revisa límites de miembros y roles.
+  </Card>
+</CardGroup>

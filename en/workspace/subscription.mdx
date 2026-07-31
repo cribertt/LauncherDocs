@@ -1,30 +1,193 @@
 ---
 title: "Subscription"
-description: "Manage plan changes, renewal, cancellation, invoices, and status."
+description: "Manage the workspace plan, billing period, cancellation, and add-on relationship."
 icon: "credit-card"
 ---
 
-
 # Subscription
 
-Document:
+The subscription belongs to the active workspace.
 
-- Changing plan.
-- Renewal.
-- Cancellation at the end of the billing period.
-- Subscription status.
-- Invoices.
-- Downgrade effects.
-- Add-ons when applicable.
+It controls the base plan and the entitlements used by that workspace's games, launcher, builds, team, and services.
 
 <Warning>
-  Explain which resources or capabilities can be blocked after a downgrade.
+  Only the workspace Owner can purchase, change, cancel, or renew the subscription and manage add-ons. Admin and Viewer roles cannot perform billing changes.
 </Warning>
 
-{/* PHOTO AREA: replace /images/screenshots/subscription.png with your real screenshot. */}
-<Frame caption="Plan, renewal, cancellation, status, and invoices">
-  <img
-    src="/images/screenshots/subscription.png"
-    alt="Workspace subscription settings"
-  />
-</Frame>
+## Subscription scope
+
+```text
+Developer account
+        ↓
+Can belong to one or more workspaces
+        ↓
+Each workspace has its own:
+  - plan
+  - subscription status
+  - billing period
+  - add-ons
+  - usage
+```
+
+Switching workspaces changes the subscription context shown by the dashboard.
+
+## Open Subscription
+
+Select **Subscription** in the left sidebar.
+
+The page can show:
+
+- Current plan.
+- Monthly or annual billing option.
+- Available plans.
+- Included limits and features.
+- Current subscription status.
+- Current period dates.
+- Upgrade or plan-selection action.
+- Cancellation state when applicable.
+
+The exact prices, limits, and plan availability displayed by the dashboard are the source of truth.
+
+## Free workspace
+
+A workspace on the Free plan:
+
+- Does not have a paid recurring plan charge.
+- Uses the limits and features included in Free.
+- Can be upgraded by the Owner.
+- Can still have usage and resource restrictions.
+
+## Paid subscription
+
+When the Owner selects a paid plan:
+
+1. Choose the billing interval when available.
+2. Review the plan limits and features.
+3. Continue to the checkout flow.
+4. Complete payment.
+5. Return to Launcher Forge.
+6. Confirm that the workspace plan and status were updated.
+
+<Info>
+  The subscription applies to the workspace, not to every member's personal account.
+</Info>
+
+## Billing period
+
+A paid subscription has a current period.
+
+The dashboard can display:
+
+- Period start.
+- Period end.
+- Billing interval.
+- Active plan.
+- Cancellation scheduled at period end.
+
+When cancellation is scheduled, paid access normally remains available until the displayed period end. The workspace then returns to the applicable Free limits unless another plan is activated.
+
+## Change plan
+
+Before changing plans, review:
+
+- Current games.
+- Team members.
+- Storage.
+- Bandwidth.
+- Branches.
+- Private-branch requirements.
+- Template and analytics usage.
+- API and commerce requirements.
+
+An upgrade can provide additional capacity or features.
+
+A downgrade can place the workspace above the new plan's limits. New resource-creating actions may be restricted until usage fits the new plan or the plan changes again.
+
+## Cancel the subscription
+
+Only the Owner can cancel.
+
+Before confirming:
+
+- Review the period end date.
+- Review resources above Free limits.
+- Review active private branches and paid features.
+- Review add-ons, because they are separate products.
+- Inform collaborators when access or capabilities will change.
+
+Cancellation does not mean deleting the developer account or workspace.
+
+## Add-ons
+
+Add-ons increase specific workspace capacity without replacing the base plan.
+
+They can include:
+
+- Additional storage.
+- Additional bandwidth.
+- Other capacity products added later.
+
+Add-ons:
+
+- Are billed separately.
+- Have their own status and period.
+- Can expire independently from the plan.
+- Can be purchased and managed only by the Owner.
+
+<Info>
+  An Admin can operate the workspace but cannot purchase, renew, or cancel add-ons.
+</Info>
+
+## Subscription status
+
+Depending on the billing state, the dashboard can represent states such as:
+
+| Status | Meaning |
+| --- | --- |
+| **Active** | The workspace currently has the plan entitlements. |
+| **Cancellation scheduled** | Access remains until the displayed period end. |
+| **Expired** | The paid period ended and the workspace no longer uses that paid entitlement. |
+| **Free** | The workspace currently uses the Free plan. |
+
+Use the status shown by the dashboard as the source of truth.
+
+## Security and billing
+
+- Do not share the Owner account.
+- Use individual team accounts.
+- Keep billing management restricted to the Owner.
+- Review the active workspace before making a purchase.
+- Verify plan and period after checkout.
+- Keep payment and invoice information private.
+
+<Check>
+  Subscription management is configured correctly when the Owner controls billing and all other members operate only within their assigned workspace permissions.
+</Check>
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="Plans and limits"
+    icon="gauge-high"
+    href="/en/workspace-and-account/plans-and-limits"
+  >
+    Review the capabilities controlled by the base plan.
+  </Card>
+
+  <Card
+    title="Usage"
+    icon="chart-simple"
+    href="/en/workspace-and-account/usage"
+  >
+    Compare current consumption with plan capacity.
+  </Card>
+
+  <Card
+    title="Team members"
+    icon="users"
+    href="/en/workspace-and-account/team-members"
+  >
+    Understand why Admin and Viewer cannot manage billing.
+  </Card>
+</CardGroup>

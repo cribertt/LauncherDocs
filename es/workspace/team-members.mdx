@@ -1,0 +1,269 @@
+---
+title: "Miembros del equipo"
+description: "Invita colaboradores, asigna roles y cambia entre los workspaces disponibles para tu cuenta."
+icon: "users"
+---
+
+# Miembros del equipo
+
+La página **Team** administra las cuentas de desarrollador que pueden colaborar dentro del workspace activo.
+
+Cada miembro utiliza su propia cuenta de Launcher Forge y sus propias configuraciones de seguridad. No es necesario compartir un inicio de sesión.
+
+<Info>
+  La página Team representa la membresía del workspace activo. Los juegos, launcher, builds, jugadores, suscripción, add-ons y uso pertenecen a ese workspace.
+</Info>
+
+## Roles
+
+Launcher Forge ofrece tres roles.
+
+| Rol | Acceso |
+| --- | --- |
+| **Owner** | Control completo, incluyendo suscripción y add-ons. |
+| **Admin** | Puede administrar los recursos y operaciones, pero no la suscripción ni los add-ons. |
+| **Viewer** | Acceso de solo lectura, sin posibilidad de modificar datos. |
+
+### Owner
+
+El Owner puede:
+
+- Cambiar el nombre del equipo o workspace.
+- Invitar y eliminar miembros.
+- Cambiar roles.
+- Administrar juegos, launcher, ramas, builds, jugadores y configuración.
+- Administrar la suscripción.
+- Comprar, renovar o administrar add-ons.
+- Revisar planes, límites y uso.
+
+Cada workspace tiene un Owner.
+
+### Admin
+
+Un Admin puede administrar las operaciones del workspace:
+
+- Configuración de juegos.
+- Configuración del launcher.
+- Creación y administración de ramas.
+- Publicación y revisión de builds.
+- Administración de jugadores y accesos.
+- Invitaciones y roles operativos cuando la interfaz lo permite.
+- Revisión de límites y uso.
+
+Un Admin no puede:
+
+- Cambiar o cancelar la suscripción.
+- Comprar, renovar o administrar add-ons.
+
+### Viewer
+
+Un Viewer tiene acceso de solo lectura.
+
+Puede revisar:
+
+- Equipo.
+- Juegos.
+- Builds y versiones.
+- Ramas.
+- Estado de jugadores.
+- Información del plan y uso disponible.
+
+No puede crear, editar, publicar, eliminar, invitar, revocar, bloquear ni cambiar configuraciones.
+
+## Resumen de permisos
+
+```text
+Owner
+  → control completo
+  → suscripción y add-ons
+
+Admin
+  → control operativo
+  → sin administración de suscripción ni add-ons
+
+Viewer
+  → solo lectura
+  → sin modificaciones
+```
+
+## 1. Abre Team
+
+Selecciona **Team** en el menú lateral.
+
+La página muestra:
+
+- Nombre del equipo o workspace.
+- Miembros activos.
+- Invitaciones pendientes.
+- Miembros actuales.
+- Rol de cada miembro.
+- Formulario de invitación.
+
+<Frame caption="Revisa los miembros e invita a un colaborador">
+  <img
+    src="/images/screenshots/team-members-overview.png"
+    alt="Página Team con el nombre, miembros, formulario de invitación e invitaciones pendientes"
+  />
+</Frame>
+
+## 2. Cambia el nombre del equipo
+
+Selecciona el lápiz junto al nombre.
+
+Ingresa el nuevo nombre y guarda los cambios.
+
+El nombre identifica al workspace dentro del dashboard y del selector de workspaces.
+
+<Note>
+  Cambiar el nombre del equipo no cambia el nombre de los juegos ni del launcher.
+</Note>
+
+## 3. Invita a un miembro
+
+En **Invite a member**:
+
+1. Ingresa el correo del colaborador.
+2. Selecciona **Admin** o **Viewer**.
+3. Presiona **Send invitation**.
+
+El enlace de invitación vence después de **7 días**.
+
+<Warning>
+  Asigna el rol mínimo necesario. Utiliza Viewer cuando la persona solo deba revisar información.
+</Warning>
+
+## 4. Acepta la invitación
+
+El destinatario recibe una invitación por correo.
+
+Debe:
+
+1. Abrir el enlace.
+2. Iniciar sesión o crear una cuenta de desarrollador cuando corresponda.
+3. Aceptar la invitación.
+
+Después de aceptarla:
+
+- Aparece como miembro activo.
+- Se aplica el rol seleccionado.
+- El workspace aparece en el selector de su cuenta.
+
+Las invitaciones permanecen pendientes hasta ser aceptadas, expirar o cancelarse.
+
+## 5. Cambia el rol
+
+Utiliza el selector junto al miembro activo.
+
+Los roles disponibles son:
+
+- **Admin**
+- **Viewer**
+
+<Frame caption="Cambia un miembro entre Admin y Viewer">
+  <img
+    src="/images/screenshots/team-member-role-management.png"
+    alt="Página Team con el selector de roles Admin y Viewer"
+  />
+</Frame>
+
+El cambio afecta únicamente al workspace activo.
+
+No cambia:
+
+- Las credenciales de la cuenta.
+- Su rol en otro workspace.
+- Su acceso a otros equipos.
+
+## 6. Elimina un miembro
+
+Utiliza la acción para eliminar al miembro.
+
+Al eliminarlo:
+
+- Pierde acceso al workspace actual.
+- Su cuenta de Launcher Forge no se elimina.
+- Los recursos del workspace no se eliminan.
+- Conserva el acceso que tenga en otros workspaces.
+
+Confirma el correo y el rol antes de continuar.
+
+## 7. Cambia de workspace
+
+Una cuenta puede pertenecer a varios workspaces al ser Owner de uno o aceptar invitaciones de otros equipos.
+
+Abre el selector de workspace en la barra superior.
+
+<Frame caption="Cambia entre los workspaces de tu cuenta">
+  <img
+    src="/images/screenshots/workspace-switcher.png"
+    alt="Selector de workspaces mostrando el workspace activo y la navegación Team"
+  />
+</Frame>
+
+Al cambiar de workspace cambia el contexto de:
+
+- Juegos.
+- Launcher.
+- Ramas y builds.
+- Jugadores.
+- Miembros.
+- Plan y suscripción.
+- Add-ons.
+- Uso.
+
+<Warning>
+  Los datos están aislados por workspace. Cambiar de workspace no combina juegos, suscripciones, uso ni permisos.
+</Warning>
+
+## Límite de miembros
+
+La cantidad permitida depende del plan activo.
+
+Al alcanzar el límite puede ser necesario:
+
+- Eliminar un miembro sin uso.
+- Mejorar el plan.
+- Aplicar un override o entitlement disponible.
+
+El límite mostrado en el dashboard es la fuente de verdad.
+
+## Recomendaciones de seguridad
+
+- Entrega Admin solo a colaboradores de confianza.
+- Utiliza Viewer para revisores o acceso de consulta.
+- Elimina miembros que ya no participen.
+- No compartas una misma cuenta entre varias personas.
+- Revisa invitaciones pendientes.
+- Verifica el correo antes de enviarlas.
+
+<Check>
+  El equipo está configurado correctamente cuando cada colaborador utiliza su propia cuenta y tiene únicamente los permisos necesarios.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Planes y límites"
+    icon="gauge-high"
+    href="/es/workspace-and-account/plans-and-limits"
+  >
+    Revisa los límites de recursos y funciones del workspace.
+  </Card>
+
+  <Card
+    title="Suscripción"
+    icon="credit-card"
+    href="/es/workspace-and-account/subscription"
+  >
+    Comprende la administración exclusiva del Owner.
+  </Card>
+
+  <Card
+    title="Uso"
+    icon="chart-simple"
+    href="/es/workspace-and-account/usage"
+  >
+    Revisa almacenamiento, ancho de banda, juegos, miembros y otros consumos.
+  </Card>
+</CardGroup>

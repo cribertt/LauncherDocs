@@ -1,24 +1,221 @@
 ---
 title: "Usage"
-description: "Review storage and bandwidth consumption."
-icon: "chart-line"
+description: "Review workspace storage, bandwidth, games, launchers, members, branches, and feature consumption."
+icon: "chart-simple"
 ---
-
 
 # Usage
 
-Workspace usage should show:
+Usage is measured for the active workspace.
 
-- Storage used and total storage.
-- Bandwidth used and total bandwidth.
-- Relevant billing period.
-- Warnings near a limit.
-- Effects of exceeding or reaching a limit.
+It is not combined across every workspace that belongs to the same developer account.
 
-{/* PHOTO AREA: replace /images/screenshots/workspace-usage.png with your real screenshot. */}
-<Frame caption="Storage and bandwidth consumption">
-  <img
-    src="/images/screenshots/workspace-usage.png"
-    alt="Workspace usage dashboard"
-  />
-</Frame>
+<Info>
+  Always confirm the active workspace in the top navigation bar before reviewing limits or usage.
+</Info>
+
+## Main usage categories
+
+| Category | What it represents |
+| --- | --- |
+| **Storage** | Stored build artifacts, manifests, and other workspace files. |
+| **Bandwidth** | Data transferred through game downloads and updates. |
+| **Games** | Games currently created in the workspace. |
+| **Launchers** | Launchers associated with the workspace. Launcher Forge currently uses one launcher per workspace. |
+| **Team members** | Accepted members using a workspace seat. |
+| **Branches** | Release channels created for each game. |
+| **Plan features** | Usage of capabilities such as private branches, templates, analytics, API, or commerce tools. |
+
+## Where usage appears
+
+Usage can be shown in several parts of Launcher Forge:
+
+- Current-plan indicator in the top bar.
+- Subscription and plan pages.
+- Branch overview storage card.
+- Team member count.
+- Game and launcher counters.
+- CLI **Account / usage** view.
+- Add-on pages for additional capacity.
+
+## CLI usage summary
+
+After authentication, the CLI can display:
+
+- Current plan.
+- Storage used and total.
+- Bandwidth used and total.
+- Games used and allowed.
+
+This confirms the active account and capacity before publishing a build.
+
+<Card
+  title="Launcher Forge CLI"
+  icon="terminal"
+  href="/en/launcher-forge-cli/overview"
+>
+  Review the CLI account summary and publishing menu.
+</Card>
+
+## Storage usage
+
+Storage is consumed by workspace artifacts such as published build files and their associated data.
+
+Before uploading a build, review:
+
+- Current storage used.
+- Total plan capacity.
+- Build size.
+- Remaining capacity.
+- Active storage add-ons.
+
+A full `STABLE` release can require more uploaded data than a `PATCH` or `HOTFIX`, depending on the manifests and file hashes.
+
+<Warning>
+  Never remove required runtime files only to fit a storage limit. Test the final packaged build locally before publishing.
+</Warning>
+
+## Bandwidth usage
+
+Bandwidth represents data transferred to players through downloads and updates.
+
+Consumption can be affected by:
+
+- Number of active players.
+- Build size.
+- Frequency of updates.
+- Number of files changed.
+- Repeated downloads.
+- Public or private testing groups.
+
+Additional bandwidth can be provided by an applicable add-on.
+
+## Games and launchers
+
+Game usage increases when a new Catalog game is created.
+
+Launcher usage belongs to the workspace. Launcher Forge currently uses one launcher for the workspace.
+
+When a plan limit is reached, the dashboard can prevent the creation of another resource.
+
+## Team members
+
+Accepted workspace members count toward the team-member capacity shown by the active plan.
+
+Review:
+
+- Active members.
+- Pending invitations.
+- Members who no longer need access.
+- Role assigned to each account.
+
+Removing a member frees workspace access without deleting that person's account.
+
+## Branch usage
+
+Plans can limit:
+
+- Number of branches per game.
+- Availability of private branches.
+
+Before creating a new branch, review the game's existing channels and remove obsolete non-default branches only when their builds and access are no longer required.
+
+## Add-on capacity
+
+Add-ons can increase a specific usage category.
+
+Examples:
+
+```text
+Base plan storage
+        +
+Storage add-on
+        =
+Effective workspace storage
+```
+
+Add-on capacity:
+
+- Applies to the workspace.
+- Does not change the base plan name.
+- Can expire separately.
+- Is managed by the Owner.
+
+## When usage reaches a limit
+
+Launcher Forge can restrict actions such as:
+
+- Uploading another build.
+- Creating another game.
+- Inviting another member.
+- Creating another branch.
+- Enabling a feature not included in the plan.
+
+Possible actions:
+
+1. Remove or archive unused resources when supported.
+2. Reduce unnecessary packaged files.
+3. Remove unused team members.
+4. Delete obsolete non-default branches when appropriate.
+5. Upgrade the plan.
+6. Purchase an applicable add-on.
+7. Contact support for a custom entitlement when available.
+
+## Usage after changing plans
+
+After an upgrade, the workspace receives the new plan capacity and features when the plan becomes active.
+
+After a downgrade, compare current usage with the new limits.
+
+A workspace above the new limit may be prevented from creating additional resources until usage is reduced.
+
+## Role access
+
+| Role | Review usage | Modify resources | Purchase capacity |
+| --- | --- | --- | --- |
+| **Owner** | Yes | Yes | Yes |
+| **Admin** | Yes | Yes | No |
+| **Viewer** | Read-only | No | No |
+
+## Recommended monitoring
+
+Review usage:
+
+- Before publishing a large build.
+- Before inviting another member.
+- Before creating another game or branch.
+- Before downgrading.
+- Before a public launch or large update.
+- When storage or bandwidth notifications appear.
+
+<Check>
+  Usage is under control when the workspace has enough capacity for the next build, update, team invitation, and expected player traffic.
+</Check>
+
+## Related guides
+
+<CardGroup cols={3}>
+  <Card
+    title="Plans and limits"
+    icon="gauge-high"
+    href="/en/workspace-and-account/plans-and-limits"
+  >
+    Understand which capacity is included in the plan.
+  </Card>
+
+  <Card
+    title="Subscription"
+    icon="credit-card"
+    href="/en/workspace-and-account/subscription"
+  >
+    Upgrade the plan or review Owner-only billing actions.
+  </Card>
+
+  <Card
+    title="Builds"
+    icon="boxes-stacked"
+    href="/en/games-and-versions/builds"
+  >
+    Understand how build artifacts and updates affect storage and bandwidth.
+  </Card>
+</CardGroup>

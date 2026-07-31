@@ -1,30 +1,193 @@
 ---
 title: "Suscripción"
-description: "Administra cambios, renovación, cancelación, facturas y estado."
+description: "Administra el plan del workspace, período de facturación, cancelación y relación con los add-ons."
 icon: "credit-card"
 ---
 
-
 # Suscripción
 
-Documenta:
+La suscripción pertenece al workspace activo.
 
-- Cambio de plan.
-- Renovación.
-- Cancelación al final del período.
-- Estado.
-- Facturas.
-- Efectos de downgrade.
-- Add-ons cuando correspondan.
+Controla el plan base y los entitlements utilizados por sus juegos, launcher, builds, equipo y servicios.
 
 <Warning>
-  Explica qué recursos o funciones pueden bloquearse después de un downgrade.
+  Solo el Owner puede comprar, cambiar, cancelar o renovar la suscripción y administrar add-ons. Admin y Viewer no pueden realizar cambios de facturación.
 </Warning>
 
-{/* PHOTO AREA: replace /images/screenshots/subscription.png with your real screenshot. */}
-<Frame caption="Plan, renovación, cancelación, estado y facturas">
-  <img
-    src="/images/screenshots/subscription.png"
-    alt="Configuración de suscripción"
-  />
-</Frame>
+## Alcance de la suscripción
+
+```text
+Cuenta de desarrollador
+        ↓
+Puede pertenecer a uno o varios workspaces
+        ↓
+Cada workspace tiene su propio:
+  - plan
+  - estado de suscripción
+  - período
+  - add-ons
+  - uso
+```
+
+Cambiar de workspace cambia el contexto de suscripción mostrado por el dashboard.
+
+## Abre Subscription
+
+Selecciona **Subscription** en el menú lateral.
+
+La página puede mostrar:
+
+- Plan actual.
+- Opción mensual o anual.
+- Planes disponibles.
+- Límites y funciones.
+- Estado actual.
+- Fechas del período.
+- Acción para mejorar o seleccionar un plan.
+- Cancelación programada cuando corresponda.
+
+Los precios, límites y planes mostrados por el dashboard son la fuente de verdad.
+
+## Workspace Free
+
+Un workspace Free:
+
+- No tiene un cobro recurrente por plan pagado.
+- Utiliza los límites y funciones incluidos en Free.
+- Puede ser mejorado por el Owner.
+- Igualmente mantiene restricciones de recursos.
+
+## Suscripción pagada
+
+Cuando el Owner selecciona un plan pagado:
+
+1. Elige el período cuando esté disponible.
+2. Revisa límites y funciones.
+3. Continúa al checkout.
+4. Completa el pago.
+5. Regresa a Launcher Forge.
+6. Confirma que el plan y estado fueron actualizados.
+
+<Info>
+  La suscripción se aplica al workspace, no a las cuentas personales de cada miembro.
+</Info>
+
+## Período de facturación
+
+Una suscripción pagada tiene un período actual.
+
+El dashboard puede mostrar:
+
+- Inicio.
+- Fin.
+- Intervalo.
+- Plan activo.
+- Cancelación programada.
+
+Cuando se programa la cancelación, el acceso pagado normalmente permanece hasta el final mostrado. Luego el workspace vuelve a los límites Free, salvo que se active otro plan.
+
+## Cambiar de plan
+
+Antes de cambiar, revisa:
+
+- Juegos.
+- Miembros.
+- Almacenamiento.
+- Ancho de banda.
+- Ramas.
+- Ramas privadas.
+- Templates y analytics.
+- API y Commerce.
+
+Un upgrade puede añadir capacidad o funciones.
+
+Un downgrade puede dejar al workspace por encima de los nuevos límites. Las acciones que crean recursos pueden quedar restringidas hasta reducir el uso o cambiar nuevamente el plan.
+
+## Cancelar la suscripción
+
+Solo el Owner puede cancelar.
+
+Antes de confirmar:
+
+- Revisa la fecha de término.
+- Revisa recursos por encima de Free.
+- Revisa ramas privadas y funciones pagadas.
+- Revisa add-ons, porque son productos separados.
+- Informa a los colaboradores cuando cambiarán las capacidades.
+
+Cancelar no elimina la cuenta ni el workspace.
+
+## Add-ons
+
+Los add-ons aumentan una capacidad específica sin reemplazar el plan base.
+
+Pueden incluir:
+
+- Almacenamiento adicional.
+- Ancho de banda adicional.
+- Otros productos de capacidad futuros.
+
+Los add-ons:
+
+- Se cobran por separado.
+- Tienen su propio estado y período.
+- Pueden vencer de forma independiente.
+- Solo pueden ser administrados por el Owner.
+
+<Info>
+  Un Admin puede operar el workspace, pero no puede comprar, renovar ni cancelar add-ons.
+</Info>
+
+## Estados
+
+El dashboard puede mostrar estados como:
+
+| Estado | Significado |
+| --- | --- |
+| **Active** | El workspace utiliza los entitlements del plan. |
+| **Cancellation scheduled** | El acceso continúa hasta el final del período. |
+| **Expired** | El período pagado terminó. |
+| **Free** | El workspace utiliza el plan Free. |
+
+Utiliza el estado del dashboard como fuente de verdad.
+
+## Seguridad y facturación
+
+- No compartas la cuenta Owner.
+- Utiliza cuentas individuales.
+- Mantén la facturación restringida al Owner.
+- Confirma el workspace antes de comprar.
+- Revisa el plan y período después del checkout.
+- Mantén privada la información de pago.
+
+<Check>
+  La suscripción está correctamente administrada cuando el Owner controla la facturación y los demás miembros operan solo según sus permisos.
+</Check>
+
+## Guías relacionadas
+
+<CardGroup cols={3}>
+  <Card
+    title="Planes y límites"
+    icon="gauge-high"
+    href="/es/workspace-and-account/plans-and-limits"
+  >
+    Revisa las capacidades controladas por el plan.
+  </Card>
+
+  <Card
+    title="Uso"
+    icon="chart-simple"
+    href="/es/workspace-and-account/usage"
+  >
+    Compara el consumo actual con la capacidad.
+  </Card>
+
+  <Card
+    title="Miembros del equipo"
+    icon="users"
+    href="/es/workspace-and-account/team-members"
+  >
+    Comprende por qué Admin y Viewer no administran facturación.
+  </Card>
+</CardGroup>
