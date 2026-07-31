@@ -96,7 +96,6 @@
               {
                 "group": "Games and Releases",
                 "pages": [
-                  "en/games-and-releases/game-settings",
                   "en/games-and-releases/branches",
                   "en/games-and-releases/builds",
                   "en/games-and-releases/updates"
@@ -225,7 +224,6 @@
               {
                 "group": "Juegos y versiones",
                 "pages": [
-                  "es/games-and-releases/game-settings",
                   "es/games-and-releases/branches",
                   "es/games-and-releases/builds",
                   "es/games-and-releases/updates"
