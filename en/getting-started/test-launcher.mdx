@@ -1,29 +1,374 @@
 ---
 title: "Test your launcher"
-description: "Download the launcher, install the game, and verify startup."
+description: "Link your game, generate the launcher, install it, and verify the complete end-user experience."
 icon: "flask"
 ---
 
-
 # Test your launcher
 
-Test the complete player experience before a public release.
+After publishing your first game build, complete the launcher setup and test the same flow your players will use.
 
-## Verification checklist
+This process covers:
 
-- Download and install the launcher.
-- Sign in with a test player account.
-- Confirm the game appears in the library.
-- Install the game.
-- Start the game.
-- Confirm launch-token validation.
-- Publish an update and verify the update flow.
-- Review errors and recovery behavior.
+1. Naming the launcher.
+2. Linking the game.
+3. Choosing free or key-based access.
+4. Generating the launcher executable.
+5. Installing the launcher.
+6. Creating an end-user account.
+7. Acquiring or redeeming the game.
+8. Downloading and starting the game.
 
-{/* PHOTO AREA: replace /images/screenshots/test-launcher.png with your real screenshot. */}
-<Frame caption="Installing and launching a game from Launcher Forge">
+<Warning>
+  A published game build does not appear automatically in the launcher. The game must also be linked to the launcher.
+</Warning>
+
+## Before you begin
+
+Confirm that:
+
+- The launcher exists.
+- The launcher has the final name you want to distribute.
+- The game is **Published** in the Catalog.
+- The game has a valid published build.
+- The main game executable was selected correctly during CLI publishing.
+- The game is ready to be linked to the launcher.
+
+## 1. Set the final launcher name
+
+Open your launcher from the left sidebar.
+
+Select the edit icon beside the launcher name, enter the final name, and select **Save**.
+
+The generated Windows installer uses the launcher identity configured on this page.
+
+<Frame caption="Set the final launcher name before generating the executable">
   <img
-    src="/images/screenshots/test-launcher.png"
-    alt="Launcher test flow"
+    src="/images/screenshots/launcher-rename-and-generate.png"
+    alt="Launcher Forge launcher overview with the editable name and Generate executable button highlighted"
   />
 </Frame>
+
+<Warning>
+  Finalize the launcher name before generating the file. If you later change the executable name or icon, delete the previously generated file and generate a new one.
+</Warning>
+
+The executable icon depends on the active plan:
+
+- Plans with custom icon support can use the configured `.ico` file.
+- Plans without custom icon support use the official Launcher Forge icon.
+
+## 2. Open Linked games
+
+In the launcher management area, select **Linked games**.
+
+<Frame caption="Open the Linked games configuration">
+  <img
+    src="/images/screenshots/launcher-open-linked-games.png"
+    alt="Launcher Forge launcher management page with Linked games highlighted"
+  />
+</Frame>
+
+The Linked apps page shows:
+
+- Number of linked games.
+- Number of available games.
+- Games that can be associated with the launcher.
+- Access mode for each game.
+
+## 3. Choose the game access mode
+
+Before linking the game, decide how players will obtain access.
+
+<Frame caption="Choose the access mode and link the game">
+  <img
+    src="/images/screenshots/launcher-link-game-access.png"
+    alt="Launcher Forge Linked apps page showing the Key option and Link button"
+  />
+</Frame>
+
+<Tabs>
+  <Tab title="Free access">
+    Leave **Key** disabled.
+
+    The game is treated as free inside the launcher. After signing in, an end user can select **Acquire** to add it to their account.
+
+    Use this mode for:
+
+    - Free games.
+    - Public demos.
+    - Open tests.
+    - Games that do not require a purchase key.
+  </Tab>
+
+  <Tab title="Key-based access">
+    Enable **Key** before linking the game.
+
+    The user must sign in and redeem a valid CD key before the game becomes available.
+
+    Use this mode for:
+
+    - Paid games.
+    - Controlled access.
+    - Private distributions.
+    - Promotional or testing keys.
+    - Access sold through your own commercial workflow.
+
+    Generate and manage the required keys from the **CD Keys** section of Launcher Forge.
+  </Tab>
+</Tabs>
+
+<Info>
+  All launcher users still authenticate with an end-user account. Key mode adds a redemption requirement; it does not replace end-user authentication.
+</Info>
+
+## 4. Link the game
+
+Select **Link**.
+
+After the operation finishes:
+
+- The linked counter increases.
+- The game displays the **Linked** status.
+- The action changes to **Unlink**.
+- The game becomes part of this launcher configuration.
+
+<Frame caption="Confirm that the game is linked to the launcher">
+  <img
+    src="/images/screenshots/launcher-game-linked.png"
+    alt="Launcher Forge Linked apps page showing the game with Linked status"
+  />
+</Frame>
+
+<Warning>
+  Unlinking the game removes it from the launcher library. It does not delete the game, its builds, or its versions from the workspace.
+</Warning>
+
+## Can the game be linked after generating the launcher?
+
+Yes. The launcher uses runtime configuration updates, so changes such as linked games can be reflected without generating a completely new launcher file.
+
+However, the recommended order is:
+
+1. Rename the launcher.
+2. Link the game.
+3. Review the game access mode.
+4. Generate the launcher.
+5. Test the complete flow.
+
+This produces a complete first test and reduces confusion.
+
+## 5. Open Generate executable
+
+Return to the launcher overview and select **Generate executable**.
+
+Launcher Forge provides two output types.
+
+<Frame caption="Choose the launcher output type">
+  <img
+    src="/images/screenshots/launcher-generation-options.png"
+    alt="Launcher Forge executable generation page with Windows installer and Portable ZIP options"
+  />
+</Frame>
+
+<CardGroup cols={2}>
+  <Card title="Windows installer" icon="windows">
+    Generates an official Windows setup executable with installation, shortcuts, and an uninstaller.
+
+    This is the recommended option for most players.
+  </Card>
+
+  <Card title="Portable ZIP" icon="file-zipper">
+    Generates a compressed portable folder.
+
+    This is useful when you want to distribute the launcher files together without using an installer.
+  </Card>
+</CardGroup>
+
+Launcher Forge keeps a maximum of one generated file per output type.
+
+To generate a replacement later, delete the current file first.
+
+<Info>
+  The launcher base can update through runtime. You do not need to regenerate the launcher for every game build or content update.
+</Info>
+
+## 6. Generate the selected file
+
+Select **Generate EXE** or **Generate ZIP**, depending on the format you want.
+
+Launcher Forge opens a confirmation window.
+
+For the Windows installer, select **Generate file**.
+
+<Frame caption="Confirm the Windows installer generation">
+  <img
+    src="/images/screenshots/launcher-generate-confirmation.png"
+    alt="Launcher Forge confirmation window for generating the Windows installer"
+  />
+</Frame>
+
+The generated file uses information from the launcher configuration:
+
+- Launcher name.
+- Technical version.
+- Channel.
+- Executable icon, when supported.
+- Current launcher identity.
+
+## 7. Download the generated launcher
+
+Wait until the generation status changes to **Ready**.
+
+The generated file panel displays:
+
+- File name.
+- File size.
+- Last generation date.
+- SHA-256 hash.
+- Download action.
+- Build logs.
+- Delete action.
+
+Select **Download**.
+
+<Frame caption="Download the generated Windows installer">
+  <img
+    src="/images/screenshots/launcher-generated-installer.png"
+    alt="Generated Launcher Forge Windows installer with Download, Logs, and Delete actions"
+  />
+</Frame>
+
+You can now:
+
+- Send the installer directly to testers.
+- Upload it to your official website.
+- Publish it on your download page.
+- Store it in your release distribution system.
+
+<Warning>
+  If you change the launcher executable name or icon, delete the current generated file and create a new one.
+</Warning>
+
+## 8. Install and open the launcher
+
+Run the downloaded setup file and complete the normal Windows installation.
+
+After installation, open the launcher.
+
+The launcher requires an **end-user account**. Developer dashboard accounts and end-user launcher accounts are separate.
+
+The player must:
+
+1. Register an end-user account or sign in.
+2. Complete email verification when required.
+3. Access the launcher library.
+
+<Info>
+  End-user authentication protects access to the launcher library and enables player-specific ownership, downloads, keys, and launch-token validation.
+</Info>
+
+## 9. Acquire or redeem the game
+
+The player experience depends on the access mode selected when linking the game.
+
+### Free game
+
+When **Key** was disabled, the launcher displays an **Acquire** action.
+
+The player selects **Acquire** to add the free game to their account.
+
+<Frame caption="Acquire a free game from the launcher">
+  <img
+    src="/images/screenshots/enduser-launcher-acquire.png"
+    alt="Launcher Forge end-user launcher showing the Acquire action for a free game"
+  />
+</Frame>
+
+### Key-protected game
+
+When **Key** was enabled:
+
+1. The player signs in.
+2. The launcher requests a valid CD key.
+3. The player redeems the key.
+4. The game is added to the account.
+5. The player can install it.
+
+<Warning>
+  A key-protected game is not unlocked merely because it is visible in the launcher. The end user must redeem a valid, active key.
+</Warning>
+
+## 10. Download and install the game
+
+After acquiring or redeeming the game, start the download.
+
+The launcher displays:
+
+- Current download state.
+- Installation percentage.
+- Downloaded size.
+- Transfer speed.
+- Estimated remaining time.
+
+<Frame caption="Verify the game download and installation progress">
+  <img
+    src="/images/screenshots/enduser-launcher-downloading.png"
+    alt="Launcher Forge end-user launcher downloading and installing the game"
+  />
+</Frame>
+
+Wait until the game status becomes ready.
+
+Then start the game from the launcher.
+
+## 11. Verify the complete player flow
+
+Test the following:
+
+- End-user registration.
+- End-user login.
+- Email verification, when required.
+- Game appears in the launcher.
+- Free game can be acquired.
+- Key-protected game requests a CD key.
+- Valid key can be redeemed.
+- Invalid or revoked key is rejected.
+- Game downloads successfully.
+- Game installs successfully.
+- Game starts using the correct executable.
+- Launcher can detect a new published version.
+- Game can update successfully.
+- Errors provide understandable recovery information.
+
+<Check>
+  Your launcher is ready for distribution after the complete player flow works correctly.
+</Check>
+
+## Validate the game connection
+
+Installing and starting the game confirms the distribution flow.
+
+To integrate and validate the authenticated connection between the launcher and the game runtime, continue with:
+
+[Launch tokens](/en/player-authentication/launch-tokens)
+
+That section explains:
+
+- How the launcher requests a launch token.
+- How the token is passed to the game.
+- How the game validates the player session.
+- Which authenticated player data is available.
+- How Unreal Engine and Unity integrations use the result.
+
+## Managing the generated setup
+
+Return to **Generate executable** whenever you need to:
+
+- Download the current installer again.
+- Review generation logs.
+- Delete the current EXE.
+- Delete the current ZIP.
+- Generate a replacement after changing the launcher identity.
+
+Deleting a generated setup does not delete the launcher, linked games, game builds, or player accounts.

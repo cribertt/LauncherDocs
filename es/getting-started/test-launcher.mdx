@@ -1,27 +1,374 @@
 ---
 title: "Probar tu launcher"
-description: "Descarga el launcher, instala el juego y verifica la ejecución."
+description: "Vincula el juego, genera el launcher, instálalo y verifica la experiencia completa del usuario final."
 icon: "flask"
 ---
 
-
 # Probar tu launcher
 
-## Lista de verificación
+Después de publicar la primera build, completa la configuración del launcher y prueba el mismo flujo que utilizarán tus jugadores.
 
-- Descarga e instala el launcher.
-- Inicia sesión con una cuenta de jugador de prueba.
-- Confirma que el juego aparezca en la biblioteca.
-- Instala el juego.
-- Ejecuta el juego.
-- Verifica el launch token.
-- Publica una actualización y prueba el flujo.
-- Revisa errores y recuperación.
+Este proceso cubre:
 
-{/* PHOTO AREA: replace /images/screenshots/test-launcher.png with your real screenshot. */}
-<Frame caption="Instalación y ejecución de un juego">
+1. Asignar el nombre definitivo al launcher.
+2. Vincular el juego.
+3. Elegir acceso gratuito o mediante key.
+4. Generar el ejecutable del launcher.
+5. Instalar el launcher.
+6. Crear una cuenta de usuario final.
+7. Adquirir o canjear el juego.
+8. Descargar e iniciar el juego.
+
+<Warning>
+  Publicar una build no hace que el juego aparezca automáticamente dentro del launcher. También debes vincular el juego con el launcher.
+</Warning>
+
+## Antes de comenzar
+
+Confirma lo siguiente:
+
+- El launcher existe.
+- Tiene el nombre definitivo que deseas distribuir.
+- El juego está **Published** en el Catálogo.
+- El juego tiene una build válida publicada.
+- El ejecutable principal fue seleccionado correctamente durante la publicación mediante CLI.
+- El juego está listo para ser vinculado.
+
+## 1. Define el nombre definitivo del launcher
+
+Abre el launcher desde el menú lateral.
+
+Selecciona el icono de edición junto al nombre, ingresa el nombre definitivo y presiona **Save**.
+
+El instalador de Windows generado utiliza la identidad configurada en esta página.
+
+<Frame caption="Define el nombre definitivo antes de generar el ejecutable">
   <img
-    src="/images/screenshots/test-launcher.png"
-    alt="Prueba del launcher"
+    src="/images/screenshots/launcher-rename-and-generate.png"
+    alt="Vista general del launcher con el nombre editable y Generate executable destacados"
   />
 </Frame>
+
+<Warning>
+  Define el nombre antes de generar el archivo. Si después cambias el nombre del ejecutable o el icono, elimina el archivo generado y crea uno nuevo.
+</Warning>
+
+El icono del ejecutable depende del plan:
+
+- Los planes con icono personalizado pueden utilizar el archivo `.ico` configurado.
+- Los planes sin esta función utilizan el icono oficial de Launcher Forge.
+
+## 2. Abre Linked games
+
+En la sección de administración del launcher, selecciona **Linked games**.
+
+<Frame caption="Abre la configuración de juegos vinculados">
+  <img
+    src="/images/screenshots/launcher-open-linked-games.png"
+    alt="Página de administración de Launcher Forge con Linked games destacado"
+  />
+</Frame>
+
+La página Linked apps muestra:
+
+- Cantidad de juegos vinculados.
+- Cantidad de juegos disponibles.
+- Juegos que pueden asociarse al launcher.
+- Tipo de acceso de cada juego.
+
+## 3. Elige el tipo de acceso
+
+Antes de vincular el juego, decide cómo obtendrán acceso los jugadores.
+
+<Frame caption="Elige el tipo de acceso y vincula el juego">
+  <img
+    src="/images/screenshots/launcher-link-game-access.png"
+    alt="Página Linked apps mostrando la opción Key y el botón Link"
+  />
+</Frame>
+
+<Tabs>
+  <Tab title="Acceso gratuito">
+    Deja **Key** desactivado.
+
+    El juego será tratado como gratuito dentro del launcher. Después de iniciar sesión, el usuario final podrá seleccionar **Acquire** para añadirlo a su cuenta.
+
+    Utiliza este modo para:
+
+    - Juegos gratuitos.
+    - Demos públicas.
+    - Pruebas abiertas.
+    - Juegos que no requieren una compra.
+  </Tab>
+
+  <Tab title="Acceso mediante key">
+    Activa **Key** antes de vincular el juego.
+
+    El usuario deberá iniciar sesión y canjear una CD key válida antes de obtener acceso.
+
+    Utiliza este modo para:
+
+    - Juegos de pago.
+    - Acceso controlado.
+    - Distribuciones privadas.
+    - Keys promocionales o de prueba.
+    - Acceso vendido mediante tu propio flujo comercial.
+
+    Genera y administra las keys desde la sección **CD Keys** de Launcher Forge.
+  </Tab>
+</Tabs>
+
+<Info>
+  Todos los usuarios del launcher deben autenticarse con una cuenta de usuario final. El modo Key añade el requisito de canje; no reemplaza la autenticación.
+</Info>
+
+## 4. Vincula el juego
+
+Selecciona **Link**.
+
+Después de completar la operación:
+
+- Aumenta el contador de juegos vinculados.
+- El juego muestra el estado **Linked**.
+- La acción cambia a **Unlink**.
+- El juego pasa a formar parte de la configuración del launcher.
+
+<Frame caption="Confirma que el juego quedó vinculado">
+  <img
+    src="/images/screenshots/launcher-game-linked.png"
+    alt="Página Linked apps mostrando el juego con estado Linked"
+  />
+</Frame>
+
+<Warning>
+  Desvincular el juego lo elimina de la biblioteca del launcher. No elimina el juego, sus builds ni sus versiones del workspace.
+</Warning>
+
+## ¿Se puede vincular después de generar el launcher?
+
+Sí. El launcher utiliza actualizaciones de configuración mediante runtime, por lo que cambios como los juegos vinculados pueden reflejarse sin generar un launcher completamente nuevo.
+
+Sin embargo, el orden recomendado es:
+
+1. Cambiar el nombre del launcher.
+2. Vincular el juego.
+3. Revisar el tipo de acceso.
+4. Generar el launcher.
+5. Probar el flujo completo.
+
+Así la primera prueba queda completa y se evitan confusiones.
+
+## 5. Abre Generate executable
+
+Regresa a la vista general del launcher y selecciona **Generate executable**.
+
+Launcher Forge ofrece dos formatos.
+
+<Frame caption="Selecciona el formato del launcher">
+  <img
+    src="/images/screenshots/launcher-generation-options.png"
+    alt="Página de generación con Windows installer y Portable ZIP"
+  />
+</Frame>
+
+<CardGroup cols={2}>
+  <Card title="Windows installer" icon="windows">
+    Genera un instalador oficial para Windows con instalación, accesos directos y desinstalador.
+
+    Es la opción recomendada para la mayoría de los jugadores.
+  </Card>
+
+  <Card title="Portable ZIP" icon="file-zipper">
+    Genera una carpeta portable comprimida.
+
+    Es útil para distribuir todos los archivos juntos sin utilizar un instalador.
+  </Card>
+</CardGroup>
+
+Launcher Forge conserva un máximo de un archivo generado por cada formato.
+
+Para crear otro posteriormente, primero debes eliminar el archivo actual.
+
+<Info>
+  La base del launcher se actualiza mediante runtime. No necesitas regenerarlo por cada build o actualización de contenido del juego.
+</Info>
+
+## 6. Genera el archivo
+
+Selecciona **Generate EXE** o **Generate ZIP**, según el formato que prefieras.
+
+Launcher Forge mostrará una ventana de confirmación.
+
+Para generar el instalador de Windows, selecciona **Generate file**.
+
+<Frame caption="Confirma la generación del instalador de Windows">
+  <img
+    src="/images/screenshots/launcher-generate-confirmation.png"
+    alt="Ventana de confirmación para generar el instalador de Windows"
+  />
+</Frame>
+
+El archivo utiliza la información de la configuración del launcher:
+
+- Nombre.
+- Versión técnica.
+- Canal.
+- Icono, cuando el plan lo permite.
+- Identidad actual del launcher.
+
+## 7. Descarga el launcher generado
+
+Espera hasta que el estado cambie a **Ready**.
+
+El panel muestra:
+
+- Nombre del archivo.
+- Tamaño.
+- Fecha de generación.
+- Hash SHA-256.
+- Botón de descarga.
+- Logs.
+- Acción para eliminar.
+
+Selecciona **Download**.
+
+<Frame caption="Descarga el instalador de Windows generado">
+  <img
+    src="/images/screenshots/launcher-generated-installer.png"
+    alt="Instalador generado con acciones Download, Logs y Delete"
+  />
+</Frame>
+
+Ahora puedes:
+
+- Enviarlo directamente a testers.
+- Subirlo a tu página web oficial.
+- Publicarlo en una página de descargas.
+- Guardarlo dentro de tu sistema de distribución.
+
+<Warning>
+  Si cambias el nombre o el icono del ejecutable, elimina el archivo actual y genera uno nuevo.
+</Warning>
+
+## 8. Instala y abre el launcher
+
+Ejecuta el instalador descargado y completa la instalación normal de Windows.
+
+Después abre el launcher.
+
+El launcher requiere una **cuenta de usuario final**. Las cuentas del dashboard de desarrollador y las cuentas de usuarios del launcher son distintas.
+
+El jugador debe:
+
+1. Registrar una cuenta de usuario final o iniciar sesión.
+2. Completar la verificación de correo cuando sea requerida.
+3. Acceder a la biblioteca.
+
+<Info>
+  La autenticación de usuarios finales protege el acceso a la biblioteca y permite administrar propiedad, descargas, keys y validación mediante launch tokens.
+</Info>
+
+## 9. Adquiere o canjea el juego
+
+La experiencia depende del tipo de acceso seleccionado al vincularlo.
+
+### Juego gratuito
+
+Cuando **Key** estaba desactivado, el launcher muestra la acción **Acquire**.
+
+El jugador selecciona **Acquire** para añadir el juego gratuito a su cuenta.
+
+<Frame caption="Adquiere un juego gratuito desde el launcher">
+  <img
+    src="/images/screenshots/enduser-launcher-acquire.png"
+    alt="Launcher de usuario final mostrando Acquire para un juego gratuito"
+  />
+</Frame>
+
+### Juego protegido mediante key
+
+Cuando **Key** estaba activado:
+
+1. El jugador inicia sesión.
+2. El launcher solicita una CD key válida.
+3. El jugador canjea la key.
+4. El juego se añade a la cuenta.
+5. El jugador puede instalarlo.
+
+<Warning>
+  Un juego protegido no queda desbloqueado solamente por aparecer en el launcher. El usuario final debe canjear una key válida y activa.
+</Warning>
+
+## 10. Descarga e instala el juego
+
+Después de adquirirlo o canjearlo, inicia la descarga.
+
+El launcher muestra:
+
+- Estado actual.
+- Porcentaje de instalación.
+- Tamaño descargado.
+- Velocidad.
+- Tiempo restante estimado.
+
+<Frame caption="Verifica el progreso de descarga e instalación">
+  <img
+    src="/images/screenshots/enduser-launcher-downloading.png"
+    alt="Launcher de usuario final descargando e instalando el juego"
+  />
+</Frame>
+
+Espera hasta que el estado del juego indique que está listo.
+
+Luego inicia el juego desde el launcher.
+
+## 11. Verifica el flujo completo
+
+Prueba:
+
+- Registro del usuario final.
+- Inicio de sesión.
+- Verificación de correo, cuando corresponda.
+- Aparición del juego en el launcher.
+- Adquisición de un juego gratuito.
+- Solicitud de CD key en un juego protegido.
+- Canje de una key válida.
+- Rechazo de una key inválida o revocada.
+- Descarga correcta.
+- Instalación correcta.
+- Inicio mediante el ejecutable seleccionado.
+- Detección de una nueva versión.
+- Actualización del juego.
+- Mensajes de error comprensibles.
+
+<Check>
+  El launcher está listo para distribuirse cuando todo el flujo del jugador funciona correctamente.
+</Check>
+
+## Valida la conexión con el juego
+
+Instalar e iniciar el juego confirma el flujo de distribución.
+
+Para integrar y validar la conexión autenticada entre el launcher y el runtime del juego, continúa con:
+
+[Launch tokens](/es/player-authentication/launch-tokens)
+
+Esa sección explica:
+
+- Cómo el launcher solicita un launch token.
+- Cómo se envía el token al juego.
+- Cómo el juego valida la sesión.
+- Qué datos del jugador están disponibles.
+- Cómo utilizan el resultado las integraciones con Unreal Engine y Unity.
+
+## Administrar el setup generado
+
+Regresa a **Generate executable** cuando necesites:
+
+- Descargar nuevamente el instalador.
+- Revisar los logs.
+- Eliminar el EXE.
+- Eliminar el ZIP.
+- Generar un reemplazo después de cambiar la identidad del launcher.
+
+Eliminar el setup generado no elimina el launcher, los juegos vinculados, las builds ni las cuentas de jugadores.
