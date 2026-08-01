@@ -1,27 +1,471 @@
 ---
-title: "API Reference"
-description: "Reserved area for the external Launcher Forge API."
+title: "Commerce API Reference"
+description: "Generate and deliver LauncherForge game keys from WooCommerce, custom stores, and external checkout systems."
 icon: "square-terminal"
 ---
 
+# Commerce API Reference
 
-# API Reference
+The LauncherForge Commerce API lets an external store request a game key **after the store has confirmed payment**.
 
 <Info>
-  Coming Soon
+LauncherForge does not charge the buyer. WooCommerce, PrestaShop, Stripe, PayPal, Mercado Pago, or your own checkout handles payment. LauncherForge only creates and returns the game key.
 </Info>
 
-Publish this section when the external API is stable.
+## What this API does
 
-It should include:
+```text
+Buyer pays in your store
+        ↓
+Your store confirms the order is paid
+        ↓
+Your server calls LauncherForge
+        ↓
+LauncherForge creates one game key
+        ↓
+Your store shows or emails the key
+        ↓
+The player redeems the key in the launcher
+```
 
-- Authentication and API keys.
-- Base URLs and environments.
-- Request and response conventions.
-- Error formats.
-- Rate limits.
-- Endpoint groups.
-- OpenAPI specification.
-- Code examples.
+## Before you start
 
-Do not publish internal administration endpoints or unstable contracts.
+You need all of the following:
+
+- An active paid LauncherForge plan.
+- The Commerce API add-on enabled for the workspace.
+- A complete Commerce API key.
+- A game that belongs to the same workspace.
+- CD-Key protection enabled for that game.
+- The numeric LauncherForge App ID expected by the Commerce API.
+
+<Warning>
+The value permanently displayed in the dashboard, such as `lf_commerce_live_d122d2cc091f`, is only the public prefix. It is not a usable credential. The complete key contains another underscore followed by a long secret and is shown only when the key is generated or regenerated.
+</Warning>
+
+## Base URL
+
+```text
+https://backend.launcherforge.io/api/v1
+```
+
+The delivery endpoint is:
+
+```text
+POST https://backend.launcherforge.io/api/v1/external/commerce/deliveries
+```
+
+Use HTTPS in production.
+
+## Create a Commerce API key
+
+<Steps>
+  <Step title="Open the Commerce API page">
+    In the LauncherForge dashboard, open `/commerce/api-key`.
+  </Step>
+
+  <Step title="Generate the key">
+    Generate or regenerate the Commerce API key.
+  </Step>
+
+  <Step title="Copy the complete key immediately">
+    Save the complete secret in your store's server-side configuration. LauncherForge will not display the complete key again.
+  </Step>
+
+  <Step title="Never expose it in frontend code">
+    Do not place the key in JavaScript, HTML, a public repository, a mobile application, or a screenshot.
+  </Step>
+</Steps>
+
+## Authentication
+
+Send the complete API key as a Bearer token:
+
+```http
+Authorization: Bearer lf_commerce_live_<public-id>_<secret>
+```
+
+Example:
+
+```http
+Authorization: Bearer YOUR_COMPLETE_COMMERCE_API_KEY
+```
+
+Do not send only the prefix.
+
+## Idempotency
+
+Every delivery request must include:
+
+```http
+Idempotency-Key: <unique-operation-id>
+```
+
+This prevents duplicate keys when a store retries the same paid order.
+
+For WooCommerce, use a deterministic value based on the site, order, order item, and unit:
+
+```text
+wc:<site-id>:<order-id>:<order-item-id>:<unit-number>
+```
+
+Example:
+
+```text
+wc:40c19d4c0ed64ca1:1001:72:1
+```
+
+If the buyer purchases three units, send three requests:
+
+```text
+wc:40c19d4c0ed64ca1:1001:72:1
+wc:40c19d4c0ed64ca1:1001:72:2
+wc:40c19d4c0ed64ca1:1001:72:3
+```
+
+<Note>
+Repeating the same `Idempotency-Key` returns the same delivery and the same game key with `alreadyProcessed: true`. It does not generate a second key.
+</Note>
+
+## Create a delivery
+
+```http
+POST /external/commerce/deliveries
+```
+
+### Headers
+
+| Header | Required | Value |
+|---|---:|---|
+| `Authorization` | Yes | `Bearer <complete-commerce-api-key>` |
+| `Idempotency-Key` | Yes | Stable unique ID for this order item and unit |
+| `Content-Type` | Yes | `application/json` |
+| `Accept` | Recommended | `application/json` |
+
+### Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `appId` | integer | Yes | Numeric LauncherForge App ID. Must belong to the API key workspace and require CD-Key activation. |
+| `externalOrderId` | string | Yes | Order identifier in the external store. Maximum 160 characters. |
+| `externalOrderItemId` | string | No | Order line or unit identifier. Maximum 160 characters. |
+| `customerEmail` | string | No | Buyer email. Must be a valid email address. |
+| `customerName` | string | No | Buyer name. Maximum 160 characters. |
+| `provider` | string | No | `CUSTOM`, `WOOCOMMERCE`, or `NATIVE_APP`. Defaults to `CUSTOM`. |
+| `expiresAt` | ISO 8601 date | No | Optional future expiration date for the generated key. |
+| `note` | string | No | Internal note for the generated key. Maximum 500 characters. |
+
+### Minimal request
+
+```json
+{
+  "appId": 1,
+  "externalOrderId": "1001"
+}
+```
+
+### Recommended WooCommerce request
+
+```json
+{
+  "appId": 1,
+  "externalOrderId": "1001",
+  "externalOrderItemId": "72:1",
+  "customerEmail": "buyer@example.com",
+  "customerName": "Example Buyer",
+  "provider": "WOOCOMMERCE",
+  "note": "WooCommerce order 1001, item 72, unit 1"
+}
+```
+
+## cURL example
+
+```bash
+curl --request POST \
+  --url "https://backend.launcherforge.io/api/v1/external/commerce/deliveries" \
+  --header "Authorization: Bearer YOUR_COMPLETE_COMMERCE_API_KEY" \
+  --header "Idempotency-Key: custom-store:1001:1" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "appId": 1,
+    "externalOrderId": "1001",
+    "externalOrderItemId": "1",
+    "customerEmail": "buyer@example.com",
+    "customerName": "Example Buyer",
+    "provider": "CUSTOM"
+  }'
+```
+
+## PowerShell example
+
+```powershell
+$commerceKey = "YOUR_COMPLETE_COMMERCE_API_KEY"
+
+$headers = @{
+    Authorization     = "Bearer $commerceKey"
+    "Idempotency-Key" = "custom-store:1001:1"
+}
+
+$body = @{
+    appId                 = 1
+    externalOrderId       = "1001"
+    externalOrderItemId   = "1"
+    customerEmail         = "buyer@example.com"
+    customerName          = "Example Buyer"
+    provider              = "CUSTOM"
+} | ConvertTo-Json
+
+$response = Invoke-RestMethod `
+    -Method Post `
+    -Uri "https://backend.launcherforge.io/api/v1/external/commerce/deliveries" `
+    -Headers $headers `
+    -ContentType "application/json" `
+    -Body $body
+
+$response | ConvertTo-Json -Depth 10
+```
+
+## JavaScript server example
+
+Run this only on a trusted server. Do not run it in browser JavaScript.
+
+```javascript
+const response = await fetch(
+  "https://backend.launcherforge.io/api/v1/external/commerce/deliveries",
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.LAUNCHERFORGE_COMMERCE_API_KEY}`,
+      "Idempotency-Key": "custom-store:1001:1",
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      appId: 1,
+      externalOrderId: "1001",
+      externalOrderItemId: "1",
+      customerEmail: "buyer@example.com",
+      customerName: "Example Buyer",
+      provider: "CUSTOM",
+    }),
+  },
+);
+
+const result = await response.json();
+
+if (!response.ok || !result.success) {
+  throw new Error(result.message ?? `LauncherForge HTTP ${response.status}`);
+}
+
+console.log(result.data.deliveryId);
+console.log(result.data.gameKey.key);
+```
+
+## PHP example
+
+```php
+<?php
+
+$apiKey = getenv('LAUNCHERFORGE_COMMERCE_API_KEY');
+$endpoint = 'https://backend.launcherforge.io/api/v1/external/commerce/deliveries';
+
+$payload = [
+    'appId' => 1,
+    'externalOrderId' => '1001',
+    'externalOrderItemId' => '1',
+    'customerEmail' => 'buyer@example.com',
+    'customerName' => 'Example Buyer',
+    'provider' => 'CUSTOM',
+];
+
+$ch = curl_init($endpoint);
+curl_setopt_array($ch, [
+    CURLOPT_POST => true,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTPHEADER => [
+        'Authorization: Bearer ' . $apiKey,
+        'Idempotency-Key: custom-store:1001:1',
+        'Content-Type: application/json',
+        'Accept: application/json',
+    ],
+    CURLOPT_POSTFIELDS => json_encode($payload, JSON_THROW_ON_ERROR),
+    CURLOPT_TIMEOUT => 30,
+]);
+
+$body = curl_exec($ch);
+$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+if ($body === false) {
+    throw new RuntimeException(curl_error($ch));
+}
+
+curl_close($ch);
+$result = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+
+if ($status < 200 || $status >= 300 || empty($result['success'])) {
+    throw new RuntimeException($result['message'] ?? 'LauncherForge request failed.');
+}
+
+$gameKey = $result['data']['gameKey']['key'];
+```
+
+## Successful response
+
+```json
+{
+  "success": true,
+  "data": {
+    "deliveryId": "dlv_98c0b1c0dae6ec7376597758",
+    "alreadyProcessed": false,
+    "provider": "CUSTOM",
+    "externalOrderId": "1001",
+    "externalOrderItemId": "1",
+    "customerEmail": "buyer@example.com",
+    "status": "GENERATED",
+    "game": {
+      "id": 1,
+      "slug": "cs-1-6",
+      "name": "CS 1.6"
+    },
+    "gameKey": {
+      "key": "A0622-F4BF7-00204",
+      "status": "ACTIVE",
+      "expiresAt": null,
+      "generatedAt": "2026-08-01T03:29:50.422Z"
+    },
+    "createdAt": "2026-08-01T03:29:50.431Z"
+  }
+}
+```
+
+### Response fields
+
+| Field | Meaning |
+|---|---|
+| `deliveryId` | Public LauncherForge delivery identifier. Save it with the external order. |
+| `alreadyProcessed` | `true` when the same idempotency operation was already completed. |
+| `status` | Delivery state. A newly generated delivery returns `GENERATED`. |
+| `gameKey.key` | Game key to show to the buyer. Treat it as sensitive order data. |
+| `gameKey.status` | Generated key state, normally `ACTIVE`. |
+| `gameKey.expiresAt` | Expiration date or `null`. |
+
+## Retry rules
+
+Retry only temporary failures:
+
+- Network or DNS errors.
+- HTTP `408`.
+- HTTP `425`.
+- HTTP `429`.
+- HTTP `500` through `599`.
+
+Do not automatically retry permanent configuration errors such as invalid credentials or an unavailable game unless the merchant first corrects the configuration.
+
+Suggested delays:
+
+```text
+Attempt 1: immediately
+Attempt 2: after 1 minute
+Attempt 3: after 5 minutes
+Attempt 4: after 15 minutes
+Attempt 5: after 1 hour
+```
+
+Always reuse the same `Idempotency-Key` during retries.
+
+## Error format
+
+Structured errors use this format:
+
+```json
+{
+  "code": "INVALID_COMMERCE_API_KEY",
+  "message": "The Commerce API key is invalid."
+}
+```
+
+### Common errors
+
+| HTTP | Code | Cause | Fix |
+|---:|---|---|---|
+| `401` | `COMMERCE_API_KEY_REQUIRED` | Missing `Authorization: Bearer ...`. | Send the complete API key. |
+| `401` | `INVALID_COMMERCE_API_KEY` | Wrong key or only the public prefix was used. | Regenerate and copy the complete key. |
+| `401` | `REVOKED_COMMERCE_API_KEY` | The credential was revoked or regenerated. | Update the store with the new key. |
+| `401` | `EXPIRED_COMMERCE_API_KEY` | The API key expired. | Generate a new key. |
+| `403` | `COMMERCE_API_NOT_INCLUDED` | Commerce API is not active for the workspace. | Activate the Commerce API add-on. |
+| `400` | `IDEMPOTENCY_KEY_REQUIRED` | Missing `Idempotency-Key`. | Send a stable unique operation ID. |
+| `400` | `IDEMPOTENCY_KEY_TOO_LONG` | Header exceeds 200 characters. | Use a shorter deterministic key. |
+| `400` | `EXTERNAL_GAME_NOT_AVAILABLE` | App does not exist, belongs to another workspace, or does not require a CD-Key. | Check the App ID, workspace, and CD-Key setting. |
+| `429` | Rate limit | Too many requests for the contracted allowance. | Slow down and retry with backoff. |
+
+## Rate limits
+
+The Commerce API allowance is displayed on the Commerce API page in LauncherForge.
+
+- Process one delivery per purchased product unit.
+- Do not generate unused key inventories through this endpoint.
+- Queue fulfillment in the background.
+- Handle HTTP `429` with backoff.
+- Do not assume rate-limit response headers are always present.
+
+## WooCommerce plugin
+
+LauncherForge provides an installable WooCommerce plugin that uses this exact endpoint.
+
+The plugin:
+
+- stores the Commerce API key only on the WordPress server;
+- maps each WooCommerce product or variation to a LauncherForge App ID;
+- waits until WooCommerce confirms payment;
+- creates one key per purchased unit;
+- uses deterministic idempotency keys;
+- stores the `deliveryId` and game key on the order item;
+- displays keys in customer emails and **My Account → Orders**;
+- supports WooCommerce HPOS;
+- retries temporary failures;
+- adds a manual **Retry LauncherForge key delivery** order action.
+
+### Install the plugin
+
+<Steps>
+  <Step title="Upload the ZIP">
+    In WordPress, open **Plugins → Add New → Upload Plugin** and upload `launcherforge-commerce-for-woocommerce.zip`.
+  </Step>
+
+  <Step title="Activate it">
+    Activate **LauncherForge Commerce for WooCommerce**.
+  </Step>
+
+  <Step title="Configure the API key">
+    Open **WooCommerce → Settings → Integrations → LauncherForge Commerce**. Keep the production API URL and paste the complete Commerce API key.
+  </Step>
+
+  <Step title="Map a product">
+    Edit a product, enable **LauncherForge delivery**, enter the numeric LauncherForge App ID, and save.
+  </Step>
+
+  <Step title="Run a test purchase">
+    Use a test payment method. Confirm the order becomes paid, processing, or completed. The key should appear in the order and customer email.
+  </Step>
+</Steps>
+
+<Warning>
+The first plugin version does not automatically revoke a key after a refund. Handle refunds manually until a stable external revocation endpoint is published.
+</Warning>
+
+## Security requirements
+
+- Keep the complete API key server-side.
+- Use HTTPS.
+- Never log the `Authorization` header.
+- Never log complete game keys in application logs.
+- Store `deliveryId`, order ID, item ID, and idempotency key for auditing.
+- Send requests only after payment is confirmed.
+- Validate that the product-to-App-ID mapping is controlled by a store administrator.
+- Rotate the API key immediately if it is exposed.
+
+## Stable public scope
+
+The current stable public Commerce API documents only key delivery.
+
+Do not depend on internal dashboard, administration, billing, override, or database endpoints. Those contracts are not part of the external API and may change without notice.
