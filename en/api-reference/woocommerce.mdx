@@ -1,0 +1,286 @@
+---
+title: "WooCommerce Integration"
+description: "Install the LauncherForge plugin, map products to games, and deliver game keys after orders are paid."
+icon: "wordpress"
+---
+
+# WooCommerce Integration
+
+The LauncherForge Commerce for WooCommerce plugin connects WooCommerce orders to LauncherForge game-key delivery.
+
+<Info>
+WooCommerce handles checkout, taxes, payment methods, refunds, and customer emails. LauncherForge generates the game key. The plugin joins both systems.
+</Info>
+
+## What the plugin does
+
+```text
+WooCommerce order is paid
+        ↓
+The plugin identifies LauncherForge-enabled products
+        ↓
+The plugin requests one key per purchased unit
+        ↓
+LauncherForge returns each delivery and game key
+        ↓
+The plugin stores the result in the WooCommerce order
+        ↓
+WooCommerce includes the key in customer order emails
+```
+
+## Requirements
+
+- WordPress with WooCommerce active.
+- LauncherForge Commerce for WooCommerce plugin.
+- Active Commerce API add-on.
+- Complete Commerce API key.
+- LauncherForge App ID for every game product.
+- CD-Key protection enabled for each mapped game.
+
+## 1. Install the plugin
+
+<Steps>
+  <Step title="Open the plugin installer">
+    In WordPress, open **Plugins → Add New Plugin → Upload Plugin**.
+  </Step>
+
+  <Step title="Upload the ZIP">
+    Select `launcherforge-commerce-for-woocommerce.zip`.
+  </Step>
+
+  <Step title="Install and activate">
+    Install the plugin, then activate it.
+  </Step>
+</Steps>
+
+![Upload the LauncherForge plugin](/images/integrations/woocommerce/plugin-upload.png)
+
+## 2. Configure the integration
+
+Open:
+
+```text
+WooCommerce → Settings → Integrations → LauncherForge Commerce
+```
+
+Configure:
+
+| Setting | Value |
+|---|---|
+| Enable integration | Enabled |
+| API base URL | `https://backend.launcherforge.io/api/v1` |
+| Commerce API key | Complete secret shown once in LauncherForge |
+| Debug logging | Enable temporarily while testing |
+
+![Configure LauncherForge Commerce](/images/integrations/woocommerce/integration-settings.png)
+
+<Warning>
+Do not paste only the visible prefix. A value such as `lf_commerce_live_d122d2cc091f` is not the complete API key.
+</Warning>
+
+## 3. Create the WooCommerce product
+
+Open:
+
+```text
+Products → Add New
+```
+
+Recommended configuration:
+
+| Field | Value |
+|---|---|
+| Product type | Simple product |
+| Virtual | Enabled |
+| Downloadable | Not required |
+| Regular price | Your game price |
+| LauncherForge delivery | Enabled |
+| LauncherForge App ID | Numeric App ID from LauncherForge |
+
+![Create a WooCommerce game product](/images/integrations/woocommerce/product-basic-settings.png)
+
+![Map the product to a LauncherForge App ID](/images/integrations/woocommerce/product-launcherforge-fields.png)
+
+<Note>
+Use the numeric App ID expected by Commerce API. Do not enter the game slug.
+</Note>
+
+## 4. Run a manual test
+
+For the clearest manual test:
+
+<Steps>
+  <Step title="Create an order">
+    Open **WooCommerce → Orders → Add Order**.
+  </Step>
+
+  <Step title="Add the buyer email">
+    Enter a billing email.
+  </Step>
+
+  <Step title="Add the mapped product">
+    Add the LauncherForge-enabled WooCommerce product.
+  </Step>
+
+  <Step title="Save the order">
+    Save the order before changing its final status.
+  </Step>
+
+  <Step title="Mark it as Completed">
+    Change the order status to **Completed** and save again.
+  </Step>
+</Steps>
+
+![Mark the test order as Completed](/images/integrations/woocommerce/order-completed.png)
+
+<Warning>
+For manual testing, use **Completed**. In a real checkout, the plugin also listens for WooCommerce payment completion and paid order transitions, but the payment gateway controls the exact order-state flow.
+</Warning>
+
+## 5. Verify the result
+
+Open the order and check:
+
+- An order note confirming that LauncherForge generated the key.
+- The key displayed under the order item.
+- A LauncherForge delivery ID.
+- The new key in LauncherForge.
+
+![Game key inside the WooCommerce order](/images/integrations/woocommerce/order-generated-key.png)
+
+The customer can also see keys in:
+
+```text
+My Account → Orders → View
+```
+
+![Customer order details with the game key](/images/integrations/woocommerce/customer-order-key.png)
+
+## Email delivery
+
+The LauncherForge backend does not email the buyer for external deliveries.
+
+The WooCommerce plugin adds generated keys to customer order emails using WooCommerce's email system.
+
+This means:
+
+```text
+LauncherForge backend
+→ generates and returns the key
+
+WooCommerce plugin
+→ stores the key in the order
+
+WooCommerce
+→ sends the customer email
+```
+
+<Note>
+Your WordPress installation must be able to send email. For production, configure a reliable WordPress mail transport or SMTP plugin according to your hosting environment.
+</Note>
+
+## Quantities
+
+If the customer buys quantity `3`, the plugin requests three keys.
+
+Each unit uses a different idempotency key, so retries do not duplicate licenses.
+
+```text
+Order 1001, item 72, unit 1 → key 1
+Order 1001, item 72, unit 2 → key 2
+Order 1001, item 72, unit 3 → key 3
+```
+
+## Background processing
+
+The plugin schedules delivery work through WooCommerce Action Scheduler.
+
+Open:
+
+```text
+WooCommerce → Status → Scheduled Actions
+```
+
+Search for:
+
+```text
+lf_wc_fulfill_order
+```
+
+![LauncherForge scheduled action](/images/integrations/woocommerce/scheduled-actions.png)
+
+Possible states:
+
+- Pending.
+- Complete.
+- Failed.
+
+## Retry a failed delivery
+
+Open the order and use:
+
+```text
+Order actions → Retry LauncherForge key delivery
+```
+
+The plugin reuses deterministic idempotency values. Existing successful units are not regenerated.
+
+## Logs
+
+Enable **Debug logging** in the integration settings, then open:
+
+```text
+WooCommerce → Status → Logs
+```
+
+Select the log source:
+
+```text
+launcherforge-commerce
+```
+
+![LauncherForge WooCommerce logs](/images/integrations/woocommerce/logs.png)
+
+The plugin does not write the Commerce API key or generated game keys to the technical log.
+
+## Common problems
+
+### No LauncherForge fields appear in the product
+
+Confirm that:
+
+- WooCommerce is active.
+- The LauncherForge plugin is active.
+- The product is being edited through WooCommerce.
+
+### The order completes but no key appears
+
+Confirm that:
+
+- The integration is enabled.
+- The complete API key is saved.
+- LauncherForge delivery is enabled on the product.
+- The App ID is numeric and correct.
+- CD-Key protection is enabled for the game.
+- The Commerce API add-on is active.
+
+Then inspect Scheduled Actions and WooCommerce logs.
+
+### `INVALID_COMMERCE_API_KEY`
+
+The saved credential is invalid or contains only the prefix. Regenerate it in LauncherForge and copy the full value.
+
+### `EXTERNAL_GAME_NOT_AVAILABLE`
+
+The App ID is wrong, the game belongs to another workspace, or CD-Key protection is disabled.
+
+## Production checklist
+
+- Use a staging store first.
+- Keep debug logging disabled after testing.
+- Configure reliable WordPress email delivery.
+- Test the real payment gateway in sandbox mode.
+- Verify customer email and My Account display.
+- Test quantity greater than one.
+- Test a repeated status update to confirm no duplicate keys.
+- Protect WordPress administrator access.

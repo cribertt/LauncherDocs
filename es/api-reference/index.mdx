@@ -1,46 +1,48 @@
 ---
 title: "Referencia de Commerce API"
-description: "Genera y entrega keys de LauncherForge desde WooCommerce, tiendas personalizadas y sistemas de checkout externos."
+description: "Genera y entrega keys de LauncherForge desde tiendas externas después de confirmar el pago."
 icon: "square-terminal"
 ---
 
 # Referencia de Commerce API
 
-LauncherForge Commerce API permite que una tienda externa solicite una key de juego **después de que la tienda haya confirmado el pago**.
+LauncherForge Commerce API permite que una integración de tienda ejecutada en el servidor genere una key después de que la tienda confirme una compra.
 
 <Info>
-LauncherForge no le cobra al comprador. WooCommerce, PrestaShop, Stripe, PayPal, Mercado Pago o tu propio checkout procesan el pago. LauncherForge solamente crea y devuelve la key del juego.
+LauncherForge no cobra al comprador. WooCommerce, PrestaShop, tu página personalizada o el proveedor de pagos procesa el cobro. LauncherForge solamente genera y devuelve la key del juego.
 </Info>
 
-## Qué hace esta API
+![Página de Commerce API key de LauncherForge](/images/commerce-api/api-key-page.png)
+
+## Cómo funciona
 
 ```text
-El comprador paga en tu tienda
+El comprador completa el pago
         ↓
-Tu tienda confirma que la orden está pagada
+La tienda confirma la orden
         ↓
-Tu servidor llama a LauncherForge
+El servidor de la tienda llama a LauncherForge
         ↓
-LauncherForge crea una key
+LauncherForge genera una key
         ↓
-Tu tienda muestra o envía la key por correo
+La tienda guarda la key en la orden
         ↓
-El jugador canjea la key en el launcher
+WooCommerce o la tienda envía la key al comprador
 ```
 
 ## Antes de comenzar
 
-Necesitas cumplir todo lo siguiente:
+Necesitas:
 
-- Un plan pagado activo de LauncherForge.
-- El add-on Commerce API activo para el workspace.
+- Un plan pagado de LauncherForge con el add-on Commerce API activo.
 - Una Commerce API key completa.
 - Un juego perteneciente al mismo workspace.
 - Protección mediante CD-Key habilitada para ese juego.
-- El App ID numérico que espera Commerce API.
+- El App ID numérico de LauncherForge.
+- Una integración ejecutada en el servidor. Nunca llames Commerce API desde JavaScript público del navegador.
 
 <Warning>
-El valor que queda visible permanentemente en el dashboard, como `lf_commerce_live_d122d2cc091f`, es solo el prefijo público. No sirve para autenticar. La key completa contiene otro guion bajo seguido de un secreto largo y se muestra únicamente al generar o regenerar la credencial.
+Un valor como `lf_commerce_live_d122d2cc091f` es solamente el prefijo visible. No sirve para autenticar solicitudes. La key completa se muestra una sola vez al crearla o regenerarla.
 </Warning>
 
 ## URL base
@@ -49,73 +51,58 @@ El valor que queda visible permanentemente en el dashboard, como `lf_commerce_li
 https://backend.launcherforge.io/api/v1
 ```
 
-El endpoint de entrega es:
+El endpoint estable actual es:
 
 ```text
-POST https://backend.launcherforge.io/api/v1/external/commerce/deliveries
+POST /external/commerce/deliveries
 ```
 
-Usa HTTPS en producción.
+URL completa:
 
-## Crear una Commerce API key
-
-<Steps>
-  <Step title="Abre Commerce API">
-    En el dashboard de LauncherForge, abre `/commerce/api-key`.
-  </Step>
-
-  <Step title="Genera la credencial">
-    Genera o regenera la Commerce API key.
-  </Step>
-
-  <Step title="Copia inmediatamente la key completa">
-    Guarda el secreto completo en la configuración del servidor de tu tienda. LauncherForge no volverá a mostrar la key completa.
-  </Step>
-
-  <Step title="Nunca la expongas en frontend">
-    No pongas la key en JavaScript, HTML, un repositorio público, una aplicación móvil ni una captura de pantalla.
-  </Step>
-</Steps>
+```text
+https://backend.launcherforge.io/api/v1/external/commerce/deliveries
+```
 
 ## Autenticación
 
-Envía la key completa como Bearer token:
-
-```http
-Authorization: Bearer lf_commerce_live_<id-publico>_<secreto>
-```
-
-Ejemplo:
+Envía la Commerce API key completa como Bearer token:
 
 ```http
 Authorization: Bearer TU_COMMERCE_API_KEY_COMPLETA
 ```
 
-No envíes solamente el prefijo.
+Nunca pongas la key en:
+
+- JavaScript del navegador.
+- HTML.
+- Aplicaciones móviles.
+- Repositorios públicos.
+- Capturas de pantalla.
+- Logs visibles para el cliente.
 
 ## Idempotencia
 
-Todas las solicitudes de entrega deben incluir:
+Toda entrega debe incluir:
 
 ```http
-Idempotency-Key: <identificador-unico-de-operacion>
+Idempotency-Key: <identificador-estable-y-unico>
 ```
 
-Esto evita generar keys duplicadas cuando una tienda reintenta la misma orden pagada.
+El valor debe identificar una unidad comprada específica. Si la tienda reintenta la misma operación con el mismo valor, LauncherForge devuelve la entrega anterior en vez de generar otra key.
 
-Para WooCommerce usa un valor determinístico basado en el sitio, la orden, el ítem y la unidad:
+Formato recomendado:
 
 ```text
-wc:<id-sitio>:<id-orden>:<id-item>:<numero-unidad>
+<proveedor>:<id-tienda>:<id-orden>:<id-item>:<unidad>
 ```
 
-Ejemplo:
+Ejemplo para WooCommerce:
 
 ```text
 wc:40c19d4c0ed64ca1:1001:72:1
 ```
 
-Si el comprador adquiere tres unidades, envía tres solicitudes:
+Si el comprador adquiere tres unidades:
 
 ```text
 wc:40c19d4c0ed64ca1:1001:72:1
@@ -124,7 +111,7 @@ wc:40c19d4c0ed64ca1:1001:72:3
 ```
 
 <Note>
-Repetir el mismo `Idempotency-Key` devuelve la misma entrega y la misma key con `alreadyProcessed: true`. No genera una segunda licencia.
+Repetir el mismo `Idempotency-Key` devuelve la misma entrega y la misma key con `alreadyProcessed: true`.
 </Note>
 
 ## Crear una entrega
@@ -138,7 +125,7 @@ POST /external/commerce/deliveries
 | Header | Obligatorio | Valor |
 |---|---:|---|
 | `Authorization` | Sí | `Bearer <commerce-api-key-completa>` |
-| `Idempotency-Key` | Sí | ID estable y único para este ítem y unidad |
+| `Idempotency-Key` | Sí | ID estable para esta unidad comprada |
 | `Content-Type` | Sí | `application/json` |
 | `Accept` | Recomendado | `application/json` |
 
@@ -146,25 +133,16 @@ POST /external/commerce/deliveries
 
 | Campo | Tipo | Obligatorio | Descripción |
 |---|---|---:|---|
-| `appId` | integer | Sí | App ID numérico de LauncherForge. Debe pertenecer al workspace de la key y requerir CD-Key. |
-| `externalOrderId` | string | Sí | Identificador de la orden en la tienda externa. Máximo 160 caracteres. |
-| `externalOrderItemId` | string | No | Identificador de la línea o unidad comprada. Máximo 160 caracteres. |
-| `customerEmail` | string | No | Correo del comprador. Debe ser válido. |
-| `customerName` | string | No | Nombre del comprador. Máximo 160 caracteres. |
-| `provider` | string | No | `CUSTOM`, `WOOCOMMERCE` o `NATIVE_APP`. Por defecto `CUSTOM`. |
-| `expiresAt` | fecha ISO 8601 | No | Fecha futura opcional de expiración para la key. |
-| `note` | string | No | Nota interna de la key generada. Máximo 500 caracteres. |
+| `appId` | integer | Sí | App ID numérico de LauncherForge. |
+| `externalOrderId` | string | Sí | ID de la orden en la tienda. |
+| `externalOrderItemId` | string | No | ID de la línea o unidad comprada. |
+| `customerEmail` | string | No | Correo del comprador. |
+| `customerName` | string | No | Nombre del comprador. |
+| `provider` | string | No | `CUSTOM`, `WOOCOMMERCE` o `NATIVE_APP`. |
+| `expiresAt` | string ISO 8601 | No | Expiración futura opcional. |
+| `note` | string | No | Referencia interna para la key. |
 
-### Solicitud mínima
-
-```json
-{
-  "appId": 1,
-  "externalOrderId": "1001"
-}
-```
-
-### Solicitud recomendada para WooCommerce
+### Solicitud recomendada
 
 ```json
 {
@@ -184,7 +162,7 @@ POST /external/commerce/deliveries
 curl --request POST \
   --url "https://backend.launcherforge.io/api/v1/external/commerce/deliveries" \
   --header "Authorization: Bearer TU_COMMERCE_API_KEY_COMPLETA" \
-  --header "Idempotency-Key: tienda-personalizada:1001:1" \
+  --header "Idempotency-Key: tienda-personalizada:1001:1:1" \
   --header "Content-Type: application/json" \
   --data '{
     "appId": 1,
@@ -203,16 +181,16 @@ $commerceKey = "TU_COMMERCE_API_KEY_COMPLETA"
 
 $headers = @{
     Authorization     = "Bearer $commerceKey"
-    "Idempotency-Key" = "tienda-personalizada:1001:1"
+    "Idempotency-Key" = "tienda-personalizada:1001:1:1"
 }
 
 $body = @{
-    appId                 = 1
-    externalOrderId       = "1001"
-    externalOrderItemId   = "1"
-    customerEmail         = "comprador@example.com"
-    customerName          = "Comprador de ejemplo"
-    provider              = "CUSTOM"
+    appId                = 1
+    externalOrderId      = "1001"
+    externalOrderItemId  = "1"
+    customerEmail        = "comprador@example.com"
+    customerName         = "Comprador de ejemplo"
+    provider             = "CUSTOM"
 } | ConvertTo-Json
 
 $response = Invoke-RestMethod `
@@ -223,90 +201,6 @@ $response = Invoke-RestMethod `
     -Body $body
 
 $response | ConvertTo-Json -Depth 10
-```
-
-## Ejemplo JavaScript en servidor
-
-Ejecuta este código solamente en un servidor confiable. No lo ejecutes en JavaScript del navegador.
-
-```javascript
-const response = await fetch(
-  "https://backend.launcherforge.io/api/v1/external/commerce/deliveries",
-  {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.LAUNCHERFORGE_COMMERCE_API_KEY}`,
-      "Idempotency-Key": "tienda-personalizada:1001:1",
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      appId: 1,
-      externalOrderId: "1001",
-      externalOrderItemId: "1",
-      customerEmail: "comprador@example.com",
-      customerName: "Comprador de ejemplo",
-      provider: "CUSTOM",
-    }),
-  },
-);
-
-const result = await response.json();
-
-if (!response.ok || !result.success) {
-  throw new Error(result.message ?? `LauncherForge HTTP ${response.status}`);
-}
-
-console.log(result.data.deliveryId);
-console.log(result.data.gameKey.key);
-```
-
-## Ejemplo PHP
-
-```php
-<?php
-
-$apiKey = getenv('LAUNCHERFORGE_COMMERCE_API_KEY');
-$endpoint = 'https://backend.launcherforge.io/api/v1/external/commerce/deliveries';
-
-$payload = [
-    'appId' => 1,
-    'externalOrderId' => '1001',
-    'externalOrderItemId' => '1',
-    'customerEmail' => 'comprador@example.com',
-    'customerName' => 'Comprador de ejemplo',
-    'provider' => 'CUSTOM',
-];
-
-$ch = curl_init($endpoint);
-curl_setopt_array($ch, [
-    CURLOPT_POST => true,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HTTPHEADER => [
-        'Authorization: Bearer ' . $apiKey,
-        'Idempotency-Key: tienda-personalizada:1001:1',
-        'Content-Type: application/json',
-        'Accept: application/json',
-    ],
-    CURLOPT_POSTFIELDS => json_encode($payload, JSON_THROW_ON_ERROR),
-    CURLOPT_TIMEOUT => 30,
-]);
-
-$body = curl_exec($ch);
-$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-if ($body === false) {
-    throw new RuntimeException(curl_error($ch));
-}
-
-curl_close($ch);
-$result = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
-
-if ($status < 200 || $status >= 300 || empty($result['success'])) {
-    throw new RuntimeException($result['message'] ?? 'Falló la solicitud a LauncherForge.');
-}
-
-$gameKey = $result['data']['gameKey']['key'];
 ```
 
 ## Respuesta exitosa
@@ -338,134 +232,61 @@ $gameKey = $result['data']['gameKey']['key'];
 }
 ```
 
-### Campos de respuesta
+## Campos de respuesta
 
 | Campo | Significado |
 |---|---|
-| `deliveryId` | Identificador público de la entrega. Guárdalo junto a la orden externa. |
-| `alreadyProcessed` | `true` cuando la misma operación idempotente ya había sido procesada. |
-| `status` | Estado de entrega. Una entrega nueva devuelve `GENERATED`. |
-| `gameKey.key` | Key que debes mostrar al comprador. Trátala como dato sensible de la orden. |
-| `gameKey.status` | Estado de la key, normalmente `ACTIVE`. |
-| `gameKey.expiresAt` | Fecha de expiración o `null`. |
+| `deliveryId` | Identificador estable de la entrega. |
+| `alreadyProcessed` | `true` cuando la operación idempotente ya existía. |
+| `status` | Estado actual de la entrega. |
+| `gameKey.key` | Key que debe recibir el comprador. |
+| `gameKey.status` | Estado actual de la key. |
+| `gameKey.expiresAt` | Expiración o `null`. |
 
-## Reglas de reintento
+## Errores comunes
 
-Reintenta solamente fallos temporales:
+### `INVALID_COMMERCE_API_KEY`
 
-- Errores de red o DNS.
-- HTTP `408`.
-- HTTP `425`.
-- HTTP `429`.
-- HTTP `500` a `599`.
+La credencial es inválida, fue revocada, está incompleta o solamente contiene el prefijo visible.
 
-No reintentes automáticamente errores permanentes de configuración, como credenciales inválidas o un juego no disponible, hasta que el comerciante corrija el problema.
+### `COMMERCE_API_NOT_ENABLED`
 
-Tiempos recomendados:
+El add-on Commerce API no está activo para el workspace.
 
-```text
-Intento 1: inmediatamente
-Intento 2: después de 1 minuto
-Intento 3: después de 5 minutos
-Intento 4: después de 15 minutos
-Intento 5: después de 1 hora
-```
+### `EXTERNAL_GAME_NOT_AVAILABLE`
 
-Durante los reintentos conserva exactamente el mismo `Idempotency-Key`.
+Falló alguna de estas condiciones:
 
-## Formato de errores
+- El App ID no existe.
+- El juego pertenece a otro workspace.
+- El juego no está vinculado correctamente.
+- La protección mediante CD-Key está deshabilitada.
 
-Los errores estructurados usan este formato:
+### `IDEMPOTENCY_KEY_REQUIRED`
 
-```json
-{
-  "code": "INVALID_COMMERCE_API_KEY",
-  "message": "La Commerce API key no es válida."
-}
-```
+Falta el header `Idempotency-Key`.
 
-### Errores comunes
+### Error de validación
 
-| HTTP | Código | Causa | Solución |
-|---:|---|---|---|
-| `401` | `COMMERCE_API_KEY_REQUIRED` | Falta `Authorization: Bearer ...`. | Envía la key completa. |
-| `401` | `INVALID_COMMERCE_API_KEY` | Key incorrecta o se utilizó solamente el prefijo. | Regenera y copia la key completa. |
-| `401` | `REVOKED_COMMERCE_API_KEY` | La credencial fue revocada o regenerada. | Actualiza la tienda con la nueva key. |
-| `401` | `EXPIRED_COMMERCE_API_KEY` | La key expiró. | Genera una credencial nueva. |
-| `403` | `COMMERCE_API_NOT_INCLUDED` | Commerce API no está activa para el workspace. | Contrata o reactiva el add-on. |
-| `400` | `IDEMPOTENCY_KEY_REQUIRED` | Falta `Idempotency-Key`. | Envía un identificador estable y único. |
-| `400` | `IDEMPOTENCY_KEY_TOO_LONG` | El header supera 200 caracteres. | Usa una key determinística más corta. |
-| `400` | `EXTERNAL_GAME_NOT_AVAILABLE` | El App ID no existe, pertenece a otro workspace o el juego no requiere CD-Key. | Revisa App ID, workspace y configuración de CD-Key. |
-| `429` | Límite de solicitudes | Se superó el límite contratado. | Reduce velocidad y reintenta con espera progresiva. |
+El body contiene un campo, tipo o valor inválido.
 
-## Límites de solicitudes
+## ¿Quién envía el correo?
 
-El límite contratado aparece en la página Commerce API de LauncherForge.
+El backend de LauncherForge devuelve la key a la integración autenticada. **No envía el correo al comprador** en las entregas externas de Commerce API.
 
-- Procesa una entrega por cada unidad de producto comprada.
-- No uses este endpoint para generar inventarios de keys sin venta.
-- Ejecuta las entregas en segundo plano.
-- Maneja HTTP `429` con espera progresiva.
-- No asumas que siempre existirán headers con información del límite.
+La tienda externa realiza la entrega:
 
-## Plugin de WooCommerce
+- El plugin de WooCommerce agrega la key a los correos del pedido enviados al cliente.
+- También muestra la key en **Mi cuenta → Pedidos**.
+- Una tienda personalizada debe enviar o mostrar la key mediante su propio sistema de correo y órdenes.
 
-LauncherForge incluye un plugin instalable para WooCommerce que utiliza exactamente este endpoint.
+## Seguridad
 
-El plugin:
-
-- guarda la Commerce API key solamente en el servidor WordPress;
-- asocia cada producto o variación con un App ID de LauncherForge;
-- espera la confirmación de pago de WooCommerce;
-- crea una key por unidad comprada;
-- usa claves de idempotencia determinísticas;
-- guarda `deliveryId` y la key en el ítem de la orden;
-- muestra las keys en correos y **Mi cuenta → Pedidos**;
-- es compatible con HPOS;
-- reintenta errores temporales;
-- agrega la acción manual **Retry LauncherForge key delivery** en la orden.
-
-### Instalar el plugin
-
-<Steps>
-  <Step title="Sube el ZIP">
-    En WordPress abre **Plugins → Añadir nuevo → Subir plugin** y sube `launcherforge-commerce-for-woocommerce.zip`.
-  </Step>
-
-  <Step title="Actívalo">
-    Activa **LauncherForge Commerce for WooCommerce**.
-  </Step>
-
-  <Step title="Configura la API key">
-    Abre **WooCommerce → Ajustes → Integraciones → LauncherForge Commerce**. Conserva la URL de producción y pega la Commerce API key completa.
-  </Step>
-
-  <Step title="Asocia un producto">
-    Edita un producto, activa **LauncherForge delivery**, escribe el App ID numérico y guarda.
-  </Step>
-
-  <Step title="Realiza una compra de prueba">
-    Usa un método de pago de pruebas. Confirma que la orden quede pagada, procesando o completada. La key debe aparecer en la orden y en el correo del cliente.
-  </Step>
-</Steps>
-
-<Warning>
-La primera versión del plugin no revoca automáticamente una key después de un reembolso. Gestiona los reembolsos manualmente hasta publicar un endpoint externo estable de revocación.
-</Warning>
-
-## Requisitos de seguridad
-
-- Mantén la API key completa únicamente en el servidor.
+- Guarda la key completa solamente en el servidor.
 - Usa HTTPS.
-- Nunca registres el header `Authorization`.
-- Nunca guardes keys completas en logs técnicos.
-- Guarda `deliveryId`, ID de orden, ID de ítem e idempotencia para auditoría.
-- Envía solicitudes solamente después de confirmar el pago.
-- Permite que solo administradores configuren la asociación producto-App ID.
-- Rota inmediatamente la API key si queda expuesta.
-
-## Alcance público estable
-
-La versión pública estable actual de Commerce API documenta solamente la generación y entrega de keys.
-
-No dependas de endpoints internos del dashboard, administración, billing, overrides o base de datos. Esos contratos no forman parte de la API externa y pueden cambiar sin aviso.
+- Regenera la key si se expone.
+- Nunca registres Bearer tokens.
+- Nunca expongas la key en frontend.
+- Usa una idempotency key determinística por unidad.
+- Confirma el pago antes de solicitar la key.
+- No cambies la idempotency key solamente porque una solicitud agotó el tiempo de espera.

@@ -178,7 +178,15 @@
             "tab": "API Reference",
             "icon": "square-terminal",
             "pages": [
-              "en/api-reference/index"
+              "en/api-reference/index",
+              {
+                "group": "Integrations",
+                "icon": "plug",
+                "pages": [
+                  "en/integrations/woocommerce",
+                  "en/integrations/prestashop"
+                ]
+              }
             ]
           }
         ]
@@ -302,7 +310,15 @@
             "tab": "Referencia API",
             "icon": "square-terminal",
             "pages": [
-              "es/api-reference/index"
+              "es/api-reference/index",
+              {
+                "group": "Integraciones",
+                "icon": "plug",
+                "pages": [
+                  "es/integrations/woocommerce",
+                  "es/integrations/prestashop"
+                ]
+              }
             ]
           }
         ]
