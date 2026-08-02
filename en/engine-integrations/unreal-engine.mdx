@@ -64,38 +64,45 @@ sequenceDiagram
 
 ## Direct plugin packages
 
-<Info>
-  You can find the download link through our Discord server. Open the **Download plugin** section and select the channel for **Unreal Engine**.
-</Info>
+<Card
+  title="Download Launcher Forge Auth for Unreal Engine"
+  icon="download"
+  href="https://discord.com/invite/2DwJtD9E3T"
+>
+  <img
+    src="/images/screenshots/engine-integrations/shared/discord-download-plugin.png"
+    alt="Discord DOWNLOAD PLUGIN category with the Unreal Engine channel"
+  />
+
+  You can find the download link through our Discord server. Open the **DOWNLOAD PLUGIN** section and select the channel corresponding to your game engine.
+
+  For Unreal Engine, open:
+
+  ```text
+  # unreal-engine
+  ```
+</Card>
 
 <CardGroup cols={2}>
-  <Card title="Unreal Engine 5.5" icon="download">
+  <Card title="Unreal Engine 5.5" icon="cube">
     <Badge color="green">Available on Discord</Badge>
-
-    Download the package from the Unreal Engine channel inside **Download plugin**.
   </Card>
 
-  <Card title="Unreal Engine 5.6" icon="download">
+  <Card title="Unreal Engine 5.6" icon="cube">
     <Badge color="green">Available on Discord</Badge>
-
-    Download the package from the Unreal Engine channel inside **Download plugin**.
   </Card>
 
-  <Card title="Unreal Engine 5.7" icon="download">
+  <Card title="Unreal Engine 5.7" icon="cube">
     <Badge color="green">Available on Discord</Badge>
-
-    Download the package from the Unreal Engine channel inside **Download plugin**.
   </Card>
 
-  <Card title="Unreal Engine 5.8" icon="download">
+  <Card title="Unreal Engine 5.8" icon="cube">
     <Badge color="green">Available on Discord</Badge>
-
-    Download the package from the Unreal Engine channel inside **Download plugin**.
   </Card>
 </CardGroup>
 
 <Note>
-  Always use a package that matches the exact Unreal Engine version used by the project.
+  Always use the package that matches the exact Unreal Engine version used by your project.
 </Note>
 
 ### Other installation methods and resources
@@ -597,23 +604,36 @@ void HandleLauncherAuthFailed(
 
 ## GameLauncherClient sample project
 
-The document describes a free **Unreal Engine 5.5** sample project named `GameLauncherClient`.
-
-The project would include:
+The free `GameLauncherClient` sample project targets **Unreal Engine 5.5** and includes:
 
 - The plugin.
 - A configured GameInstance.
 - The validation flow.
 - A starting point for testing.
 
-<Card title="GameLauncherClient for UE 5.5" icon="folder-open">
-  <Badge color="gray">Download not available yet</Badge>
+<Card
+  title="Download GameLauncherClient for UE 5.5"
+  icon="folder-open"
+  href="https://discord.com/invite/2DwJtD9E3T"
+>
+  <img
+    src="/images/screenshots/engine-integrations/shared/discord-download-templates.png"
+    alt="Discord DOWNLOAD TEMPLATES category with the GameLauncherClient sample-project channel"
+  />
 
-  The document does not provide a public URL. The project targets UE 5.5 and must be recompiled for later engine versions.
+  You can find the download link through our Discord server. Open the **DOWNLOAD TEMPLATES** section and select the channel corresponding to your game engine.
+
+  For the Unreal Engine sample project, open:
+
+  ```text
+  # game-launcher-cliente-ue
+  ```
 </Card>
 
 <Note>
-  According to the provided document, the plugin is free and must not be resold separately.
+  The project targets Unreal Engine 5.5. Later versions may require recompilation.
+
+  The plugin is free and must not be commercialized or resold separately.
 </Note>
 
 ---
@@ -663,9 +683,9 @@ The project would include:
 - `Validate Launch Token` uses the correct URL.
 - `On Success` continues only when `Valid` is `true`.
 - `On Failed` blocks access in a controlled way.
-- The token is not hardcoded.
-- The request uses `{ "token": "TOKEN" }`.
-- The final test was completed from a build linked to the launcher.
+- No credential is manually created, entered, or reused.
+- The plugin performs the validation request internally.
+- The final test was completed from a linked build started through Launcher Forge.
 
 ## Related guides
 
