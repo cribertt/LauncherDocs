@@ -1,266 +1,197 @@
 ---
 title: "Unreal Engine"
-description: "Instala Launcher Auth Plugin y valida que el juego haya sido iniciado desde una sesión autorizada de Launcher Forge."
+description: "Instala Launcher Forge Auth, valida el launch token y utiliza los datos autenticados desde Blueprint o C++."
 icon: "gamepad"
 ---
 
 # Integración con Unreal Engine
 
-**Launcher Auth Plugin** permite que un juego desarrollado con Unreal Engine valide si fue iniciado desde una sesión autorizada de Launcher Forge.
+**Launcher Forge Auth** permite que un juego desarrollado con Unreal Engine valide si fue iniciado desde una sesión autorizada de Launcher Forge.
 
-Cuando el jugador inicia el juego desde el launcher:
+Cuando un jugador inicia el juego desde el launcher:
 
 1. Launcher Forge genera un token temporal.
-2. El launcher entrega el token al ejecutable mediante `--launchToken`.
-3. El plugin lee el argumento al iniciar.
-4. El juego envía el token al endpoint de validación.
-5. El backend responde con los datos validados.
-6. Blueprint o C++ continúa según el resultado.
+2. El launcher inicia el ejecutable con `--launchToken`.
+3. El plugin lee el token desde los argumentos del proceso.
+4. El plugin envía el token al endpoint de validación.
+5. El backend devuelve `id`, `email` y `valid`.
+6. El juego continúa o bloquea el acceso según el resultado.
 
 <Card
   title="Comprender los launch tokens"
   icon="shield-halved"
   href="/es/game-authentication/launch-tokens"
 >
-  Revisa el flujo completo de generación, entrega y validación del token temporal entre el launcher y el juego.
+  Revisa el flujo completo de generación, entrega y validación entre el launcher y el juego.
 </Card>
 
 <Warning>
-  La validación descrita en esta guía corresponde a la conexión técnica entre el **launcher** y el **juego**.
-
-  No reemplaza el registro, inicio de sesión, propiedad del juego ni canje de CD keys de los usuarios finales.
+  Esta integración valida la conexión entre el **launcher** y el **juego**. No reemplaza el registro, el inicio de sesión, la biblioteca ni el canje de CD keys de los jugadores.
 </Warning>
 
-## Arquitectura de validación
+## Flujo de validación
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant L as Launcher Forge Launcher
+    participant L as Launcher Forge
     participant G as Juego Unreal Engine
-    participant P as Launcher Auth Plugin
-    participant B as Backend de Launcher Forge
+    participant P as Launcher Forge Auth
+    participant B as Backend
 
-    L->>G: Inicia el ejecutable con --launchToken=TOKEN
-    G->>P: Inicializa el GameInstance
-    P->>P: Lee el argumento de inicio
-    P->>B: POST { "token": "TOKEN" }
+    L->>G: Inicia el juego con --launchToken=TOKEN
+    G->>P: GameInstance inicia la validación
+    P->>P: Lee el argumento --launchToken
+    P->>B: POST { token }
 
     alt Token válido
         B-->>P: success + id + email + valid
         P-->>G: On Success
     else Token ausente, inválido o expirado
-        B-->>P: Error de validación
+        B-->>P: Error
         P-->>G: On Failed
     end
 ```
 
-## Datos disponibles
+## Disponibilidad
 
-Después de una validación correcta, el plugin expone únicamente los datos necesarios de la sesión:
+<CardGroup cols={2}>
+  <Card title="Instalación desde Fab" icon="store">
+    <Badge color="gray">No disponible por el momento</Badge>
 
-| Campo | Tipo | Descripción |
-| --- | --- | --- |
-| `Id` | `string` | Identificador autenticado devuelto por el backend. |
-| `Email` | `string` | Correo asociado con la sesión validada. |
-| `Valid` | `boolean` | Confirma que el launch token fue aceptado. |
+    La distribución mediante Fab todavía no está habilitada. Utiliza la instalación manual.
+  </Card>
 
-El plugin no expone como campos separados:
+  <Card title="Proyecto de ejemplo para UE 5.5" icon="folder-open">
+    <Badge color="gray">Descarga todavía no disponible</Badge>
 
-- `username`
-- `userId`
-- `gameId`
-- `launcherId`
+    El documento describe `GameLauncherClient`, pero no incluye una URL pública de descarga.
+  </Card>
+</CardGroup>
+
+### Paquetes directos del plugin
+
+El documento todavía no entrega enlaces reales para los paquetes por versión. Se mantienen marcados como no disponibles hasta que las URLs oficiales sean publicadas.
+
+<CardGroup cols={2}>
+  <Card title="Unreal Engine 5.5" icon="download">
+    <Badge color="gray">No disponible</Badge>
+  </Card>
+
+  <Card title="Unreal Engine 5.6" icon="download">
+    <Badge color="gray">No disponible</Badge>
+  </Card>
+
+  <Card title="Unreal Engine 5.7" icon="download">
+    <Badge color="gray">No disponible</Badge>
+  </Card>
+
+  <Card title="Unreal Engine 5.8" icon="download">
+    <Badge color="gray">No disponible</Badge>
+  </Card>
+</CardGroup>
+
+<Note>
+  Utiliza siempre un paquete compatible con la versión exacta de Unreal Engine de tu proyecto.
+</Note>
 
 ---
 
-## Antes de comenzar
+## Instalación manual
 
-Comprueba lo siguiente:
+La instalación manual coloca el plugin dentro del proyecto.
 
-- El juego fue creado y publicado en Launcher Forge.
-- El juego está vinculado con el launcher.
-- La integración de launch tokens está habilitada en el backend.
-- Tienes la URL del endpoint de validación.
-- El plugin corresponde a la misma versión de Unreal Engine utilizada por el proyecto.
-- El proyecto puede compilar plugins C++.
+<Steps>
+  <Step title="Descomprime el paquete">
+    Descomprime `LauncherAuthPlugin.zip` correspondiente a tu versión de Unreal Engine.
+  </Step>
 
-Ejemplo de endpoint:
+  <Step title="Abre la carpeta del proyecto">
+    Ve a la carpeta que contiene `YourProject.uproject`.
+  </Step>
 
-```text
-http://backend.launcherforge.io/api/v1/games/auth/validate-launch-token
-```
+  <Step title="Crea la carpeta Plugins">
+    Si todavía no existe, crea:
 
----
+    ```text
+    YourProject/
+    └── Plugins/
+    ```
+  </Step>
 
-## Instalar Launcher Auth Plugin
+  <Step title="Copia el plugin">
+    Descomprime el plugin dentro de `Plugins`.
 
-<Tabs>
-  <Tab title="Instalación desde Fab">
-    Después de agregar el plugin a tu biblioteca de Fab, instálalo en la versión de Unreal Engine utilizada por el proyecto.
+    La estructura esperada es:
 
-    <Steps>
-      <Step title="Abre Epic Games Launcher">
-        Inicia Epic Games Launcher con la cuenta que contiene el plugin.
-      </Step>
+    ```text
+    YourProject/
+    ├── YourProject.uproject
+    └── Plugins/
+        └── LauncherForgeAuth/
+            ├── Binaries/
+            ├── Content/
+            ├── Intermediate/
+            ├── Resources/
+            ├── Source/
+            └── LauncherForgeAuth.uplugin
+    ```
+  </Step>
 
-      <Step title="Abre la biblioteca de Fab">
-        Ve a tu biblioteca y busca **Forge Launcher Auth**.
-      </Step>
+  <Step title="Regenera los archivos del proyecto">
+    Haz clic derecho sobre `YourProject.uproject` y selecciona:
 
-      <Step title="Instala el plugin">
-        Selecciona la misma versión de Unreal Engine utilizada por el proyecto.
-      </Step>
+    ```text
+    Generate Visual Studio project files
+    ```
+  </Step>
 
-      <Step title="Abre el proyecto">
-        Inicia el proyecto desde Unreal Engine.
-      </Step>
+  <Step title="Compila el proyecto">
+    Abre `YourProject.sln` y vuelve a compilar.
+  </Step>
 
-      <Step title="Activa el plugin">
-        Ve a **Edit → Plugins**, busca **Launcher Auth Plugin** y actívalo.
-      </Step>
+  <Step title="Comprueba el plugin">
+    Abre Unreal Engine y ve a **Edit → Plugins**. Confirma que **Launcher Forge Auth** esté activado.
+  </Step>
+</Steps>
 
-      <Step title="Reinicia Unreal Engine">
-        Reinicia el editor cuando Unreal Engine lo solicite.
-      </Step>
-    </Steps>
+<Frame caption="Estructura del plugin dentro de la carpeta Plugins">
+  <img
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-manual-plugin-folder.png"
+    alt="Carpeta LauncherForgeAuth instalada dentro de Plugins"
+  />
+</Frame>
 
-    {/* PHOTO AREA: Fab Library showing Forge Launcher Auth. */}
-    <Frame caption="Forge Launcher Auth dentro de la biblioteca de Fab">
-      <img
-        src="/images/screenshots/unreal-fab-library.png"
-        alt="Biblioteca de Fab mostrando Forge Launcher Auth"
-      />
-    </Frame>
-
-    {/* PHOTO AREA: Epic Games Launcher showing the installed engine version. */}
-    <Frame caption="Plugin instalado para una versión específica de Unreal Engine">
-      <img
-        src="/images/screenshots/unreal-fab-engine-version.png"
-        alt="Epic Games Launcher mostrando la versión de Unreal Engine donde fue instalado el plugin"
-      />
-    </Frame>
-
-    {/* PHOTO AREA: Unreal Engine Plugin Browser with plugin enabled. */}
-    <Frame caption="Launcher Auth Plugin activado en Unreal Engine">
-      <img
-        src="/images/screenshots/unreal-plugin-enabled.png"
-        alt="Plugin Browser de Unreal Engine con Launcher Auth Plugin activado"
-      />
-    </Frame>
-  </Tab>
-
-  <Tab title="Instalación manual">
-    También puedes instalar el plugin directamente dentro del proyecto.
-
-    <Note>
-      Utiliza el paquete compilado para la versión exacta de Unreal Engine utilizada por tu proyecto.
-    </Note>
-
-    {/* TODO: Añadir aquí los enlaces oficiales de descarga para UE 5.5, 5.6, 5.7 y 5.8. */}
-
-    <Steps>
-      <Step title="Descarga el paquete correcto">
-        Descarga `LauncherAuthPlugin.zip` correspondiente a la versión de Unreal Engine del proyecto.
-      </Step>
-
-      <Step title="Abre la carpeta del proyecto">
-        Ve a la carpeta que contiene `YourProject.uproject`.
-      </Step>
-
-      <Step title="Crea la carpeta Plugins">
-        Si no existe, crea una carpeta llamada:
-
-        ```text
-        Plugins
-        ```
-      </Step>
-
-      <Step title="Descomprime el plugin">
-        Descomprime el paquete dentro de la carpeta `Plugins`.
-
-        La estructura debería quedar similar a:
-
-        ```text
-        YourProject/
-        ├── YourProject.uproject
-        └── Plugins/
-            └── LauncherAuthPlugin/
-                ├── LauncherAuthPlugin.uplugin
-                ├── Binaries/
-                ├── Resources/
-                └── Source/
-        ```
-      </Step>
-
-      <Step title="Regenera los archivos del proyecto">
-        En proyectos Blueprint o C++, haz clic derecho sobre `YourProject.uproject` y selecciona:
-
-        ```text
-        Generate Visual Studio project files
-        ```
-      </Step>
-
-      <Step title="Recompila el proyecto">
-        Abre `YourProject.sln` y compila nuevamente el proyecto.
-      </Step>
-
-      <Step title="Confirma la activación">
-        Abre Unreal Engine, ve a **Edit → Plugins** y confirma que **Launcher Auth Plugin** está activado.
-      </Step>
-    </Steps>
-
-    {/* PHOTO AREA: Project directory showing the Plugins folder. */}
-    <Frame caption="Plugin instalado dentro de la carpeta Plugins del proyecto">
-      <img
-        src="/images/screenshots/unreal-manual-plugin-folder.png"
-        alt="Carpeta de un proyecto Unreal Engine mostrando LauncherAuthPlugin dentro de Plugins"
-      />
-    </Frame>
-
-    {/* PHOTO AREA: Unreal Engine Plugin Browser with plugin enabled. */}
-    <Frame caption="Launcher Auth Plugin listo para utilizarse">
-      <img
-        src="/images/screenshots/unreal-plugin-enabled.png"
-        alt="Plugin Browser de Unreal Engine mostrando Launcher Auth Plugin activado"
-      />
-    </Frame>
-  </Tab>
-</Tabs>
-
-## Compatibilidad de versiones
-
-Launcher Auth Plugin es un plugin C++.
-
-Los binarios precompilados dependen de la versión de Unreal Engine para la cual fueron generados.
+<Frame caption="Launcher Forge Auth activado en Unreal Engine">
+  <img
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-plugin-enabled.png"
+    alt="Plugin Browser mostrando Launcher Forge Auth activado"
+  />
+</Frame>
 
 <Warning>
-  Un paquete compilado para una versión del motor no garantiza compatibilidad automática con versiones posteriores.
+  Los binarios de un plugin C++ dependen de la versión del motor. Un paquete compilado para otra versión puede requerir recompilación.
 </Warning>
-
-Utiliza siempre el paquete correspondiente a la versión exacta del proyecto.
-
-Según el documento de integración actual, las versiones **Unreal Engine 5.6 o superiores** deben validarse antes de considerarse oficialmente compatibles.
 
 ---
 
-## Configurar un GameInstance personalizado
+## Configuración en GameInstance
 
-El lugar recomendado para iniciar la validación es un Blueprint basado en `GameInstance`.
+El lugar recomendado para iniciar la validación es un Blueprint personalizado basado en `GameInstance`.
 
-Esto permite validar la conexión antes de cargar:
+Esto permite validar temprano, antes de cargar:
 
 - Datos del jugador.
 - Menús online.
 - Partidas guardadas.
-- Servicios protegidos.
-- Sistemas que dependan de una sesión autorizada.
+- Funciones protegidas.
+- Sistemas que dependan de una conexión válida con el launcher.
 
-## 1. Crea el GameInstance
+## 1. Crea y asigna el GameInstance
 
 <Steps>
-  <Step title="Crea una clase Blueprint">
-    Crea un Blueprint basado en `GameInstance`.
+  <Step title="Crea el Blueprint">
+    Crea una clase Blueprint basada en `GameInstance`.
   </Step>
 
   <Step title="Asigna un nombre">
@@ -272,63 +203,47 @@ Esto permite validar la conexión antes de cargar:
   </Step>
 
   <Step title="Abre Project Settings">
-    Ve a **Edit → Project Settings**.
+    Ve a **Edit → Project Settings → Maps & Modes**.
   </Step>
 
-  <Step title="Abre Maps & Modes">
-    Busca la sección **Maps & Modes**.
-  </Step>
-
-  <Step title="Asigna Game Instance Class">
+  <Step title="Selecciona la clase">
     En **Game Instance Class**, selecciona `BP_GameInstance`.
   </Step>
 </Steps>
 
-{/* PHOTO AREA: Project Settings > Maps & Modes > Game Instance Class. */}
-<Frame caption="Game Instance Class configurado en Project Settings">
+<Frame caption="BP_GameInstance asignado en Maps & Modes">
   <img
-    src="/images/screenshots/unreal-game-instance-class.png"
-    alt="Project Settings de Unreal Engine mostrando BP_GameInstance como Game Instance Class"
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-game-instance-class.png"
+    alt="Project Settings mostrando BP_GameInstance como Game Instance Class"
   />
 </Frame>
 
 ## 2. Configura Event Init
 
-Abre `BP_GameInstance` y crea este flujo:
+Dentro del Event Graph de `BP_GameInstance`, utiliza:
 
 ```text
-Event Init
-    ↓
-Delay 0.5
-    ↓
-Validate Launch Token
+Event Init → Delay 0.5 → Validate Launch Token
 ```
 
 <Warning>
-  Agrega un `Delay` de **0.5 segundos** antes de llamar `Validate Launch Token`.
+  Agrega un delay de **0.5 segundos** antes de ejecutar `Validate Launch Token`.
 
-  En builds empaquetadas, algunos sistemas de inicio pueden no estar completamente inicializados en el momento exacto en que se ejecuta `Event Init`.
+  En una build empaquetada, el subsystem o los argumentos de lanzamiento pueden no estar listos exactamente durante el primer frame de `Init`.
 </Warning>
 
-Sin este delay, el plugin puede:
-
-- No encontrar `--launchToken`.
-- Fallar al acceder al subsystem.
-- Devolver un error de autenticación aunque el launcher haya enviado correctamente el token.
-
-{/* PHOTO AREA: Blueprint Event Init -> Delay 0.5 -> Validate Launch Token. */}
-<Frame caption="Flujo recomendado dentro de BP_GameInstance">
+<Frame caption="Event Init, Delay 0.5 y Validate Launch Token">
   <img
-    src="/images/screenshots/unreal-game-instance-validation-flow.png"
-    alt="Blueprint mostrando Event Init, Delay 0.5 y Validate Launch Token"
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-blueprint-init-validation.png"
+    alt="Blueprint mostrando el flujo de inicialización y validación"
   />
 </Frame>
 
 ---
 
-## Configurar Validate Launch Token
+## Nodo Validate Launch Token
 
-El nodo principal del plugin es:
+El nodo principal es:
 
 ```text
 Validate Launch Token
@@ -340,93 +255,78 @@ Validate Launch Token
 | --- | --- |
 | **Backend Url** | URL completa del endpoint que valida el launch token. |
 
-Ejemplo:
+Endpoint utilizado en el documento:
 
 ```text
-http://backend.launcherforge.io/api/v1/games/auth/validate-launch-token
+https://backend.launcherforge.io/api/v1/games/auth/validate-launch-token
 ```
 
 ### Delegates de salida
 
-| Delegate | Cuándo se ejecuta |
+| Delegate | Comportamiento |
 | --- | --- |
-| **On Success** | El backend aceptó el token y devolvió datos válidos. |
-| **On Failed** | El token falta, expiró, es inválido o falló la solicitud HTTP. |
+| **On Success** | Se ejecuta cuando el backend valida correctamente el token. |
+| **On Failed** | Se ejecuta cuando el token falta, expiró, es inválido o falla la solicitud HTTP. |
 
-## Flujo recomendado
+<Frame caption="Nodo principal y datos autenticados">
+  <img
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-blueprint-node-overview.png"
+    alt="Blueprint mostrando Validate Launch Token y los datos autenticados"
+  />
+</Frame>
 
-```mermaid
-flowchart TD
-    A[Event Init] --> B[Delay 0.5]
-    B --> C[Validate Launch Token]
-    C -->|On Success| D[Leer Id, Email y Valid]
-    D --> E[Continuar al menú o cargar datos]
-    C -->|On Failed| F[Mostrar error controlado]
-    F --> G[Bloquear acceso o volver al launcher]
-```
+### On Success
 
-### En On Success
+Utiliza `On Success` para:
 
-Puedes:
-
-- Guardar los datos autenticados durante la sesión.
+- Confirmar que `Valid` sea `true`.
+- Guardar o utilizar `Id` y `Email`.
 - Continuar al menú principal.
-- Cargar información específica.
+- Cargar datos específicos.
 - Habilitar sistemas protegidos.
 - Permitir el acceso al juego.
 
-### En On Failed
+### On Failed
 
-Puedes:
+Utiliza `On Failed` para:
 
-- Mostrar un error de autenticación.
+- Mostrar un error controlado.
 - Bloquear el acceso.
-- Indicar que el juego debe iniciarse desde Launcher Forge.
+- Pedir que el juego sea iniciado desde Launcher Forge.
 - Volver a una pantalla inicial.
 - Cerrar el juego de forma controlada.
 
-{/* PHOTO AREA: Complete Blueprint with success and failed branches. */}
-<Frame caption="Blueprint completo con On Success y On Failed">
+<Frame caption="Flujo Blueprint completo con éxito y error">
   <img
-    src="/images/screenshots/unreal-validation-success-failed.png"
-    alt="Blueprint mostrando Validate Launch Token y las ramas On Success y On Failed"
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-blueprint-complete-flow.png"
+    alt="Blueprint completo con ramas On Success y On Failed"
   />
 </Frame>
 
 ---
 
-## Contrato del launch token
+## Contrato del token
 
-El token es generado por Launcher Forge cuando el jugador inicia el juego.
+Launcher Forge genera el token cuando el jugador inicia el juego.
 
 No debes:
 
 - Guardarlo dentro del proyecto.
-- Escribirlo directamente en Blueprint.
+- Hardcodearlo en Blueprint.
 - Hardcodearlo en C++.
 - Almacenarlo en archivos de configuración.
 - Mostrarlo en la interfaz.
 - Imprimirlo completo en logs de producción.
 
-El launcher inicia el juego utilizando:
+El launcher entrega el token mediante:
 
 ```text
 --launchToken=TOKEN
 ```
 
-No se requieren argumentos de lanzamiento adicionales para esta integración.
-
-{/* PHOTO AREA: Game executable launched with --launchToken. */}
-<Frame caption="Ejecutable iniciado con el argumento launchToken">
-  <img
-    src="/images/screenshots/unreal-launch-token-argument.png"
-    alt="Terminal mostrando YourGame.exe con el argumento --launchToken"
-  />
-</Frame>
+No se requieren argumentos adicionales para esta integración.
 
 ## Request enviado por el plugin
-
-El plugin envía una solicitud HTTP con este body:
 
 ```json
 {
@@ -434,21 +334,7 @@ El plugin envía una solicitud HTTP con este body:
 }
 ```
 
-<Note>
-  La presencia del argumento no significa que la conexión ya esté validada. El juego debe esperar la respuesta del backend.
-</Note>
-
-{/* PHOTO AREA: Backend request inspector showing token body. */}
-<Frame caption="Body enviado al endpoint de validación">
-  <img
-    src="/images/screenshots/unreal-validation-request-body.png"
-    alt="Inspector del backend mostrando un request con el campo token"
-  />
-</Frame>
-
 ## Respuesta esperada
-
-El backend debe responder con esta estructura:
 
 ```json
 {
@@ -462,318 +348,312 @@ El backend debe responder con esta estructura:
 ```
 
 <ResponseField name="success" type="boolean">
-  Indica que la solicitud fue procesada correctamente.
+  Indica que el backend procesó correctamente la validación.
 </ResponseField>
 
 <ResponseField name="data.id" type="string">
-  Identificador autenticado devuelto por el backend.
+  Identificador autenticado de la cuenta o sesión.
 </ResponseField>
 
 <ResponseField name="data.email" type="string">
-  Correo asociado con la sesión validada.
+  Correo del usuario autenticado.
 </ResponseField>
 
 <ResponseField name="data.valid" type="boolean">
   Confirma que el backend aceptó el launch token.
 </ResponseField>
 
-{/* PHOTO AREA: Break Struct or validated data in Blueprint. */}
-<Frame caption="Datos disponibles después de una validación correcta">
-  <img
-    src="/images/screenshots/unreal-authenticated-data.png"
-    alt="Blueprint mostrando Id, Email y Valid después de validar el token"
-  />
-</Frame>
+El plugin expone actualmente:
+
+```text
+Id
+Email
+Valid
+```
+
+Ya no expone como campos separados:
+
+```text
+username
+userId
+gameId
+launcherId
+```
 
 ---
 
-## Uso en Blueprint
+## Prueba inicial dentro del editor
 
-El flujo recomendado es:
+Antes de compilar y vincular el juego con un launcher, puedes confirmar que la integración fue inicializada revisando el Output Log.
 
-```text
-Event Init
-    ↓
-Delay 0.5
-    ↓
-Validate Launch Token
-    ├── On Success
-    └── On Failed
-```
+En este escenario es correcto observar:
 
-Ejemplo de lógica:
+- Token vacío.
+- `Length: 0`.
+- Una advertencia indicando que la conexión fue inicializada, pero requiere un token válido.
 
-<Tabs>
-  <Tab title="On Success">
-    1. Confirma que `Valid` sea `true`.
-    2. Guarda `Id` y `Email` cuando sean necesarios durante la sesión.
-    3. Carga los sistemas dependientes de autenticación.
-    4. Abre el menú principal o continúa el inicio.
-  </Tab>
-
-  <Tab title="On Failed">
-    1. Muestra un mensaje breve.
-    2. Bloquea los sistemas protegidos.
-    3. Indica que el juego debe iniciarse desde Launcher Forge.
-    4. Vuelve a una pantalla segura o cierra el juego.
-  </Tab>
-</Tabs>
-
-Ejemplo de mensaje visible:
-
-```text
-No fue posible validar el inicio del juego desde Launcher Forge.
-```
-
-Evita mostrar al jugador:
-
-- El token.
-- La URL interna completa.
-- Headers HTTP.
-- Stack traces.
-- Detalles sensibles del backend.
-
-{/* PHOTO AREA: Print String or UI widget showing authenticated identity. */}
-<Frame caption="Ejemplo de datos autenticados utilizados desde Blueprint">
+<Frame caption="Resultado no válido antes de iniciar desde el launcher">
   <img
-    src="/images/screenshots/unreal-authenticated-user-ui.png"
-    alt="Blueprint o widget mostrando el identificador o correo después de una validación exitosa"
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-validation-failed-widget.png"
+    alt="Widget de prueba mostrando una validación no válida"
   />
 </Frame>
+
+<Frame caption="Output Log con token vacío dentro del editor">
+  <img
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-editor-empty-token-log.png"
+    alt="Output Log mostrando Length 0 y la advertencia de token requerido"
+  />
+</Frame>
+
+Ejemplo de mensajes esperados:
+
+```text
+[LauncherForgeAuth] Launch token found. Length: 0
+[LauncherForgeAuth] Request method: POST
+[LauncherForgeAuth] HTTP request started.
+[LauncherForgeAuth] Connection was initialized, but it requires a valid token.
+```
+
+<Info>
+  Este resultado confirma que el plugin y la conexión fueron inicializados. No confirma una autenticación válida, porque el editor no recibió un token generado por el launcher.
+</Info>
+
+---
+
+## Prueba con una build vinculada
+
+La validación completa debe probarse con:
+
+1. El juego compilado.
+2. La build publicada.
+3. El juego vinculado con el launcher.
+4. El ejecutable iniciado desde Launcher Forge.
+5. Un launch token generado durante ese inicio.
+
+Cuando el flujo termina correctamente:
+
+- `Valid` es `true`.
+- `Email` contiene el correo autenticado.
+- `Id` contiene el identificador devuelto.
+- Se ejecuta `On Success`.
+
+<Frame caption="Juego autenticado después de iniciarlo desde Launcher Forge">
+  <img
+    src="/images/screenshots/engine-integrations/unreal-engine/unreal-validation-success-widget.png"
+    alt="Widget de prueba mostrando Valid, Email e Id"
+  />
+</Frame>
+
+<Check>
+  La conexión es válida cuando el token generado por el launcher es leído por el juego, aceptado por el backend y devuelto mediante `On Success`.
+</Check>
 
 ---
 
 ## Uso en C++
 
-El plugin está diseñado principalmente para Blueprint, pero un proyecto C++ también puede acceder a los datos de autenticación mediante las clases del plugin.
+Los proyectos C++ pueden utilizar las clases públicas del plugin.
 
-Casos habituales:
+### Clases principales
 
-- Comprobar si la sesión fue validada.
-- Leer los datos autenticados.
-- Reaccionar ante éxito o error.
-- Integrar la validación con sistemas propios del proyecto.
+| Clase | Responsabilidad |
+| --- | --- |
+| `UValidateLaunchTokenAsync` | Ejecuta la validación contra el backend. Es la clase utilizada por el nodo Blueprint. |
+| `ULauncherForgeAuthSubsystem` | Guarda el token leído desde `--launchToken` y almacena el usuario después de una validación exitosa. |
+| `FLauncherForgeAuthUser` | Contiene `Id`, `Email` y `Valid`. |
 
-## Patrón recomendado
+## Flujo recomendado en C++
 
-1. Espera aproximadamente `0.5` segundos después de la inicialización.
-2. Accede al subsystem del plugin desde el `GameInstance`.
-3. Inicia o espera la validación.
-4. Lee los datos únicamente después de un resultado exitoso.
-5. No continúes cuando la validación falle.
+```text
+GameInstance::Init()
+→ Delay 0.5 segundos
+→ Validate Launch Token
+→ On Success: leer FLauncherForgeAuthUser
+→ On Failed: manejar el error
+```
 
 <Warning>
-  La misma regla de inicialización se aplica en C++: evita validar exactamente en el primer instante de `Init`.
+  Mantén el delay de `0.5` segundos también en C++. Esto evita problemas de inicialización temprana en packaged builds.
 </Warning>
 
-Ejemplo conceptual:
+### Ejemplo para el archivo `.cpp`
 
 ```cpp
-UGameInstance* GameInstance = GetGameInstance();
-if (!GameInstance)
+#include "MyGameInstance.h"
+#include "TimerManager.h"
+#include "ValidateLaunchTokenAsync.h"
+#include "LauncherForgeAuthTypes.h"
+
+void UMyGameInstance::Init()
 {
-    return;
+    Super::Init();
+
+    GetWorld()->GetTimerManager().SetTimer(
+        LauncherAuthTimerHandle,
+        this,
+        &UMyGameInstance::ValidateLauncherSession,
+        0.5f,
+        false
+    );
 }
 
-// Accede al subsystem de Launcher Auth desde el GameInstance.
-// Lee los datos solo después de una validación exitosa.
+void UMyGameInstance::ValidateLauncherSession()
+{
+    const FString BackendUrl =
+        TEXT("https://your-api.com/api/v1/games/auth/validate-launch-token");
+
+    UValidateLaunchTokenAsync* AuthNode =
+        UValidateLaunchTokenAsync::ValidateLaunchToken(
+            this,
+            BackendUrl
+        );
+
+    if (!AuthNode)
+    {
+        UE_LOG(
+            LogTemp,
+            Error,
+            TEXT("[LauncherForgeAuth] Failed to create validation node.")
+        );
+        return;
+    }
+
+    AuthNode->OnSuccess.AddDynamic(
+        this,
+        &UMyGameInstance::HandleLauncherAuthSuccess
+    );
+
+    AuthNode->OnFailed.AddDynamic(
+        this,
+        &UMyGameInstance::HandleLauncherAuthFailed
+    );
+
+    AuthNode->Activate();
+}
+
+void UMyGameInstance::HandleLauncherAuthSuccess(
+    FLauncherForgeAuthUser User
+)
+{
+    UE_LOG(
+        LogTemp,
+        Log,
+        TEXT("[LauncherForgeAuth] Authenticated user: %s"),
+        *User.Email
+    );
+}
+
+void UMyGameInstance::HandleLauncherAuthFailed(
+    FString ErrorMessage
+)
+{
+    UE_LOG(
+        LogTemp,
+        Error,
+        TEXT("[LauncherForgeAuth] Authentication failed: %s"),
+        *ErrorMessage
+    );
+}
 ```
 
-El documento fuente no define una API C++ pública completa ni nombres definitivos de métodos para este ejemplo. Utiliza las clases expuestas por la versión instalada del plugin.
+### Extracto para el archivo `.h`
 
-{/* PHOTO AREA: IDE showing access to the plugin subsystem. */}
-<Frame caption="Acceso al subsystem del plugin desde un proyecto C++">
-  <img
-    src="/images/screenshots/unreal-cpp-subsystem.png"
-    alt="IDE mostrando código C++ accediendo al subsystem de Launcher Auth"
-  />
-</Frame>
+```cpp
+#include "LauncherForgeAuthTypes.h"
+
+FTimerHandle LauncherAuthTimerHandle;
+
+UFUNCTION()
+void ValidateLauncherSession();
+
+UFUNCTION()
+void HandleLauncherAuthSuccess(
+    FLauncherForgeAuthUser User
+);
+
+UFUNCTION()
+void HandleLauncherAuthFailed(
+    FString ErrorMessage
+);
+```
+
+<Note>
+  El código anterior reproduce el ejemplo del documento. Debes integrarlo dentro de la declaración real de tu clase `UGameInstance` y sus archivos correspondientes.
+</Note>
 
 ---
 
-## Probar la integración
+## Proyecto de ejemplo GameLauncherClient
 
-La prueba principal debe realizarse con una build empaquetada iniciada desde Launcher Forge.
+El documento describe un proyecto gratuito para **Unreal Engine 5.5** llamado `GameLauncherClient`.
 
-## Flujo recomendado
+El proyecto incluiría:
 
-<Steps>
-  <Step title="Empaqueta el juego">
-    Genera primero una build de tipo **Development** para facilitar el diagnóstico.
-  </Step>
+- El plugin incorporado.
+- Un GameInstance configurado.
+- El flujo de validación.
+- Una base para realizar pruebas.
 
-  <Step title="Publica la build">
-    Sube la versión mediante Launcher Forge CLI.
-  </Step>
+<Card title="GameLauncherClient para UE 5.5" icon="folder-open">
+  <Badge color="gray">Descarga todavía no disponible</Badge>
 
-  <Step title="Abre el launcher">
-    Inicia sesión con una cuenta de jugador válida.
-  </Step>
+  El documento no contiene una URL pública. El proyecto está preparado únicamente para UE 5.5 y requiere recompilación para versiones posteriores.
+</Card>
 
-  <Step title="Instala el juego">
-    Descarga la build desde el launcher.
-  </Step>
-
-  <Step title="Inicia el juego">
-    Selecciona **Play** y permite que Launcher Forge genere y entregue el token.
-  </Step>
-
-  <Step title="Comprueba el resultado">
-    Verifica que `On Success` sea ejecutado y que `Valid` sea `true`.
-  </Step>
-</Steps>
-
-<Info>
-  Probar únicamente desde el editor no reproduce necesariamente el mismo orden de inicialización de una build empaquetada.
-</Info>
-
-### Prueba manual del argumento
-
-Para una prueba técnica controlada, el ejecutable puede iniciarse con:
-
-<CodeGroup>
-```powershell PowerShell
-.\YourGame.exe "--launchToken=TOKEN"
-```
-
-```text Command Prompt
-YourGame.exe --launchToken=TOKEN
-```
-</CodeGroup>
-
-<Warning>
-  Utiliza únicamente un token temporal válido generado para la prueba. No guardes el token dentro del proyecto ni lo reutilices como configuración permanente.
-</Warning>
+<Note>
+  Según el documento proporcionado, el plugin es gratuito y no debe comercializarse por separado.
+</Note>
 
 ---
 
-## Errores frecuentes
+## Solución de problemas
 
 <AccordionGroup>
-  <Accordion title="La validación falla inmediatamente al iniciar">
-    **Causa probable:** `Validate Launch Token` se ejecuta demasiado temprano desde `GameInstance Init`.
-
-    **Solución:**
-
-    ```text
-    Event Init → Delay 0.5 → Validate Launch Token
-    ```
-
-    Confirma también que `BP_GameInstance` esté asignado en **Project Settings → Maps & Modes**.
+  <Accordion title="El nodo no aparece">
+    Confirma que el plugin esté dentro de `Plugins`, activado en **Edit → Plugins** y compilado para la versión correcta del motor.
   </Accordion>
 
-  <Accordion title="El juego no encuentra el launch token">
-    **Causa probable:** el ejecutable no fue iniciado con `--launchToken`.
-
-    **Solución:**
-
-    - Inicia el juego desde Launcher Forge.
-    - Confirma que el launcher utiliza la build y ejecutable correctos.
-    - Para una prueba manual:
-
-    ```powershell
-    .\YourGame.exe "--launchToken=TOKEN"
-    ```
+  <Accordion title="El subsystem no está disponible">
+    Ejecuta la validación desde GameInstance y conserva el delay de `0.5` segundos.
   </Accordion>
 
-  <Accordion title="Funciona en el editor, pero falla en una packaged build">
-    **Causa probable:** el orden de inicialización cambia en una build empaquetada.
-
-    **Solución:**
-
-    - Utiliza el delay recomendado de `0.5` segundos.
-    - Prueba primero una build **Development**.
-    - Revisa que el GameInstance personalizado esté configurado.
-    - Comprueba que el plugin esté incluido en el empaquetado.
+  <Accordion title="Length es 0 dentro del editor">
+    Es esperado cuando el juego todavía no fue iniciado desde Launcher Forge. Comprueba que también aparezca la advertencia de conexión inicializada.
   </Accordion>
 
-  <Accordion title="El backend responde HTTP 401">
-    **Causa probable:**
+  <Accordion title="On Failed se ejecuta en la build">
+    Comprueba que la build esté vinculada, que el launcher utilice el ejecutable correcto y que `Backend Url` apunte al endpoint de validación.
+  </Accordion>
 
-    - Token inválido.
-    - Token expirado.
-    - Token firmado con otro secret.
-    - Endpoint rechazó el token.
-
-    **Solución:**
-
-    - Inicia nuevamente el juego desde Launcher Forge para generar un token nuevo.
-    - Confirma que el backend recibe:
+  <Accordion title="El backend rechaza el token">
+    Inicia nuevamente el juego desde Launcher Forge para generar un token nuevo y comprueba que el body enviado sea:
 
     ```json
     {
       "token": "TOKEN"
     }
     ```
-
-    - Confirma que el token no haya expirado.
-    - Confirma que el backend utiliza la configuración correcta para validar launch tokens.
   </Accordion>
 
-  <Accordion title="El backend responde HTTP 404">
-    **Causa probable:** el valor de **Backend Url** es incorrecto.
-
-    **Solución:**
-
-    Revisa la URL configurada en `Validate Launch Token`.
-
-    ```text
-    http://backend.launcherforge.io/api/v1/games/auth/validate-launch-token
-    ```
-  </Accordion>
-
-  <Accordion title="El nodo Validate Launch Token no aparece">
-    **Causa probable:**
-
-    - El plugin no está activado.
-    - Unreal Engine necesita reiniciarse.
-    - El proyecto C++ no fue recompilado.
-    - El paquete corresponde a otra versión del motor.
-
-    **Solución:**
-
-    1. Abre **Edit → Plugins**.
-    2. Busca **Launcher Auth Plugin**.
-    3. Actívalo.
-    4. Reinicia Unreal Engine.
-    5. Regenera los archivos de Visual Studio cuando corresponda.
-    6. Recompila el proyecto.
-  </Accordion>
-
-  <Accordion title="El subsystem no está disponible">
-    **Causa probable:** la validación o acceso al plugin ocurre antes de que el `GameInstance` y sus subsystems estén listos.
-
-    **Solución:**
-
-    - Mantén el flujo dentro del GameInstance.
-    - Agrega el delay recomendado.
-    - Evita ejecutar la validación desde un objeto creado antes del GameInstance.
+  <Accordion title="El plugin fue compilado para otra versión">
+    Utiliza un paquete correspondiente a tu versión del motor o recompila el plugin junto con el proyecto.
   </Accordion>
 </AccordionGroup>
 
----
-
 ## Lista de verificación
 
-Antes de publicar la integración, confirma:
-
-- Launcher Auth Plugin está instalado para la versión correcta de Unreal Engine.
-- El plugin está activado.
-- El proyecto fue recompilado cuando corresponde.
+- El plugin está instalado dentro de `Plugins`.
+- Launcher Forge Auth está activado.
+- El proyecto fue recompilado.
 - `BP_GameInstance` está asignado en Maps & Modes.
-- El flujo utiliza `Event Init`.
-- Existe un `Delay` de `0.5` segundos.
+- `Event Init` utiliza un delay de `0.5` segundos.
 - `Validate Launch Token` utiliza la URL correcta.
-- `On Success` continúa únicamente cuando `Valid` es `true`.
+- `On Success` continúa solo cuando `Valid` es `true`.
 - `On Failed` bloquea el acceso de forma controlada.
 - El token no está hardcodeado.
-- El body enviado es `{ "token": "TOKEN" }`.
-- La respuesta contiene `success`, `data.id`, `data.email` y `data.valid`.
-- La prueba final fue realizada con una build empaquetada iniciada desde Launcher Forge.
-
-<Check>
-  La integración está lista cuando el juego recibe el token desde el launcher, lo valida con el backend y distingue correctamente entre `On Success` y `On Failed`.
-</Check>
+- El request utiliza `{ "token": "TOKEN" }`.
+- La prueba final se realizó desde una build vinculada al launcher.
 
 ## Guías relacionadas
 
@@ -783,7 +663,7 @@ Antes de publicar la integración, confirma:
     icon="shield-halved"
     href="/es/game-authentication/launch-tokens"
   >
-    Comprende el contrato completo de validación entre el launcher y el juego.
+    Comprende el contrato completo de validación.
   </Card>
 
   <Card
@@ -791,7 +671,7 @@ Antes de publicar la integración, confirma:
     icon="cloud-arrow-up"
     href="/es/getting-started/publish-first-build"
   >
-    Publica una build empaquetada mediante la CLI interactiva.
+    Publica la build mediante la CLI interactiva.
   </Card>
 
   <Card
@@ -799,6 +679,6 @@ Antes de publicar la integración, confirma:
     icon="flask"
     href="/es/getting-started/test-launcher"
   >
-    Verifica la descarga, instalación y ejecución del juego desde Launcher Forge.
+    Verifica instalación, descarga e inicio desde Launcher Forge.
   </Card>
 </CardGroup>
