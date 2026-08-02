@@ -17,21 +17,18 @@ Cuando un jugador inicia el juego desde el launcher:
 5. El backend devuelve `id`, `email` y `valid`.
 6. El juego continúa o bloquea el acceso según el resultado.
 
-<Warning>
+<Note>
   La credencial temporal no se genera ni se introduce manualmente. La validación real solo puede probarse cuando la build compilada está vinculada y es iniciada desde Launcher Forge.
-</Warning>
+</Note>
 
 <Card
   title="Comprender los launch tokens"
   icon="shield-halved"
-  href="/es/game-authentication/launch-tokens"
+  href="/es/player-authentication/launch-tokens"
 >
   Revisa el flujo completo de generación, entrega y validación entre el launcher y el juego.
 </Card>
 
-<Warning>
-  Esta integración valida la conexión entre el **launcher** y el **juego**. No reemplaza el registro, el inicio de sesión, la biblioteca ni el canje de CD keys de los jugadores.
-</Warning>
 
 ## Flujo de validación
 
@@ -58,10 +55,6 @@ sequenceDiagram
     end
 ```
 
-<Note>
-  El diagrama representa un flujo automático. No es necesario ni recomendable intentar reproducir manualmente la entrega de la credencial.
-</Note>
-
 ## Paquetes directos del plugin
 
 <Card
@@ -82,24 +75,6 @@ sequenceDiagram
   # unreal-engine
   ```
 </Card>
-
-<CardGroup cols={2}>
-  <Card title="Unreal Engine 5.5" icon="cube">
-    <Badge color="green">Disponible en Discord</Badge>
-  </Card>
-
-  <Card title="Unreal Engine 5.6" icon="cube">
-    <Badge color="green">Disponible en Discord</Badge>
-  </Card>
-
-  <Card title="Unreal Engine 5.7" icon="cube">
-    <Badge color="green">Disponible en Discord</Badge>
-  </Card>
-
-  <Card title="Unreal Engine 5.8" icon="cube">
-    <Badge color="green">Disponible en Discord</Badge>
-  </Card>
-</CardGroup>
 
 <Note>
   Utiliza siempre el paquete correspondiente a la versión exacta de Unreal Engine de tu proyecto.

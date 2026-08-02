@@ -13,16 +13,16 @@ Your project can use the result to restrict game access or specific features unt
 <Card
   title="Understand launch tokens"
   icon="shield-halved"
-  href="/en/game-authentication/launch-tokens"
+  href="/en/player-authentication/launch-tokens"
 >
   Learn how Launcher Forge automatically generates and validates the temporary credential used during game startup.
 </Card>
 
-<Warning>
+<Note>
   Launcher Forge generates and delivers the temporary credential automatically. It must not be entered manually or used as a manual testing method.
 
   Pressing **Play** in the Unity Editor or running the build directly does not reproduce real authentication.
-</Warning>
+</Note>
 
 ## How it works
 
@@ -48,10 +48,6 @@ sequenceDiagram
         P-->>G: AuthenticationFailed
     end
 ```
-
-<Info>
-  The flow is automatic. You do not need to add the package to a `GameObject` or create a custom bootstrap.
-</Info>
 
 ## Requirements
 
@@ -84,14 +80,6 @@ Before starting, confirm that:
   # unity
   ```
 </Card>
-
-<Note>
-  The package is distributed as:
-
-  ```text
-  LauncherForge_LauncherAuth_Unity_1.0.2.zip
-  ```
-</Note>
 
 ### Install the package
 

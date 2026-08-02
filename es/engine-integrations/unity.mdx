@@ -13,16 +13,16 @@ La integración puede utilizarse para condicionar el acceso al juego o a funcion
 <Card
   title="Comprender los launch tokens"
   icon="shield-halved"
-  href="/es/game-authentication/launch-tokens"
+  href="/es/player-authentication/launch-tokens"
 >
   Revisa cómo Launcher Forge genera y valida automáticamente la credencial temporal utilizada durante el inicio del juego.
 </Card>
 
-<Warning>
+<Note>
   La credencial temporal es generada y entregada automáticamente por Launcher Forge. No debe introducirse manualmente ni utilizarse como un método de prueba.
 
   Presionar **Play** dentro del Unity Editor o ejecutar directamente la build no reproduce una autenticación real.
-</Warning>
+</Note>
 
 ## Cómo funciona
 
@@ -48,10 +48,6 @@ sequenceDiagram
         P-->>G: AuthenticationFailed
     end
 ```
-
-<Info>
-  El flujo es automático. No necesitas añadir el package a un `GameObject` ni crear un bootstrap manual.
-</Info>
 
 ## Requisitos
 
@@ -84,14 +80,6 @@ Antes de comenzar, confirma:
   # unity
   ```
 </Card>
-
-<Note>
-  El package se distribuye como:
-
-  ```text
-  LauncherForge_LauncherAuth_Unity_1.0.2.zip
-  ```
-</Note>
 
 ### Instalar el package
 
