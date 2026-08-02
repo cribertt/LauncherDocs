@@ -10,12 +10,16 @@ icon: "gamepad"
 
 When a player starts the game from the launcher:
 
-1. Launcher Forge generates a temporary token.
-2. The launcher starts the executable with `--launchToken`.
-3. The plugin reads the token from the process arguments.
-4. The plugin sends the token to the validation endpoint.
+1. Launcher Forge generates a temporary credential for that launch.
+2. The launcher starts the compiled executable and delivers the credential automatically.
+3. The plugin internally retrieves the credential supplied by the launcher.
+4. The plugin sends it to the validation endpoint.
 5. The backend returns `id`, `email`, and `valid`.
 6. The game continues or blocks access according to the result.
+
+<Warning>
+  The temporary credential is not generated or entered manually. A real validation can only be tested after the compiled build is linked and started through Launcher Forge.
+</Warning>
 
 <Card
   title="Understand launch tokens"
@@ -39,19 +43,24 @@ sequenceDiagram
     participant P as Launcher Forge Auth
     participant B as Backend
 
-    L->>G: Starts the game with --launchToken=TOKEN
+    L->>L: Generates a temporary credential
+    L->>G: Starts the linked build
     G->>P: GameInstance starts validation
-    P->>P: Reads the --launchToken argument
-    P->>B: POST { token }
+    P->>P: Retrieves the credential delivered by the launcher
+    P->>B: Sends the credential for validation
 
-    alt Valid token
+    alt Successful validation
         B-->>P: success + id + email + valid
         P-->>G: On Success
-    else Missing, invalid, or expired token
+    else Missing, invalid, or expired credential
         B-->>P: Error
         P-->>G: On Failed
     end
 ```
+
+<Note>
+  This diagram represents an automatic flow. You do not need to reproduce the credential delivery manually.
+</Note>
 
 ## Availability
 
@@ -305,34 +314,34 @@ Use `On Failed` to:
 
 ---
 
-## Token contract
+## Automatic validation
 
-Launcher Forge generates the token when the player starts the game.
+Launcher Forge generates and delivers the temporary credential as part of the normal game launch.
 
-Do not:
+The developer must not:
 
-- Store it in the project.
-- Hardcode it in Blueprint.
-- Hardcode it in C++.
-- Store it in configuration files.
-- Display it in the UI.
-- Print the full value in production logs.
+- Create credentials manually for testing.
+- Store them in the project.
+- Hardcode them in Blueprint or C++.
+- Store them in configuration files.
+- Display them in the user interface.
+- Print complete values in production logs.
 
-The launcher passes the token through:
+<Info>
+  The plugin receives the credential automatically when a linked build is started through Launcher Forge. Opening the game in the editor or running the `.exe` directly does not reproduce a real validation.
+</Info>
 
-```text
---launchToken=TOKEN
-```
+### Internal plugin request
 
-No additional launch arguments are required for this integration.
-
-## Request sent by the plugin
+The plugin internally sends the credential to the backend using the contract expected by the validation endpoint:
 
 ```json
 {
-  "token": "TOKEN"
+  "token": "TEMPORARY_CREDENTIAL"
 }
 ```
+
+Do not build this request from Blueprint or ask the player to enter a token.
 
 ## Expected response
 
@@ -460,7 +469,7 @@ C++ projects can use the public plugin classes.
 | Class | Responsibility |
 | --- | --- |
 | `UValidateLaunchTokenAsync` | Validates the token against the backend. This class powers the Blueprint node. |
-| `ULauncherForgeAuthSubsystem` | Stores the token read from `--launchToken` and the authenticated user after successful validation. |
+| `ULauncherForgeAuthSubsystem` | Retrieves the temporary credential delivered by Launcher Forge and stores the authenticated user after successful validation. |
 | `FLauncherForgeAuthUser` | Contains `Id`, `Email`, and `Valid`. |
 
 ## Recommended C++ flow
@@ -626,14 +635,15 @@ The project would include:
     Confirm that the build is linked, the launcher uses the correct executable, and `Backend Url` points to the validation endpoint.
   </Accordion>
 
-  <Accordion title="The backend rejects the token">
-    Start the game again through Launcher Forge to generate a new token and confirm that the request body is:
+  <Accordion title="The backend rejects validation">
+    Close the game and start it again through Launcher Forge to create a new temporary session.
 
-    ```json
-    {
-      "token": "TOKEN"
-    }
-    ```
+    Also confirm that:
+
+    - The build is linked to the launcher.
+    - The launcher uses the correct executable.
+    - `Backend Url` points to the validation endpoint.
+    - The test is not being performed from the editor or by running the `.exe` directly.
   </Accordion>
 
   <Accordion title="The plugin was compiled for another engine version">
