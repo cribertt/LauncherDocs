@@ -13,7 +13,7 @@ La integración puede utilizarse para condicionar el acceso al juego o a funcion
 <Card
   title="Comprender los launch tokens"
   icon="shield-halved"
-  href="/es/player-authentication/launch-tokens"
+  href="/es/game-authentication/launch-tokens"
 >
   Revisa cómo Launcher Forge genera y valida automáticamente la credencial temporal utilizada durante el inicio del juego.
 </Card>
@@ -72,7 +72,7 @@ Antes de comenzar, confirma:
     alt="Categoría DOWNLOAD PLUGIN de Discord con los canales para Unreal Engine, Unity y Godot"
   />
 
-  Puedes encontrar el link de descarga a través de nuestro Discord, en la sección **DOWNLOAD PLUGIN**, y buscas el canal correspondiente al de tu motor gráfico.
+  Puedes encontrar el enlace de descarga a través de nuestro Discord. Abre la sección **DOWNLOAD PLUGIN** y busca el canal correspondiente a tu motor gráfico.
 
   Para esta integración, abre el canal:
 
@@ -435,7 +435,7 @@ public sealed class LauncherAuthExample : MonoBehaviour
   No es recomendable depender únicamente de un `if` ejecutado una vez en `Start`, porque la validación puede seguir en curso. Para reaccionar inmediatamente, utiliza los eventos del package.
 </Warning>
 
-## Authenticación Fallida
+## Autenticación fallida
 
 No existe una propiedad llamada:
 
@@ -478,6 +478,7 @@ else if (
 
     // El juego decide cómo mostrar el error.
 }
+```
 
 <Frame caption="Resultado esperado cuando la build no fue iniciada desde Launcher Forge">
   <img
@@ -485,7 +486,6 @@ else if (
     alt="Proyecto de Unity mostrando Launcher Auth Access Denied"
   />
 </Frame>
-```
 
 ---
 
@@ -760,7 +760,7 @@ LauncherAuthSession.LastError
     alt="Categoría DOWNLOAD TEMPLATES de Discord con los proyectos de ejemplo para Unreal Engine, Unity y Godot"
   />
 
-  Puedes encontrar el link de descarga a través de nuestro Discord, en la sección **DOWNLOAD TEMPLATES**, y buscas el canal correspondiente al de tu motor gráfico.
+  Puedes encontrar el enlace de descarga a través de nuestro Discord. Abre la sección **DOWNLOAD TEMPLATES** y busca el canal correspondiente a tu motor gráfico.
 
   Para el proyecto de ejemplo de Unity, abre el canal:
 
