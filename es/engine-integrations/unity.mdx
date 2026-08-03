@@ -355,7 +355,7 @@ LauncherAuthSession.State
 | `LauncherAuthState.Authenticated` | La autenticación terminó correctamente. |
 | `LauncherAuthState.Failed` | La autenticación no pudo completarse. |
 
-## Datos autenticados
+## Autenticación exitosa
 
 Después de una validación correcta, el usuario está disponible en:
 
@@ -389,6 +389,13 @@ string userId = LauncherAuthSession.User.id;
   Confirma que la credencial fue aceptada.
 </ResponseField>
 
+
+<Frame caption="Autenticación correcta en una build iniciada desde Launcher Forge">
+  <img
+    src="/images/screenshots/engine-integrations/unity/unity-authentication-success.png"
+    alt="Proyecto de Unity mostrando Launcher Auth Access Granted"
+  />
+</Frame>
 ---
 
 ## Consultar el resultado actual
@@ -428,7 +435,7 @@ public sealed class LauncherAuthExample : MonoBehaviour
   No es recomendable depender únicamente de un `if` ejecutado una vez en `Start`, porque la validación puede seguir en curso. Para reaccionar inmediatamente, utiliza los eventos del package.
 </Warning>
 
-## Comprobar un error
+## Authenticación Fallida
 
 No existe una propiedad llamada:
 
@@ -471,6 +478,13 @@ else if (
 
     // El juego decide cómo mostrar el error.
 }
+
+<Frame caption="Resultado esperado cuando la build no fue iniciada desde Launcher Forge">
+  <img
+    src="/images/screenshots/engine-integrations/unity/unity-authentication-failed.png"
+    alt="Proyecto de Unity mostrando Launcher Auth Access Denied"
+  />
+</Frame>
 ```
 
 ---
@@ -579,13 +593,6 @@ Esto no representa un error del package. Confirma que:
   El package no contiene un `TokenOverride` para el Editor. La autenticación real no puede probarse desde el botón Play del editor.
 </Warning>
 
-<Frame caption="Resultado esperado cuando la build no fue iniciada desde Launcher Forge">
-  <img
-    src="/images/screenshots/engine-integrations/unity/unity-authentication-failed.png"
-    alt="Proyecto de Unity mostrando Launcher Auth Access Denied"
-  />
-</Frame>
-
 ## Probar una autenticación real
 
 Para comprobar la integración completa:
@@ -615,13 +622,6 @@ Para comprobar la integración completa:
     La sesión debe quedar autenticada y el evento `AuthenticationSucceeded` debe ejecutarse.
   </Step>
 </Steps>
-
-<Frame caption="Autenticación correcta en una build iniciada desde Launcher Forge">
-  <img
-    src="/images/screenshots/engine-integrations/unity/unity-authentication-success.png"
-    alt="Proyecto de Unity mostrando Launcher Auth Access Granted"
-  />
-</Frame>
 
 Cuando el backend responde correctamente:
 

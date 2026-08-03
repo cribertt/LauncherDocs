@@ -8,20 +8,20 @@ icon: "cube"
 
 **LauncherForge Launch Authentication** validates whether a Unity build was started from an authorized Launcher Forge session.
 
-Your project can use the result to restrict game access or specific features until the backend confirms the connection between the launcher and the executable.
+The integration can be used to restrict access to the game or specific features until the backend confirms the connection between the launcher and the executable.
 
 <Card
   title="Understand launch tokens"
   icon="shield-halved"
   href="/en/player-authentication/launch-tokens"
 >
-  Learn how Launcher Forge automatically generates and validates the temporary credential used during game startup.
+  Review how Launcher Forge automatically generates and validates the temporary credential used when starting the game.
 </Card>
 
 <Note>
-  Launcher Forge generates and delivers the temporary credential automatically. It must not be entered manually or used as a manual testing method.
+  The temporary credential is generated and delivered automatically by Launcher Forge. It must not be entered manually or used as a testing method.
 
-  Pressing **Play** in the Unity Editor or running the build directly does not reproduce real authentication.
+  Pressing **Play** inside the Unity Editor or running the build directly does not reproduce a real authentication flow.
 </Note>
 
 ## How it works
@@ -51,14 +51,14 @@ sequenceDiagram
 
 ## Requirements
 
-Before starting, confirm that:
+Before you begin, confirm that:
 
 - The game exists and is published in Launcher Forge.
 - The game is linked to the launcher.
-- Your Unity version is compatible with the package.
+- You are using a Unity version compatible with the package.
 - The project can use local packages.
 - You know the validation endpoint URL.
-- The final test will use a published build started through Launcher Forge.
+- The final test will be performed with a published build started through Launcher Forge.
 
 ## Unity installation
 
@@ -83,7 +83,7 @@ Before starting, confirm that:
 
 ### Install the package
 
-You can install the package by copying it into the project or selecting its `package.json` through Unity Package Manager.
+The package can be installed by copying it into the project or by selecting its `package.json` file through Unity Package Manager.
 
 <Tabs>
   <Tab title="Copy into Packages">
@@ -143,7 +143,7 @@ You can install the package by copying it into the project or selecting its `pac
       </Step>
     </Steps>
 
-    <Frame caption="Package copied into the project's Packages folder">
+    <Frame caption="Package copied into the Packages folder">
       <img
         src="/images/screenshots/engine-integrations/unity/unity-package-folder.png"
         alt="File Explorer showing com.launcherforge.launcherauth inside Packages"
@@ -162,7 +162,7 @@ You can install the package by copying it into the project or selecting its `pac
       </Step>
 
       <Step title="Select Install package from disk">
-        Select the `+` button and choose:
+        Select the `+` button, then choose:
 
         ```text
         Install package from disk
@@ -177,8 +177,8 @@ You can install the package by copying it into the project or selecting its `pac
         ```
       </Step>
 
-      <Step title="Confirm installation">
-        The package should appear as:
+      <Step title="Confirm the installation">
+        The package should appear in Package Manager as:
 
         ```text
         LauncherForge Launch Authentication 1.0.2
@@ -235,7 +235,7 @@ The package automatically loads its configuration from `Resources`.
   </Step>
 </Steps>
 
-The name and location are required because the package loads the asset with:
+The name and path are required because the package loads the asset with:
 
 ```csharp
 Resources.Load<LauncherAuthSettings>(
@@ -244,7 +244,7 @@ Resources.Load<LauncherAuthSettings>(
 ```
 
 <Warning>
-  If you rename the asset or move it outside `Assets/Resources`, the package cannot load the configuration automatically.
+  If you rename the asset or move it outside `Assets/Resources`, the package will not be able to load the configuration automatically.
 </Warning>
 
 ## Configure the backend
@@ -255,10 +255,10 @@ Select:
 Assets/Resources/LauncherAuthSettings.asset
 ```
 
-The Inspector exposes:
+The Inspector contains:
 
 <ResponseField name="Backend Url" type="string">
-  Complete validation endpoint URL.
+  Full URL of the validation endpoint.
 </ResponseField>
 
 <ResponseField name="Startup Delay Seconds" type="float">
@@ -266,7 +266,7 @@ The Inspector exposes:
 </ResponseField>
 
 <ResponseField name="Timeout Seconds" type="float">
-  Maximum time allowed for the HTTP request.
+  Maximum amount of time allowed for the HTTP request.
 </ResponseField>
 
 Recommended configuration:
@@ -298,9 +298,9 @@ The internal request uses the contract expected by the backend:
 
 ## Automatic initialization
 
-Do not add the package manually to a `GameObject`.
+Do not manually add the package to a `GameObject`.
 
-When the game loads, the package automatically creates:
+When the game starts, the package automatically creates:
 
 ```text
 [LauncherAuth]
@@ -312,7 +312,7 @@ Internally, it uses:
 RuntimeInitializeOnLoadMethod
 ```
 
-The object persists between scenes through:
+The object remains active when changing scenes through:
 
 ```csharp
 DontDestroyOnLoad
@@ -325,7 +325,7 @@ flowchart TD
     A[Initial load] --> B[Create LauncherAuth]
     B --> C[Startup delay]
     C --> D[Retrieve the credential delivered by the launcher]
-    D --> E[POST to backend]
+    D --> E[POST to the backend]
     E -->|Success| F[Authenticated]
     E -->|Error| G[Failed]
 ```
@@ -348,16 +348,16 @@ LauncherAuthSession.State
 
 | State | Description |
 | --- | --- |
-| `LauncherAuthState.NotStarted` | Initialization has not started. |
+| `LauncherAuthState.NotStarted` | Initialization has not started yet. |
 | `LauncherAuthState.WaitingForStartup` | The package is waiting for the configured delay. |
-| `LauncherAuthState.ReadingToken` | The package is retrieving the startup credential. |
-| `LauncherAuthState.Validating` | The backend request is in progress. |
+| `LauncherAuthState.ReadingToken` | The package is retrieving the launch credential. |
+| `LauncherAuthState.Validating` | The backend is validating the request. |
 | `LauncherAuthState.Authenticated` | Authentication completed successfully. |
 | `LauncherAuthState.Failed` | Authentication could not be completed. |
 
-## Authenticated data
+## Successful authentication
 
-After successful validation, the user is available from:
+After successful validation, the user is available through:
 
 ```csharp
 LauncherAuthSession.User
@@ -389,11 +389,18 @@ string userId = LauncherAuthSession.User.id;
   Confirms that the credential was accepted.
 </ResponseField>
 
+<Frame caption="Successful authentication in a build started through Launcher Forge">
+  <img
+    src="/images/screenshots/engine-integrations/unity/unity-authentication-success.png"
+    alt="Unity project showing Launcher Auth Access Granted"
+  />
+</Frame>
+
 ---
 
-## Read the current result
+## Check the current result
 
-You can inspect the session from any script that imports the namespace.
+You can inspect the session state from any script that imports the namespace.
 
 ```csharp
 using LauncherForge.LauncherAuth;
@@ -425,10 +432,10 @@ public sealed class LauncherAuthExample : MonoBehaviour
 ```
 
 <Warning>
-  Do not rely only on an `if` executed once in `Start`, because validation may still be in progress. Use the package events when you need to react immediately.
+  Relying only on an `if` executed once in `Start` is not recommended because validation may still be in progress. Use the package events to react immediately.
 </Warning>
 
-## Check a failed result
+## Failed authentication
 
 There is no property named:
 
@@ -473,11 +480,18 @@ else if (
 }
 ```
 
+<Frame caption="Expected result when the build was not started through Launcher Forge">
+  <img
+    src="/images/screenshots/engine-integrations/unity/unity-authentication-failed.png"
+    alt="Unity project showing Launcher Auth Access Denied"
+  />
+</Frame>
+
 ---
 
 ## Use authentication events
 
-This is the recommended pattern for a main menu or any controller that must react as soon as validation finishes.
+This is the recommended approach for a main menu or controller that must react as soon as validation finishes.
 
 ```csharp
 using LauncherForge.LauncherAuth;
@@ -551,7 +565,7 @@ public sealed class LauncherAuthMenuController : MonoBehaviour
         // The game decides what to do:
         // - display an error
         // - disable online options
-        // - show a close button
+        // - display a close button
         // - return to the launcher
     }
 }
@@ -565,26 +579,19 @@ public sealed class LauncherAuthMenuController : MonoBehaviour
 
 ## Behavior inside the Unity Editor
 
-When you press **Play** directly in the Editor, the expected result is an access-denied state.
+When you press **Play** directly in the editor, the expected result is an access-denied state.
 
 This does not indicate a package error. It confirms that:
 
-- Automatic initialization ran.
-- The package attempted to retrieve the startup credential.
-- The Editor did not receive a credential generated by Launcher Forge.
+- Automatic initialization worked.
+- The package attempted to retrieve the launch credential.
+- The editor did not receive a credential generated by Launcher Forge.
 - `LauncherAuthSession.State` changed to `LauncherAuthState.Failed`.
-- The error became available from `LauncherAuthSession.LastError`.
+- The error message became available through `LauncherAuthSession.LastError`.
 
 <Warning>
-  The package does not provide a `TokenOverride` for the Editor. Real authentication cannot be tested with the Editor Play button.
+  The package does not contain a `TokenOverride` for the Editor. Real authentication cannot be tested through the editor's Play button.
 </Warning>
-
-<Frame caption="Expected result when the build was not started through Launcher Forge">
-  <img
-    src="/images/screenshots/engine-integrations/unity/unity-authentication-failed.png"
-    alt="Unity project showing Launcher Auth Access Denied"
-  />
-</Frame>
 
 ## Test real authentication
 
@@ -592,7 +599,7 @@ To verify the complete integration:
 
 <Steps>
   <Step title="Create a Unity build">
-    Build the project with all files required to run outside the Editor.
+    Compile the project with all files required to run it outside the editor.
   </Step>
 
   <Step title="Publish the build">
@@ -604,24 +611,17 @@ To verify the complete integration:
   </Step>
 
   <Step title="Install the game from the launcher">
-    Use a player account that has access to the game.
+    Use a player account with access to the game.
   </Step>
 
   <Step title="Start the build through Launcher Forge">
-    The launcher generates and delivers the temporary credential automatically.
+    The launcher will automatically generate and deliver the temporary credential.
   </Step>
 
   <Step title="Verify the result">
-    The session should become authenticated and `AuthenticationSucceeded` should run.
+    The session should become authenticated and the `AuthenticationSucceeded` event should run.
   </Step>
 </Steps>
-
-<Frame caption="Successful authentication in a build started through Launcher Forge">
-  <img
-    src="/images/screenshots/engine-integrations/unity/unity-authentication-success.png"
-    alt="Unity project showing Launcher Auth Access Granted"
-  />
-</Frame>
 
 When the backend responds successfully:
 
@@ -647,7 +647,7 @@ LauncherAuthSession.State ==
     LauncherAuthState.Authenticated
 ```
 
-The user becomes available from:
+The user is available through:
 
 ```csharp
 LauncherAuthSession.User
@@ -655,7 +655,7 @@ LauncherAuthSession.User
 
 ## Failed authentication result
 
-Validation can fail because of:
+Validation may fail because of:
 
 - Missing credential.
 - Invalid credential.
@@ -664,7 +664,7 @@ Validation can fail because of:
 - Timeout.
 - Invalid JSON response.
 - `valid == false`.
-- Missing or empty `id`.
+- Empty or missing `id`.
 
 The package sets:
 
@@ -677,14 +677,14 @@ LauncherAuthSession.State ==
     LauncherAuthState.Failed
 ```
 
-The message becomes available from:
+The message is available through:
 
 ```csharp
 LauncherAuthSession.LastError
 ```
 
 <Info>
-  The package does not close the game automatically. Your project decides whether to display an error, disable features, offer a close action, return to the launcher, or continue with limited capabilities.
+  The package does not close the game automatically. Your project decides whether to display an error, disable features, offer a close action, or continue with limited capabilities.
 </Info>
 
 ---
@@ -696,12 +696,12 @@ LauncherAuthSession.LastError
     Confirm that:
 
     - The folder is named `com.launcherforge.launcherauth`.
-    - `package.json` is at the package root.
+    - `package.json` is located at the package root.
     - You selected the correct file through **Install package from disk**.
     - The Unity version is compatible.
   </Accordion>
 
-  <Accordion title="LauncherAuthSettings is not loaded">
+  <Accordion title="LauncherAuthSettings does not load">
     Confirm the exact path and name:
 
     ```text
@@ -711,8 +711,8 @@ LauncherAuthSession.LastError
     The asset must be named exactly `LauncherAuthSettings`.
   </Accordion>
 
-  <Accordion title="The session remains Failed in the Editor">
-    This is the expected result. The Editor does not receive a temporary Launcher Forge credential, and the package does not provide an override to simulate one.
+  <Accordion title="The session remains Failed inside the Editor">
+    This is the expected result. The editor does not receive a temporary credential from Launcher Forge, and there is no override for simulating one.
 
     Perform the final test with a published, linked build started through the launcher.
   </Accordion>
@@ -723,11 +723,11 @@ LauncherAuthSession.LastError
     - `Backend Url`.
     - Backend availability.
     - HTTPS certificate.
-    - `Timeout Seconds`.
+    - `Timeout Seconds` value.
     - Build connectivity.
   </Accordion>
 
-  <Accordion title="Authentication finishes before the menu listens to events">
+  <Accordion title="Authentication finishes before the menu listens to the events">
     Call `EvaluateCurrentState()` after subscribing. This processes a result that may have completed before `OnEnable`.
   </Accordion>
 
@@ -736,9 +736,9 @@ LauncherAuthSession.LastError
 
     - The build was published through the CLI.
     - The game is linked to the correct launcher.
-    - The correct main executable is configured.
+    - The correct main executable was configured.
     - The build was started through Launcher Forge.
-    - The settings asset is included under `Resources`.
+    - The configuration asset is included in `Resources`.
   </Accordion>
 </AccordionGroup>
 
@@ -776,20 +776,20 @@ LauncherAuthSession.LastError
 ## Verification checklist
 
 - The package is located at `Packages/com.launcherforge.launcherauth`.
-- Package Manager shows LauncherForge Launch Authentication.
+- Package Manager displays LauncherForge Launch Authentication.
 - `Assets/Resources/LauncherAuthSettings.asset` exists.
-- `Backend Url` contains the complete endpoint.
+- `Backend Url` contains the full endpoint.
 - `Startup Delay Seconds` is set to `0.5`.
 - `Timeout Seconds` is set to `10`.
-- You did not add a manual bootstrap to a GameObject.
-- Your code imports `LauncherForge.LauncherAuth`.
+- You did not add a manual bootstrap component to a GameObject.
+- The code imports `LauncherForge.LauncherAuth`.
 - The menu uses events or evaluates the current state.
 - The project handles both `Authenticated` and `Failed`.
 - You do not attempt to enter a credential manually.
-- The final test uses a linked build started through Launcher Forge.
+- The final test is performed with a linked build started through Launcher Forge.
 
 <Check>
-  The integration is ready when a build started through Launcher Forge invokes `AuthenticationSucceeded`, exposes `id`, `email`, and `valid`, and your game correctly handles the `Failed` state.
+  The integration is ready when a build started through Launcher Forge triggers `AuthenticationSucceeded`, exposes `id`, `email`, and `valid`, and your game correctly handles the `Failed` state.
 </Check>
 
 ## Related guides
@@ -800,7 +800,7 @@ LauncherAuthSession.LastError
     icon="shield-halved"
     href="/en/game-authentication/launch-tokens"
   >
-    Understand the automatic validation flow between the launcher and the game.
+    Understand automatic validation between the launcher and the game.
   </Card>
 
   <Card
